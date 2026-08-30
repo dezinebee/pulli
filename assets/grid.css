@@ -1,0 +1,214 @@
+/* ============================================================================
+   PULLI · DATA GRID STYLES
+   Load after tokens.css and system.css. Semantic tokens only — no literal
+   length except the two documented accessibility floors inherited from the
+   token layer.
+
+   The grid is the most literal lattice in the system: rows crossing columns.
+   The sorted column's header dot is wrapped by a loop, which is the same
+   primitive tabs and the toggle use.
+   ========================================================================== */
+
+.pg{
+  display:flex; flex-direction:column;
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel);
+  background:var(--color-surface);
+  overflow:hidden;
+  --pg-cols:1fr;
+}
+
+/* ---------- toolbar ---------- */
+.pg-toolbar{
+  display:flex; align-items:center; gap:var(--space-inline);
+  padding:var(--space-inset-sm) var(--space-inset-md);
+  border-bottom:var(--border-hairline) solid var(--color-border);
+  background:var(--color-surface-sunken);
+  flex-wrap:wrap;
+}
+.pg-search{
+  flex:1; min-width:calc(var(--p) * 24);
+  font-family:var(--face-ui); font-size:var(--ezhuthu-small); color:var(--color-text);
+  background:var(--color-bg);
+  border:var(--border-hairline) solid var(--color-border-strong);
+  border-radius:var(--radius-control);
+  padding:0 var(--space-inset-sm); min-height:var(--alavu-md);
+}
+.pg-search:focus{ outline:none; border-color:var(--color-accent); box-shadow:0 0 0 var(--border-edge) var(--color-accent-subtle); }
+.pg-count{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); white-space:nowrap; }
+.pg-selinfo{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); white-space:nowrap; }
+.pg-selinfo.on{ color:var(--color-accent); font-weight:600; }
+
+.pg-chooser-wrap{ position:relative; }
+.pg-chooser{
+  position:absolute; right:0; top:calc(100% + var(--p));
+  z-index:20; min-width:calc(var(--p) * 26);
+  background:var(--color-surface);
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel);
+  box-shadow:var(--elevation-overlay);
+  padding:var(--space-inset-sm) var(--space-inset-md);
+  max-height:calc(var(--p) * 40); overflow:auto;
+}
+.pg-chooser[hidden]{ display:none; }
+
+/* ---------- scroll region ---------- */
+.pg-scroll{ overflow:auto; max-height:calc(var(--p) * 64); position:relative; }
+.pg-grid{ min-width:max-content; position:relative; }
+.pg-grid:focus{ outline:none; }
+.pg-grid:focus-visible{ outline:var(--border-edge) solid var(--color-focus); outline-offset:calc(var(--border-edge) * -1); }
+
+/* ---------- rows ---------- */
+.pg-head, .pg-filters, .pg-row{
+  display:grid; grid-template-columns:var(--pg-cols);
+  min-width:max-content;
+}
+.pg-head{
+  position:sticky; top:0; z-index:12;
+  background:var(--color-surface-sunken);
+  border-bottom:var(--border-hairline) solid var(--color-border-strong);
+}
+.pg-filters{
+  position:sticky; z-index:11;
+  background:var(--color-surface);
+  border-bottom:var(--border-hairline) solid var(--color-border);
+}
+.pg-body{ position:relative; }
+.pg-row{
+  position:absolute; left:0; right:0;
+  border-bottom:var(--border-hairline) solid var(--color-border);
+  background:var(--color-surface);
+  align-items:center;
+}
+.pg-row:hover{ background:var(--color-surface-sunken); }
+.pg-row.is-selected{ background:var(--color-accent-subtle); }
+
+/* ---------- cells ---------- */
+.pg-cell{
+  padding:0 var(--space-inset-sm);
+  font-size:var(--ezhuthu-small); color:var(--color-text);
+  display:flex; align-items:center; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.pg-cell[style*="end"]{ justify-content:flex-end; }
+.pg-num{ font-family:var(--face-mono); font-variant-numeric:tabular-nums; }
+.pg-frozen{ position:sticky; z-index:5; background:inherit; }
+.pg-head .pg-frozen{ z-index:14; background:var(--color-surface-sunken); }
+.pg-filters .pg-frozen{ background:var(--color-surface); }
+.pg-frozen::after{
+  content:""; position:absolute; right:0; top:0; bottom:0;
+  width:var(--border-hairline); background:var(--color-border);
+}
+.pg-select{ padding:0; justify-content:center; }
+.pg-select .choice{ min-height:0; padding:0; gap:0; }
+.pg-select .choice input{ margin-top:0; }
+
+/* focused cell — the roving tabindex target */
+.pg-cell.is-focus{
+  outline:var(--border-edge) solid var(--color-focus);
+  outline-offset:calc(var(--border-edge) * -1);
+  z-index:6;
+}
+
+/* ---------- header cell ---------- */
+.pg-th{ position:relative; height:var(--alavu-md); }
+.pg-sort{
+  flex:1; min-width:0; text-align:inherit;
+  background:none; border:0; cursor:pointer;
+  font-family:var(--face-ui); font-size:var(--ezhuthu-caption);
+  font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--color-text-tertiary);
+  padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  transition:color var(--motion-state);
+}
+.pg-sort:hover{ color:var(--color-text); }
+.pg-label{
+  font-size:var(--ezhuthu-caption); font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--color-text-tertiary);
+}
+
+/* the sorted column: a pulli on the header kambi, wrapped by a loop.
+   Same primitive as tabs — choosing a sort column IS choosing among options
+   along a line. Direction stays an arrow: the loop says WHICH, the arrow
+   says WHICH WAY, and one mark should not carry both. */
+.pg-th::before{
+  content:""; position:absolute; left:var(--space-inset-sm); bottom:0; z-index:0;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-25%, 50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+.pg-th::after{
+  content:""; position:absolute; left:var(--space-inset-sm); bottom:0; z-index:1;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translate(-25%, 50%);
+  transition:background var(--motion-state);
+}
+.pg-th[aria-sort="none"]::after{ background:var(--color-border-strong); }
+.pg-th[aria-sort="ascending"], .pg-th[aria-sort="descending"]{ }
+.pg-th[aria-sort="ascending"]::before,
+.pg-th[aria-sort="descending"]::before{ transform:translate(-25%, 50%) scale(1); }
+.pg-th[aria-sort="ascending"]::after,
+.pg-th[aria-sort="descending"]::after{ background:var(--color-accent); }
+.pg-th[aria-sort="ascending"] .pg-sort,
+.pg-th[aria-sort="descending"] .pg-sort{ color:var(--color-accent); }
+.pg-th[aria-sort="ascending"] .pg-dir::after{ content:" ↑"; }
+.pg-th[aria-sort="descending"] .pg-dir::after{ content:" ↓"; }
+
+/* ---------- resize handle ---------- */
+.pg-resize{
+  position:absolute; top:0; right:calc(var(--p) * -0.5); bottom:0;
+  width:var(--idai-1); cursor:col-resize; z-index:3;
+  display:flex; align-items:center; justify-content:center;
+  touch-action:none;
+}
+.pg-resize::before{
+  content:""; width:var(--border-edge); height:50%;
+  background:var(--color-border-strong); opacity:0;
+  transition:opacity var(--motion-state);
+}
+.pg-th:hover .pg-resize::before, .pg-resize:focus-visible::before{ opacity:1; }
+.pg-resize:focus-visible{ outline:var(--border-edge) solid var(--color-focus); }
+
+/* ---------- filter row ---------- */
+.pg-filter{
+  width:100%; min-width:0;
+  font-family:var(--face-ui); font-size:var(--ezhuthu-caption); color:var(--color-text);
+  background:var(--color-bg);
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-control);
+  padding:calc(var(--p) * .5) calc(var(--p) * .75);
+  margin:calc(var(--p) * .5) 0;
+}
+.pg-filter:focus{ outline:none; border-color:var(--color-accent); box-shadow:0 0 0 var(--border-edge) var(--color-accent-subtle); }
+
+/* ---------- live region ---------- */
+.pg-live{
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap;
+}
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+
+/* ==========================================================================
+   FORCED COLORS
+   Backgrounds are dropped, so selection and sort state must be re-expressed
+   as border and system colour or they vanish entirely.
+   ========================================================================== */
+@media (forced-colors: active){
+  .pg, .pg-row, .pg-head, .pg-filters{ border-color:CanvasText; }
+  .pg-cell{ border-right:1px solid CanvasText; }
+  .pg-frozen::after{ background:CanvasText; }
+  .pg-row.is-selected{ outline:2px solid Highlight; outline-offset:-2px; }
+  .pg-cell.is-focus{ outline:3px solid Highlight; }
+  .pg-th::before{ border-color:CanvasText; }
+  .pg-th[aria-sort="ascending"]::before,
+  .pg-th[aria-sort="descending"]::before{ border-color:Highlight; border-width:2px; }
+  .pg-th::after{ background:CanvasText; forced-color-adjust:none; }
+  .pg-search, .pg-filter{ border:1px solid ButtonBorder; }
+}
+
+/* the expressive sort loop is off under the conservative profiles;
+   the arrow alone carries it, as it does in the rest of the subset */
+[data-profile="regulated"] .pg-th::before,
+[data-profile="regulated"] .pg-th::after{ display:none; }

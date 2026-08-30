@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility — Pulli</title>
+<meta name="description" content="Measured contrast matrix, focus and motion policy, target sizes, the pattern-density limits, and cultural handling.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html" aria-current="page">09 · Accessibility</a>
+          <ul class="nav-sub">
+            <li><a href="#contrast">Contrast matrix</a></li>
+            <li><a href="#focus">Focus</a></li>
+            <li><a href="#targets">Target size</a></li>
+            <li><a href="#motion">Motion</a></li>
+            <li><a href="#pattern">The pattern layer</a></li>
+            <li><a href="#semantics">Semantics per component</a></li>
+            <li><a href="#cultural">Cultural handling</a></li>
+            <li><a href="#checklist">Testing checklist</a></li>
+          </ul>
+        </li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">09 — Accessibility</div>
+      <h1>Where the tradition has to yield.</h1>
+      <p class="lede">Kolam is high-frequency line work in a high-contrast palette. Some of that helps users and some of it fights them. This page names both, publishes measured numbers rather than intentions, and sets the limits that the rest of the system is not allowed to argue with.</p>
+    </div>
+
+    <!-- ============ CONTRAST ============ -->
+    <section class="doc-section" id="contrast">
+      <h2>Contrast matrix</h2>
+      <p class="sub">Every figure below is computed from the palette using the WCAG 2.x relative-luminance formula, not estimated. The same computation runs in CI; a claim that drifts from its measurement fails the build.</p>
+
+      <div class="doc-sub">
+        <h3>Light theme</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Pair</th><th>Foreground</th><th>Ground</th><th>Ratio</th><th>Required</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr class="pass"><td>Body text</td><td class="derive">--color-text</td><td class="derive">--color-bg</td><td class="mono">17.99</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Body on panel</td><td class="derive">--color-text</td><td class="derive">--color-surface</td><td class="mono">18.60</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Secondary</td><td class="derive">--color-text-secondary</td><td class="derive">--color-bg</td><td class="mono">7.74</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Captions</td><td class="derive">--color-text-tertiary</td><td class="derive">--color-bg</td><td class="mono">5.58</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Captions on sunken</td><td class="derive">--color-text-tertiary</td><td class="derive">--color-surface-sunken</td><td class="mono">5.04</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Accent link</td><td class="derive">--color-accent</td><td class="derive">--color-bg</td><td class="mono">5.92</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>On accent</td><td class="derive">--color-on-accent</td><td class="derive">--color-accent</td><td class="mono">5.92</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Control boundary</td><td class="derive">--color-border-strong</td><td class="derive">--color-bg</td><td class="mono">3.54</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Boundary on panel</td><td class="derive">--color-border-strong</td><td class="derive">--color-surface</td><td class="mono">3.66</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Boundary on sunken</td><td class="derive">--color-border-strong</td><td class="derive">--color-surface-sunken</td><td class="mono">3.20</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Focus ring</td><td class="derive">--color-focus</td><td class="derive">--color-bg</td><td class="mono">5.92</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class=""><td>Hairline (decorative)</td><td class="derive">--color-border</td><td class="derive">--color-bg</td><td class="mono">1.32</td><td class="derive">—</td><td class="res">Exempt — decorative</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Dark theme</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Pair</th><th>Foreground</th><th>Ground</th><th>Ratio</th><th>Required</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr class="pass"><td>Body text</td><td class="derive">--color-text</td><td class="derive">--color-bg</td><td class="mono">16.25</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Body on panel</td><td class="derive">--color-text</td><td class="derive">--color-surface</td><td class="mono">15.01</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Secondary</td><td class="derive">--color-text-secondary</td><td class="derive">--color-bg</td><td class="mono">8.89</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Captions</td><td class="derive">--color-text-tertiary</td><td class="derive">--color-bg</td><td class="mono">5.53</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Captions on sunken</td><td class="derive">--color-text-tertiary</td><td class="derive">--color-surface-sunken</td><td class="mono">4.51</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Accent link</td><td class="derive">--color-accent</td><td class="derive">--color-bg</td><td class="mono">7.77</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>On accent</td><td class="derive">--color-on-accent</td><td class="derive">--color-accent</td><td class="mono">7.77</td><td class="derive">4.5</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Control boundary</td><td class="derive">--color-border-strong</td><td class="derive">--color-bg</td><td class="mono">5.08</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Boundary on panel</td><td class="derive">--color-border-strong</td><td class="derive">--color-surface</td><td class="mono">4.69</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Boundary on sunken</td><td class="derive">--color-border-strong</td><td class="derive">--color-surface-sunken</td><td class="mono">4.14</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class="pass"><td>Focus ring</td><td class="derive">--color-focus</td><td class="derive">--color-bg</td><td class="mono">7.77</td><td class="derive">3.0 non-text</td><td class="res">Pass AA</td></tr>
+              <tr class=""><td>Hairline (decorative)</td><td class="derive">--color-border</td><td class="derive">--color-bg</td><td class="mono">1.41</td><td class="derive">—</td><td class="res">Exempt — decorative</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout warn"><b>Tertiary text has the smallest margin in the system</b> — 5.04 in light and 4.51 in dark against <code>--color-surface-sunken</code>, its worst background. It clears AA and very little more. It is for captions, metadata and hints only. Nothing a user must read to complete a task may be set in <code>--color-text-tertiary</code>, and it must never be combined with a reduced font weight.</div>
+
+      <div class="callout danger"><b>Every earlier version of this table tested against <code>--color-bg</code> only, and that is where four failures hid.</b> Components do not sit on the page background — they sit on <code>--color-surface</code> and <code>--color-surface-sunken</code>. Measured against those, <code>--color-text-tertiary</code> came to 4.46 in light and 4.14 in dark against the 4.5 requirement, and <code>--color-border-strong</code> — the pulli, the kambi, the colour the entire state language is drawn in — came to 2.94 in light and <b>2.63 in dark</b> against the 3.0 requirement. The worst case was the sort indicator on a table header, because table headers use the sunken surface: the one mark the system offers as proof that state is shape rather than colour was the mark that failed to meet contrast on the surface it actually renders on. Four roles were repointed one rung along the existing ramp, which fixed all eight failures without touching a palette value. <b>A contrast table is only as good as the backgrounds it thinks to test.</b></div>
+
+      <div class="callout"><b>Both border tokens are not equal.</b> <code>--color-border</code> is decorative — dividers, card edges — and is not required to clear 3:1. <code>--color-border-strong</code> is the boundary of an interactive control and is. Using the decorative one on an input is the single most common accessibility regression in a token system, so the names were chosen to make it awkward.</div>
+    </section>
+
+    <!-- ============ FOCUS ============ -->
+    <section class="doc-section" id="focus">
+      <h2>Focus</h2>
+      <p class="sub">One ring, everywhere, never removed.</p>
+
+      <div class="grid-2">
+        <div>
+          <ul class="speclist">
+            <li><span>Width</span><b>--border-edge · 2px</b></li>
+            <li><span>Offset</span><b>--border-edge · 2px</b></li>
+            <li><span>Colour</span><b>--color-focus</b></li>
+            <li><span>Contrast vs ground</span><b>5.92 / 7.77</b></li>
+            <li><span>Style</span><b>solid outline</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-3)">The offset matters as much as the width: a ring drawn flush against an accent-filled button disappears into it. Two pixels of ground between the control and the ring keeps it legible on every variant without needing a per-variant ring colour.</p>
+        </div>
+        <div class="panel">
+          <h3>Rules</h3>
+          <ul class="bullets">
+            <li><b><code>:focus-visible</code>, not <code>:focus</code>.</b> Mouse users do not get a ring on click; keyboard users always do.</li>
+            <li><b>Never <code>outline: none</code></b> without an equivalent replacement in the same declaration.</li>
+            <li><b>Focus is never colour alone.</b> A border colour change is not a focus indicator — it fails for anyone who cannot see the difference.</li>
+            <li><b>Focus order follows reading order.</b> If it does not, the DOM is wrong; do not repair it with <code>tabindex</code> values above zero.</li>
+            <li><b>Focus is restored</b> after any overlay closes, to the element that opened it.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-stage">
+          <button class="btn btn-primary">Tab to me</button>
+          <button class="btn btn-secondary">And me</button>
+          <label class="switch"><input type="checkbox"><span class="track"></span>And this</label>
+        </div>
+        <div class="demo-spec">try it with the keyboard — ring appears on tab, not on click</div>
+      </div>
+    </section>
+
+    <!-- ============ TARGETS ============ -->
+    <section class="doc-section" id="targets">
+      <h2>Target size</h2>
+      <p class="sub">The one place the system overrides its own derivation, and it does so deliberately.</p>
+
+      <div class="prose">
+        <p>Control heights are derived from the pitch: <code>--alavu-md</code> is <code>5.5 P</code>. At the default pitch of 8 that is 44px exactly. At compact density, P is 6, and the derivation gives 33px — below the WCAG 2.5.8 minimum.</p>
+        <p>The token therefore reads <code>max(calc(var(--p) * 5.5), 44px)</code>. Arithmetic loses to accessibility, in the token itself rather than in a patch applied per component. It is listed in <a href="lattice.html#breaks">where derivation breaks</a> and it is the model for how any future exception must be handled.</p>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Token</th><th>P = 6</th><th>P = 8</th><th>P = 10</th><th>Interactive?</th></tr></thead>
+          <tbody>
+            <tr><td class="name">--alavu-xs</td><td>18px</td><td>24px</td><td>30px</td><td class="derive">No — badges only</td></tr>
+            <tr><td class="name">--alavu-sm</td><td>24px</td><td>32px</td><td>40px</td><td class="derive">Meets 2.5.8 (AA, 24px) at every density; the AAA 44px target is supplied by an expander, not by the box</td></tr>
+            <tr><td class="name">--alavu-md</td><td><b>44px</b> <span class="mono" style="color:var(--color-warning)">floored</span></td><td>44px</td><td>55px</td><td class="derive">Yes</td></tr>
+            <tr><td class="name">--alavu-lg</td><td><b>48px</b> <span class="mono" style="color:var(--color-warning)">floored</span></td><td>56px</td><td>70px</td><td class="derive">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout danger"><b>Visual size and target size are different measurements.</b> A 32px row action may keep its 32px appearance provided its interactive area is padded to 44px. Conflating the two is how dense tables end up unusable on touch, and the system will not let the visual token be read as a target guarantee.</div>
+
+      <div class="callout warn"><b>This page asserted the 44px rule for two rounds before the code enforced it.</b> An audit of the stylesheet found <code>.btn-sm</code> and <code>.btn-icon.btn-sm</code> resolving to 32px at the default pitch and 24px at compact, with no hit-area expansion anywhere in the CSS — the requirement was written down, marked as a condition of use, and never implemented. It is implemented now, as a <code>::before</code> that expands the pointer target to <code>--alavu-md</code> without changing a pixel of the visual box, and it is opted out of every component whose <code>::before</code> already carries a kolam mark. The claim has also been narrowed to what is actually true: small controls clear WCAG 2.5.8 at AA on their own geometry, and reach the AAA 44px figure through the expander. <b>A documented requirement that nothing checks is a requirement that is not met.</b></div>
+    </section>
+
+    <!-- ============ MOTION ============ -->
+    <section class="doc-section" id="motion">
+      <h2>Motion</h2>
+      <p class="sub">Reduced motion is not slower motion. It is the removal of motion that carries no information. Summarised here; the full policy, the choreography ceiling and the testing checks are in <a href="motion.html#reduced">08 · Motion</a>.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Motion</th><th>Purpose</th><th>Under reduced motion</th></tr></thead>
+          <tbody>
+            <tr><td>Hover, press, colour</td><td class="derive">feedback</td><td>Instant. Colour still changes — the information is preserved, the transition is not.</td></tr>
+            <tr><td>Expand, reveal</td><td class="derive">continuity of place</td><td>Instant. Content appears in its final position.</td></tr>
+            <tr><td>Toggle loop travel</td><td class="derive">state change</td><td>Instant — the loop jumps to the other dot. Position and colour still communicate the state.</td></tr>
+            <tr><td>Page transition</td><td class="derive">spatial relationship</td><td>Removed entirely. Cross-fade is not a substitute; it triggers the same vestibular response.</td></tr>
+            <tr><td><b>Kolam draw-on</b></td><td class="derive">decoration</td><td><b>Removed entirely.</b> The static kolam renders immediately. Any accompanying status stays as text.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top:var(--idai-4)">
+        <div class="panel">
+          <h3>Implementation</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The stylesheet collapses all durations under the media query, and the generator checks the same query in JavaScript before running its draw-on. Two mechanisms because the animation is not purely declarative — and a CSS-only guard would leave the JS path running.</p>
+          <pre style="margin-top:var(--idai-2)">@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .001ms !important;
+      animation-duration:  .001ms !important; }
+}</pre>
+        </div>
+        <div class="panel">
+          <h3>Limits</h3>
+          <ul class="bullets">
+            <li><b>Nothing loops indefinitely</b> except an explicit loading indicator, which stops when loading stops.</li>
+            <li><b>No parallax, no auto-play</b>, no motion tied to scroll position.</li>
+            <li><b>Nothing flashes</b> more than three times per second — the draw-on staggers segments but never blinks.</li>
+            <li><b>Duration ceiling of 600ms</b> for anything a user is waiting on.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PATTERN LAYER ============ -->
+    <section class="doc-section" id="pattern">
+      <h2>The pattern layer</h2>
+      <p class="sub">The expressive part of this system is also the part most able to harm it. These limits are hard.</p>
+
+      <div class="grid-2">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+          <h3>Hard limits</h3>
+          <ul class="bullets">
+            <li><b>Density ≤ 10%</b> of any viewport at any breakpoint. Kolam belongs to empty states, onboarding, brand moments and print — never behind body text, never in table chrome, never as a persistent page ground at full strength.</li>
+            <li><b>Never the sole carrier of meaning.</b> A motif may reinforce a state; it may not encode one. Every state needs text plus a non-pattern cue.</li>
+            <li><b>3:1 for line art.</b> Kolam strokes are non-text graphics. At <code>--kambi-1</code> on a busy ground they will not clear it — raise the weight or lower the density.</li>
+            <li><b>Always <code>aria-hidden</code></b> when decorative, which is nearly always. A generated pattern has no informational content to announce.</li>
+            <li><b>Never behind text</b> without a solid surface between them. Not at reduced opacity, not blurred.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="canvas" data-kolam='{"dots":9,"seed":606,"crossing":0.25,"stroke":2,"showDots":false}' style="opacity:.12"></div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">A page ground at 12% opacity, behind nothing. This is the maximum acceptable treatment for a full-bleed pattern — and even here, any text placed over it must sit on its own opaque surface.</p>
+          <div class="callout" style="margin-top:var(--idai-3)"><b>How to measure density.</b> Screenshot at the smallest supported viewport, threshold the image, and compute the ratio of pattern pixels to total. Over 10% is a change request, not a discussion. The check is cheap enough to run in CI on key screens.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SEMANTICS ============ -->
+    <section class="doc-section" id="semantics">
+      <h2>Semantics per component</h2>
+      <p class="sub">What the library styles versus what your markup must declare. The CSS reacts to state; it does not set it.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Component</th><th>You must provide</th><th>Library handles</th></tr></thead>
+          <tbody>
+            <tr><td>Button</td><td class="derive">accessible name, aria-busy when loading, disabled</td><td class="derive">focus ring, states, target size</td></tr>
+            <tr><td>Field</td><td class="derive">label, aria-invalid, aria-describedby, required</td><td class="derive">error styling, focus glow, height</td></tr>
+            <tr><td>Choice</td><td class="derive">label wrapping, name grouping for radios</td><td class="derive">target size, focus, switch travel</td></tr>
+            <tr><td>Badge</td><td class="derive">a text label — always</td><td class="derive">colour, shape</td></tr>
+            <tr><td>Alert</td><td class="derive">role="alert" or role="status", or neither</td><td class="derive">accent bar, colour, layout</td></tr>
+            <tr><td>Tabs</td><td class="derive">role, aria-controls, aria-labelledby, ids</td><td class="derive">arrow-key navigation, roving tabindex, panel visibility</td></tr>
+            <tr><td>Table</td><td class="derive">th scope, aria-sort, caption</td><td class="derive">rules, hover, header ground</td></tr>
+            <tr><td>Progress</td><td class="derive">role, aria-valuenow/min/max, text status</td><td class="derive">track and fill</td></tr>
+            <tr><td>Empty state</td><td class="derive">aria-hidden on the illustration</td><td class="derive">layout, art sizing</td></tr>
+            <tr><td>Toast</td><td class="derive">role="status", timing, queueing</td><td class="derive">elevation, layout</td></tr>
+            <tr><td>Modal</td><td class="derive">role="dialog", aria-modal, focus trap and restore, Escape, inert background</td><td class="derive">layout, elevation, sizing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><b>This split is deliberate.</b> A library that sets ARIA state for you is a library that gets it wrong in the cases it did not anticipate, silently. Styling reacts to correct markup; it cannot manufacture it.</div>
+    </section>
+
+    <!-- ============ CULTURAL ============ -->
+    <section class="doc-section" id="cultural">
+      <h2>Cultural handling</h2>
+      <p class="sub">Accessibility includes not doing harm to the people whose practice this is built on.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>What this system requires</h3>
+          <ul class="bullets">
+            <li><b>Name the source.</b> Tamil terminology is used with glosses throughout, never as exotic labelling. The README credits kolam practice and the formal-grammar research — Gift Siromoney and colleagues at Madras Christian College, from the 1970s — that established kolams as a generable picture language and made this engine possible. The rationale for choosing this tradition at all, its contested chronology, and the threshold traditions elsewhere that arrived at the same constraints are set out in <a href="origins.html">01 · Origins</a>.</li>
+            <li><b>Avoid the sacred set.</b> Some kolams are tied to specific festivals, to mourning, and to temple thresholds. The generator produces secular looped patterns only, and a denylist of ritual configurations ships alongside it.</li>
+            <li><b>Assess fit before adoption.</b> This language carries meaning. For a product with no relationship to that context it risks reading as ornament borrowed for texture. Say so in your own README rather than letting your users be the ones who point it out.</li>
+            <li><b>Route credit and, where there is revenue, resources</b> back toward the practice and the communities that sustain it. Kolam is authored by generations of women and is largely uncredited; an open-source system built on it should not repeat that.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What this system does not claim</h3>
+          <ul class="bullets">
+            <li><b>Not authoritative.</b> This is one reading of the form by a design system, not a documentation of the tradition. Regional practice varies enormously and this engine captures a narrow slice.</li>
+            <li><b>Not complete.</b> The tile decomposition covers square kolams. Diamond grids, <em>padi</em> kolams, freehand <em>rangoli</em> and coloured-powder forms are outside it.</li>
+            <li><b>Not a substitute for consultation.</b> If you are shipping this to an audience for whom kolam is a living daily practice, ask them. The engine will not tell you what is appropriate on a given morning.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHECKLIST ============ -->
+    <section class="doc-section" id="checklist">
+      <h2>Testing checklist</h2>
+      <p class="sub">Split by what a machine can settle and what it cannot.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Automated — runs in CI</h3>
+          <ul class="bullets">
+            <li>Recompute every published contrast figure from the palette; fail on drift.</li>
+            <li>axe-core on every documented component in both themes and all three densities.</li>
+            <li>Assert no <code>outline: none</code> without a replacement in the same rule.</li>
+            <li>Assert every interactive element resolves to ≥ 24px of its own geometry at P = 6, and ≥ 44px once the target expander is counted. Assert the expander is present on every control below <code>--alavu-md</code>.</li>
+            <li>Assert generated kolams have zero open endpoints.</li>
+            <li>Lint for length literals outside <code>tokens.css</code>.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Manual — every release</h3>
+          <ul class="bullets">
+            <li>Keyboard-only pass through every flow: reachable, visible, escapable, focus restored.</li>
+            <li>Screen reader pass on forms, tabs and modals — VoiceOver and NVDA at minimum.</li>
+            <li>200% zoom and 400% reflow with no horizontal page scroll.</li>
+            <li>Reduced-motion pass: confirm removal, not shortening.</li>
+            <li>Greyscale pass: does every status still read?</li>
+            <li>Pattern density screenshot at the smallest viewport.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

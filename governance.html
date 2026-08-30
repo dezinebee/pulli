@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Governance — Pulli</title>
+<meta name="description" content="Versioning, the derivation-proof review rule, deprecation lifecycle, adoption tiers, decision records, roadmap and credit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html" aria-current="page">10 · Governance</a>
+          <ul class="nav-sub">
+            <li><a href="#versioning">Versioning</a></li>
+            <li><a href="#contribution">Contribution</a></li>
+            <li><a href="#review">Review criteria</a></li>
+            <li><a href="#deprecation">Deprecation</a></li>
+            <li><a href="#adoption">Adoption tiers</a></li>
+            <li><a href="#audit">The verification harness</a></li>
+            <li><a href="#decisions">Decision records</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#credit">Credit &amp; licence</a></li>
+          </ul>
+        </li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">10 — Governance</div>
+      <h1>Made to be erased.</h1>
+      <p class="lede">The fourth principle is a release policy, not a poem. A kolam lasts a day and is redrawn the next morning; the value is in the drawing, not the artefact. Systems that cannot remove things die of accretion, so this one schedules its own sweeping.</p>
+    </div>
+
+    <!-- ============ VERSIONING ============ -->
+    <section class="doc-section" id="versioning">
+      <h2>Versioning</h2>
+      <p class="sub">Semantic versioning, with one breaking release a year and a name for it.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Change</th><th>Bump</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><b>Major</b></td><td class="derive">1.0.0 → 2.0.0</td><td>Removing a token or component; renaming a semantic role; changing the seed relationship; altering a default that shifts layout.</td></tr>
+            <tr><td><b>Minor</b></td><td class="derive">1.0.0 → 1.1.0</td><td>Adding a token, component or variant; deprecating something (with the warning, not the removal); new generator options with safe defaults.</td></tr>
+            <tr><td><b>Patch</b></td><td class="derive">1.0.0 → 1.0.1</td><td>Bug fixes; contrast corrections that keep the same role; documentation; test coverage.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>The Margazhi release.</b> One breaking version per year, published in December — the month when kolams are drawn most elaborately, every morning, across Tamil Nadu. Consumers plan one migration a year instead of watching for breakage continuously. The migration guide is written and published <em>before</em> the change lands, not after.</div>
+
+      <div class="doc-sub">
+        <h3>What counts as breaking</h3>
+        <ul class="bullets">
+          <li><b>Any semantic token rename or removal.</b> Semantics are the public API.</li>
+          <li><b>A primitive change that alters resolved values</b> at the default pitch.</li>
+          <li><b>A component's default appearance changing enough to shift layout</b> — a height, a padding, a radius step.</li>
+          <li><b>Generator output changing for a given seed.</b> Determinism is a promise; if a fix must change output, it is a major version and the release notes say which seeds moved.</li>
+        </ul>
+        <p class="prose" style="margin-top:var(--idai-2)"><b>Not breaking:</b> adding a token, adding a variant, tightening a contrast value within the same role, or any change confined to the palette layer that preserves every published contrast figure.</p>
+      </div>
+    </section>
+
+    <!-- ============ CONTRIBUTION ============ -->
+    <section class="doc-section" id="contribution">
+      <h2>Contribution</h2>
+      <p class="sub">One unusual rule, and it is the one that keeps the system coherent.</p>
+
+      <div class="callout"><b>Derivation proof.</b> Every pull request that introduces a value must show that value expressed in terms of <code>P</code> and <code>r</code>. A raw length literal is a review block, not a nit. If the value genuinely cannot be derived, the PR must say which external constraint forces it, land it in <code>tokens.css</code> with an inline comment, and add a row to the table in <a href="lattice.html#breaks">Lattice → where derivation breaks</a>.</p></div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Pull request template</h3>
+          <pre>## What
+One sentence.
+
+## Derivation
+| value | expression | at P=8 |
+|-------|-----------|--------|
+| height | 5.5 P     | 44px   |
+| radius | 2 r       | 8px    |
+
+## Layer
+[ ] palette  [ ] primitive  [ ] semantic  [ ] component
+References only the layer above it: yes / no
+
+## Accessibility
+Contrast measured: …
+Target size at P=6: …
+Reduced motion: …
+
+## Sweep plan
+What replaces this, and when, if it does not last.</pre>
+        </div>
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Two layers only</h3>
+          <p class="prose" style="font-size:var(--ezhuthu-small)">Primitives and semantic aliases. There is no third layer of component-scoped tokens — no <code>--button-padding-x</code>. A component that needs its own token is a component whose spec has drifted from the system, and the correct fix is to bring it back rather than to give it a private vocabulary.</p>
+          <h3 style="font-size:var(--ezhuthu-h3);margin:var(--idai-4) 0 var(--idai-2)">The generator is the source of truth</h3>
+          <p class="prose" style="font-size:var(--ezhuthu-small)">No hand-drawn SVG pattern assets enter the repository. They cannot be re-derived when the pitch or the palette changes, which means they cannot be swept and redrawn — and a pattern that cannot be redrawn is exactly what principle 04 exists to prevent.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REVIEW ============ -->
+    <section class="doc-section" id="review">
+      <h2>Review criteria</h2>
+      <p class="sub">What a reviewer checks, in order. The first failure ends the review — no point discussing colour if the layer direction is wrong.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Check</th><th>Fails if</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">1</td><td><b>Layer direction</b></td><td>The change references a layer below itself, or a component references a palette or primitive value.</td></tr>
+            <tr><td class="mono">2</td><td><b>Derivation</b></td><td>A length literal appears outside <code>tokens.css</code> without a documented exception.</td></tr>
+            <tr><td class="mono">3</td><td><b>Accessibility floors</b></td><td>Contrast under 4.5 for text or 3.0 for non-text; target under 44px at P = 6; focus indicator removed or colour-only.</td></tr>
+            <tr><td class="mono">4</td><td><b>Both themes</b></td><td>The change was only checked in one theme.</td></tr>
+            <tr><td class="mono">5</td><td><b>All three densities</b></td><td>Layout breaks at P = 6 or P = 10.</td></tr>
+            <tr><td class="mono">6</td><td><b>Principle conflict</b></td><td>The change violates a principle without invoking the precedence table in <a href="principles.html#conflict">Principles → when they conflict</a>.</td></tr>
+            <tr><td class="mono">7</td><td><b>Emphasis budget</b></td><td>The change adds a second emphasised element to a view without removing one.</td></tr>
+            <tr><td class="mono">8</td><td><b>Sweep plan</b></td><td>A component is added with no account of what would replace it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ DEPRECATION ============ -->
+    <section class="doc-section" id="deprecation">
+      <h2>Deprecation</h2>
+      <p class="sub">Sweeping is scheduled, announced, and tooled. It is never a surprise and never indefinite.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">The lifecycle</h3>
+          <div class="step" style="display:grid;grid-template-columns:calc(var(--p)*10) 1fr;gap:var(--idai-2);margin-bottom:var(--idai-3)">
+            <span class="mono" style="color:var(--color-accent);font-size:var(--ezhuthu-small)">minor n</span>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Marked.</b> Deprecation notice in the docs, a console warning in development builds, and a codemod published the same day. The replacement must already exist.</p>
+          </div>
+          <div class="step" style="display:grid;grid-template-columns:calc(var(--p)*10) 1fr;gap:var(--idai-2);margin-bottom:var(--idai-3)">
+            <span class="mono" style="color:var(--color-accent);font-size:var(--ezhuthu-small)">minor n+1</span>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Last call.</b> The warning escalates and names the version that will remove it. Docs move the component to a "sweeping" section.</p>
+          </div>
+          <div class="step" style="display:grid;grid-template-columns:calc(var(--p)*10) 1fr;gap:var(--idai-2);margin-bottom:var(--idai-3)">
+            <span class="mono" style="color:var(--color-accent);font-size:var(--ezhuthu-small)">next major</span>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Swept.</b> Removed from the codebase entirely. No legacy directory, no compatibility shim, no flag to bring it back.</p>
+          </div>
+          <div class="step" style="display:grid;grid-template-columns:calc(var(--p)*10) 1fr;gap:var(--idai-2)">
+            <span class="mono" style="color:var(--color-accent);font-size:var(--ezhuthu-small)">permanent</span>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">In the ledger.</b> The entry stays in the removal ledger forever, with the date, the reasoning and the replacement. The record of what was swept is part of the system.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>The removal ledger</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-bottom:var(--idai-3)">A single page listing everything ever removed. It is the cheapest documentation in the system and the most useful in two years, when someone asks why there is no accordion.</p>
+          <pre style="margin:0">## Swept
+
+### `.btn-tertiary` — removed 2.0.0
+Three button variants were carrying two levels of
+priority. Ghost absorbed the use cases.
+→ replacement: `.btn-ghost`
+→ codemod: `npx pulli-codemod btn-tertiary`
+
+### `--color-text-muted` — removed 2.0.0
+Duplicated `--color-text-tertiary` at a different
+contrast, and shipped below 4.5 twice.
+→ replacement: `--color-text-tertiary`</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADOPTION ============ -->
+    <section class="doc-section" id="adoption">
+      <h2>Adoption tiers</h2>
+      <p class="sub">Three ways to use this, each honest about what it gives you and what it costs.</p>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>Tier 1 · Pattern only</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Take:</b> <code>kolam.js</code>.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b style="color:var(--color-text)">Get:</b> generated marks, empty states and grounds inside your existing system.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b style="color:var(--color-text)">Cost:</b> 4 KB. You still owe the density limit and the cultural handling.</p>
+        </div>
+        <div class="panel">
+          <h3>Tier 2 · Tokens</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Take:</b> <code>tokens.css</code>, map your components onto the semantic layer.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b style="color:var(--color-text)">Get:</b> derivation discipline, both themes, three densities, the measured contrast matrix.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b style="color:var(--color-text)">Cost:</b> a migration of every hardcoded value you own. This is the real work and it is worth doing once.</p>
+        </div>
+        <div class="panel">
+          <h3>Tier 3 · Full system</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Take:</b> everything.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b style="color:var(--color-text)">Get:</b> twelve components with accessibility contracts, and the principles as a shared review vocabulary.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b style="color:var(--color-text)">Cost:</b> twelve components is a foundation, not a product library. You will build the other thirty and should expect to contribute them back.</p>
+        </div>
+      </div>
+
+      <div class="callout warn"><b>Do not adopt tier 3 for an application that needs fifty components next quarter.</b> Adopt tier 2, keep your own component layer, and take the pattern engine if it fits your brand. A system that oversells its coverage is how teams end up maintaining two libraries.</div>
+    </section>
+
+
+    <!-- ============ AUDIT ============ -->
+    <section class="doc-section" id="audit">
+      <h2>The verification harness</h2>
+      <p class="sub">What is checked automatically, what it found the first time it was run in full, and why several of those things had been asserted on other pages for weeks before anything checked them.</p>
+
+      <p>A design system that publishes numbers has to be able to prove them. Five harnesses run over the whole system: the generator's geometry, the token graph, every contrast pair, the documented usage limits, and the link and document structure of all twenty-one pages. They are the reason the figures elsewhere in this documentation can be disagreed with rather than merely believed.</p>
+
+      <h3>What each harness asserts</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th scope="col">Harness</th><th scope="col">Assertions</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            <tr><td>Geometry</td><td>Every arc has radius <code>r = U/2</code> and its centre on a lattice dot; no open endpoints; deterministic output per seed; dot counts normalise to odd; <code>cells = (n−1)²</code>; boundary loops match the published formula; the draw-on never exceeds its cap; <code>r = unit/2</code> for both frame styles at every unit.</td><td>480 configurations · <b>71,354 arcs</b> · 0 failures</td></tr>
+            <tr><td>Token graph</td><td>Every <code>var()</code> resolves; the palette is not referenced outside the token layer; no raw hex in product CSS; type does not scale with pitch; every density tier resolves; no dead tokens.</td><td>141 defined · 131 consumed · 0 unresolved · 0 leaks</td></tr>
+            <tr><td>Contrast</td><td>Every text and non-text pair in five themes — light, dark by media query, dark by attribute, AAA high-contrast, and print — against <code>bg</code>, <code>surface</code> <em>and</em> <code>surface-sunken</code>.</td><td>0 failures</td></tr>
+            <tr><td>Limits</td><td>No CSS duration exceeds the motion cap; the cap and segment duration have exactly one source of truth; the inventory's group counts sum to the published denominator.</td><td>0 breaches · 46 + 4 + 8 = 58</td></tr>
+            <tr><td>Structure</td><td>All internal links and anchors resolve; the sidebar is byte-identical on every page; exactly one <code>aria-current="page"</code> per document, pointing at itself; one <code>h1</code> per page; no skipped heading levels.</td><td>813 links · 21/21 pages · 0 failures</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>What it found</h3>
+      <p>Eleven defects, on a system whose earlier rounds had each ended with a verification pass. They are listed in full because the pattern in them is more useful than the fixes.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th scope="col">Defect</th><th scope="col">Severity</th><th scope="col">How it survived</th></tr></thead>
+          <tbody>
+            <tr><td><code>--color-border-strong</code> at <b>2.63:1</b> on <code>surface-sunken</code> in dark, against a 3.0 requirement. This is the colour the pulli and the kambi are drawn in, and table headers use the sunken surface — so the sort indicator, the system's own example of state carried by shape, failed contrast on the surface it renders on.</td><td><span class="status bad">Critical</span></td><td>Every previous contrast table tested against <code>--color-bg</code> only. Components do not sit on the page background.</td></tr>
+            <tr><td><code>--color-text-tertiary</code> at 4.46 light / 4.14 dark on <code>surface-sunken</code>, against 4.5.</td><td><span class="status bad">Critical</span></td><td>Same blind spot.</td></tr>
+            <tr><td>The 44px target-size rule was documented as a condition of use, marked in the token table, listed in the audit checklist — and implemented nowhere. <code>.btn-sm</code> resolved to 32px at default pitch and 24px at compact with no hit-area expansion in the stylesheet.</td><td><span class="status bad">Critical</span></td><td>Writing a requirement down is not the same as enforcing it, and nothing checked.</td></tr>
+            <tr><td><code>--motion-cap</code> was published as the ceiling and consumed by nothing; <code>kolam.js</code> restated 600ms as a literal. Two independent declarations of one rule.</td><td><span class="status warn">Major</span></td><td>The token existed, so it looked wired up.</td></tr>
+            <tr><td><code>framePath()</code> silently ignored <code>unit</code> for the curl style, reading only <code>radius</code>. A caller setting <code>unit</code> got a frame whose local pitch disagreed with the one they asked for, and the two frame styles could disagree with each other from a single call.</td><td><span class="status warn">Major</span></td><td>Both defaults happened to give r = 16, so the bug was invisible at default settings.</td></tr>
+            <tr><td>Two palette leaks into product CSS — <code>--maa-50</code> in <code>.btn-danger</code>, <code>--mann-900</code> in <code>.scrim</code> — breaking the one-way layer dependency the system publishes as a rule.</td><td><span class="status warn">Major</span></td><td>Two roles were missing from the semantic layer, so the palette was the only place to reach.</td></tr>
+            <tr><td><code>aria-current="page"</code> on five in-page anchors across four pages, giving those documents more than one current item.</td><td><span class="status warn">Major</span></td><td>Copied from the sidebar pattern, where it was correct.</td></tr>
+            <tr><td>Heading levels skipped from <code>h2</code> to <code>h4</code> on twenty of twenty-one pages — 110 panel titles.</td><td><span class="status warn">Major</span></td><td><code>h4</code> was chosen for its default size rather than its level, on the first page, and copied everywhere after.</td></tr>
+            <tr><td>Two pages carried two page-level <code>h1</code>s.</td><td><span class="status info">Minor</span></td><td>A demo heading and a page heading in one document.</td></tr>
+            <tr><td>Six tokens defined and referenced by nothing.</td><td><span class="status info">Minor</span></td><td>Left behind by earlier revisions.</td></tr>
+            <tr><td>The curl and scallop frames were seeded from different local pitches — 4P and 6P — from the same call site, with no stated reason.</td><td><span class="status info">Minor</span></td><td>Two parameters were passed where one rule applies.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The pattern</h3>
+      <p>Nine of the eleven are the same failure in different clothing: <b>a rule that was written down and then not connected to anything that could check it.</b> The 44px floor, the motion cap, the layer dependency, the heading hierarchy — each was stated as a principle on one page while the code went its own way on another. The two contrast failures are a variation: the check existed and ran clean, but it tested the wrong backgrounds, so it certified a system that failed on the surfaces components actually sit on.</p>
+
+      <p>This is worth being precise about, because the obvious lesson — <em>write more tests</em> — is the wrong one. Every one of these had documentation. What none of them had was a path from the documentation to an assertion. The correction is not more prose about correctness; it is that <b>a claim in the documentation and a check in the harness are now required to ship together</b>, and that is a rule in <a href="#review">review criteria</a> rather than an aspiration here.</p>
+
+      <div class="callout warn"><b>The harness certified this system as sound four times before it found any of this.</b> Each earlier round ended with a verification pass, and each pass was real — it checked the things it knew to check. The generator has been correct at every size and seed from the beginning and remains so. What moved was the <em>scope</em> of the checking, and the honest reading of that is not that the system is now verified, but that the previous four clean results meant less than they appeared to. A passing test suite is a statement about coverage, not about correctness.</div>
+    </section>
+
+    <!-- ============ DECISIONS ============ -->
+    <section class="doc-section" id="decisions">
+      <h2>Decision records</h2>
+      <p class="sub">Short, dated, never edited. New decisions supersede old ones rather than overwriting them.</p>
+
+      <pre># DR-004 · Elevation has three levels, not six
+
+Date: 2026-03-11
+Status: accepted (supersedes DR-002)
+
+## Context
+Six elevation levels were proposed to match the component set.
+
+## Decision
+Three. Depth is carried primarily by surface stepping
+(sunken / bg / surface); shadow is reserved for things
+that genuinely float and can be dismissed.
+
+## Reasoning
+A kolam is flour on a floor and casts no shadow. More
+practically, elevation ramps become a second unowned
+hierarchy that competes with type and colour, and nobody
+can say what level 4 means versus level 5.
+
+## Consequences
+Popovers and cards share --elevation-panel. Distinguishing
+them is the job of position and border, not depth.</pre>
+
+      <div class="table-scroll" style="margin-top:var(--idai-4)">
+        <table>
+          <thead><tr><th>DR</th><th>Decision</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">DR-001</td><td>r = P/2 is fixed and forks may not change it</td><td class="derive">accepted</td></tr>
+            <tr><td class="mono">DR-002</td><td>Six elevation levels</td><td class="derive">superseded by DR-004</td></tr>
+            <tr><td class="mono">DR-003</td><td>Type scale uses √2 and does not follow the pitch</td><td class="derive">accepted</td></tr>
+            <tr><td class="mono">DR-004</td><td>Elevation has three levels</td><td class="derive">accepted</td></tr>
+            <tr><td class="mono">DR-005</td><td>Target size floors override derivation, inside the token</td><td class="derive">accepted</td></tr>
+            <tr><td class="mono">DR-006</td><td>Dark is the native theme; light is the inversion</td><td class="derive">accepted</td></tr>
+            <tr><td class="mono">DR-007</td><td>No component-scoped token layer</td><td class="derive">accepted</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ ROADMAP ============ -->
+    <section class="doc-section" id="roadmap">
+      <h2>Roadmap</h2>
+      <p class="sub">Stated as intentions with reasons, not as dates.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Next</h3>
+          <ul class="bullets">
+            <li><b>Figma variable library</b> mapping the three layers, with density and theme as modes.</li>
+            <li><b>Style Dictionary build</b> emitting CSS, JSON, Swift and Kotlin from one source.</li>
+            <li><b>Density audit tooling</b> — the pattern-coverage check as a CI script rather than a screenshot instruction.</li>
+            <li><b>Diamond-grid kolams</b> in the generator. The tile logic holds; the boundary-closure proof needs redoing for a non-square perimeter.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Considered and declined</h3>
+          <ul class="bullets">
+            <li><b>A React package.</b> The CSS is framework-agnostic on purpose; a component wrapper would halve its audience and double the maintenance.</li>
+            <li><b>More elevation levels.</b> See DR-004.</li>
+            <li><b>Coloured kolams.</b> Multi-colour powder forms are festival-specific and land squarely in the sacred set the generator avoids.</li>
+            <li><b>An icon set.</b> Out of scope, and there are good ones already. Pulli specifies icon <em>sizing</em>, not icon drawing.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CREDIT ============ -->
+    <section class="doc-section" id="credit">
+      <h2>Credit &amp; licence</h2>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The code</b> is MIT. Take it, fork it, ship it commercially, no attribution required for the software.</p>
+          <p><b>The practice is not licensed by anyone here.</b> Kolam belongs to the households and communities who draw it, and has for far longer than any of this. What the licence cannot require, the documentation asks for: name the source, keep the glosses, avoid the sacred set, and route credit and resources back where you can.</p>
+          <p><b>Research credit.</b> The observation that kolams form a generable picture language — that a formal grammar can produce them — comes from Gift Siromoney, Rani Siromoney and Kamala Krithivasan at Madras Christian College in the 1970s. The full account — including Siromoney's own, notably conservative reading of the tradition's age — is in <a href="origins.html#evolution">01 · Origins</a>. This engine is a small applied consequence of that work and would not exist without it.</p>
+        </div>
+        <div class="panel">
+          <h3>If you ship this</h3>
+          <ul class="bullets">
+            <li>Say in your own README that the visual language derives from kolam practice.</li>
+            <li>Keep the Tamil terms and their glosses. Renaming them to English erases exactly the thing worth crediting.</li>
+            <li>Read <a href="accessibility.html#cultural">Accessibility → cultural handling</a> before deciding this is right for your product.</li>
+            <li>If your product has no connection to the tradition, say that out loud in your design review. It may still be the right call — but it should be a call, not a default.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Readiness — Pulli</title>
+<meta name="description" content="Honest enterprise readiness assessment: what is production-grade, what is missing, domain fit for fintech, healthcare and large service organisations, and a phased roadmap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<style>
+  .sev-block{ color:var(--color-danger); font-weight:600; }
+  .sev-major{ color:var(--color-warning); font-weight:600; }
+  .sev-minor{ color:var(--color-text-tertiary); }
+  .sev-done{ color:var(--color-success); font-weight:600; }
+  .score{ display:grid; grid-template-columns:repeat(auto-fit,minmax(calc(var(--p)*22),1fr)); gap:var(--idai-2); margin:var(--idai-4) 0; }
+  .score div{ border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); padding:var(--space-inset-md); background:var(--color-surface); }
+  .score dt{ font-size:var(--ezhuthu-caption); text-transform:uppercase; letter-spacing:.12em; color:var(--color-text-tertiary); font-weight:600; }
+  .score dd{ margin:calc(var(--p)*.5) 0 0; font-family:var(--face-display); font-size:var(--ezhuthu-h2); line-height:1; }
+  .score dd small{ font-family:var(--face-ui); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); display:block; margin-top:calc(var(--p)*.5); font-weight:400; }
+  .phase{ border-left:var(--kambi-3) solid var(--color-border); padding-left:var(--idai-4); margin-bottom:var(--idai-6); position:relative; }
+  .phase::before{ content:""; position:absolute; left:calc(var(--idai-4) * -1 - var(--p)*.375); top:calc(var(--p)*.5); width:calc(var(--p)*.75); height:calc(var(--p)*.75); border-radius:var(--radius-pill); background:var(--color-accent); }
+  .phase.now{ border-left-color:var(--color-accent); }
+  .phase .when{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-accent); letter-spacing:.06em; }
+  .phase h3{ font-size:var(--ezhuthu-lead); margin:calc(var(--p)*.25) 0 var(--idai-2); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html" aria-current="page">12 · Readiness</a>
+          <ul class="nav-sub">
+            <li><a href="#verdict">The verdict</a></li>
+            <li><a href="#ready">What is ready</a></li>
+            <li><a href="#gaps">Gap analysis</a></li>
+            <li><a href="#domains">Domain fit</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#cost">Team and cost</a></li>
+            <li><a href="#cultural">The cultural decision</a></li>
+            <li><a href="#evaluate">Evaluate it yourself</a></li>
+          </ul>
+        </li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">12 — Readiness</div>
+      <h1>What this is ready for, and what it isn't.</h1>
+      <p class="lede">Two questions hide inside "is it enterprise-grade", and they have opposite answers. The architecture is largely production-quality. The system is roughly a fifth of one. This page separates them, quantifies the gap, and says what it would cost to close.</p>
+    </div>
+
+    <!-- ============ VERDICT ============ -->
+    <section class="doc-section" id="verdict">
+      <h2>The verdict</h2>
+
+      <div class="score">
+        <div><dt>Token architecture</dt><dd>Ready<small>At or above shipping enterprise systems</small></dd></div>
+        <div><dt>Component coverage</dt><dd>46 / 58<small>79% fully shipped · 4 partial · 8 absent · <a href="library.html#inventory">inventory published</a></small></dd></div>
+        <div><dt>Engineering</dt><dd>Not started<small>No package, types, or framework binding</small></dd></div>
+        <div><dt>Conformance evidence</dt><dd>None<small>Good practice, no audit or VPAT</small></dd></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-success)">
+          <h3>Is the architecture enterprise-grade?</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Largely yes.</b> The three-layer token model with a one-way dependency rule is how Carbon, Spectrum and Polaris are built, and most systems that fail do so because products reach past the semantic layer — this one lints against that. Density tiers, measured contrast, a motion ceiling, a deprecation lifecycle and decision records are all present and are the parts teams usually retrofit badly.</p>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+          <h3>Is the system ready to deploy?</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">No.</b> Thirteen components against the fifty-plus a real enterprise application needs. No data grid, date picker, combobox or menu. No React package, no TypeScript, no Storybook, no Figma library. No RTL. No third-party accessibility audit. Those are not hard problems — they are <em>long</em> ones, and they are most of the calendar time.</p>
+        </div>
+      </div>
+
+      <div class="callout warn"><b>Coverage rose from 24% to 79%; readiness barely moved.</b> Thirty-two components were added and <a href="library.html">the inventory is published</a>, but four of the six remaining blockers — package, Figma, RTL, conformance evidence — are engineering and organisational rather than design. <b>A library of forty-six components that cannot be installed is not more adoptable than a library of fourteen that cannot be installed.</b> Component count is a weak proxy for readiness and it is worth saying so while raising it.</div>
+
+      <div class="callout"><b>A correction to an earlier estimate.</b> This documentation previously said the system was "roughly 15%" of an enterprise library. Enumerated properly — 13 shipped against a 58-component reference inventory — it is closer to <b>22%</b>. Still a foundation, but the earlier figure was pessimistic and was not counted.</div>
+    </section>
+
+    <!-- ============ READY ============ -->
+    <section class="doc-section" id="ready">
+      <h2>What is ready</h2>
+      <p class="sub">Not a courtesy list. These are the parts that are genuinely hard to get right and are done.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Capability</th><th>State</th><th>Why it matters at scale</th></tr></thead>
+          <tbody>
+            <tr><td><b>Three-layer token model</b></td><td class="sev-done">Ready</td><td>The one-way dependency rule is the difference between a design system and a stylesheet. Enforceable by lint, and the reason a theme or pitch change does not require touching products.</td></tr>
+            <tr><td><b>Density tiers</b></td><td class="sev-done">Ready</td><td>Compact / default / comfortable from a single attribute. Enterprise consoles need this and it is painful to retrofit — Carbon and Spectrum both have it, most in-house systems do not.</td></tr>
+            <tr><td><b>Dual theme</b></td><td class="sev-done">Ready</td><td>Both complete, neither an afterthought. Every semantic role defined in both.</td></tr>
+            <tr><td><b>Measured contrast</b></td><td class="sev-done">Ready</td><td>Published figures computed from the palette, not asserted, with the intention of CI verification. Most systems publish intentions.</td></tr>
+            <tr><td><b>Accessibility floors</b></td><td class="sev-done">Ready</td><td>44px targets enforced inside the token via <code>max()</code>, including at compact density. Focus policy, reduced-motion policy, non-text contrast on control boundaries.</td></tr>
+            <tr><td><b>Motion specification</b></td><td class="sev-done">Ready</td><td>Duration ceiling measured end-to-end across sequences, an animatable-property allow-list, reduced motion as removal rather than shortening.</td></tr>
+            <tr><td><b>Governance model</b></td><td class="sev-done">Ready</td><td>Deprecation lifecycle, removal ledger, decision records, derivation-proof review rule, annual breaking release. More disciplined than many funded systems.</td></tr>
+            <tr><td><b>Email and print</b></td><td class="sev-done">Ready</td><td>Token resolution at build time for surfaces without <code>var()</code>, and a print stylesheet with the lattice re-seeded in millimetres. Genuinely rare — most enterprise systems have no answer for Outlook at all.</td></tr>
+            <tr><td><b>Documentation</b></td><td class="sev-done">Ready</td><td>Thirteen sections including the system's own failures. An evaluator can determine fitness without a call, which shortens procurement.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ GAPS ============ -->
+    <section class="doc-section" id="gaps">
+      <h2>Gap analysis</h2>
+      <p class="sub"><span class="sev-block">Blocker</span> — cannot ship without. <span class="sev-major">Major</span> — needed by most enterprise applications. <span class="sev-minor">Minor</span> — needed eventually. Effort assumes one designer and two engineers.</p>
+
+      <div class="doc-sub">
+        <h3>Components — 46 of 58</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Missing</th><th>Severity</th><th>Note</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td><b>Data grid</b> — virtualised, sortable, filterable, resizable, frozen columns, bulk select, column chooser</td><td class="sev-major">Part-built</td><td>The single largest item. Every fintech and most healthcare applications are a data grid with a shell around it. <b><a href="grid.html">Now built for read-heavy use</a></b> — virtualised, sorted, filtered, resizable, freezable, selectable, with full ARIA grid semantics. Cell editing, grouping, column virtualisation and server-side data remain absent.</td><td>Read-heavy: <span class="sev-done">done</span>. Editing and grouping: adopt headless, 4–6 wks</td></tr>
+              <tr><td><b>Menu / dropdown, tooltip, popover</b></td><td class="sev-major">Part-built</td><td>Shipped with focus management and dismissal, but <b>naive viewport-flip placement</b> — no scrolling-container or transformed-ancestor handling. Swapping in Floating UI is a contained change.</td><td>1 wk to swap placement</td></tr>
+              <tr><td><b>Combobox / autocomplete, multiselect</b></td><td class="sev-block">Blocker</td><td>The hardest ARIA pattern in common use. Do not hand-roll.</td><td>3–4 wks on a headless base</td></tr>
+              <tr><td><b>Date picker, range picker, time picker</b></td><td class="sev-block">Blocker</td><td>Locale, calendar systems, keyboard grid, screen-reader announcement of a two-dimensional widget.</td><td>4–6 wks on a headless base</td></tr>
+              <tr><td><b>Drawer, accordion, breadcrumb, pagination, tag, avatar, skeleton, spinner, banner, split button, search, number input, slider, file upload</b></td><td class="sev-done">Shipped</td><td>All present in <a href="library.html">the library</a>, tokens-only, both themes, forced-colors path.</td><td class="sev-done">Done</td></tr>
+              <tr><td><b>Tree view, command palette, notification centre, wizard, filter panel, bulk action bar</b></td><td class="sev-major">Major</td><td>Application patterns rather than primitives. Toolbar now shipped.</td><td>5–7 wks</td></tr>
+              <tr><td><b>Charts</b></td><td class="sev-major">Major</td><td>The showcase draws SVG charts by hand. A real system needs a themed charting layer with accessible data tables behind every visualisation.</td><td>4–6 wks on a charting base</td></tr>
+              <tr><td><b>Icon system</b></td><td class="sev-major">Major</td><td>Sizing is specified; there are no icons. Adopt a set rather than draw 300.</td><td>2 wks to integrate</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Engineering</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Missing</th><th>Severity</th><th>Note</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td><b>Framework package</b> — React first, TypeScript types</td><td class="sev-block">Blocker</td><td>Raw CSS is adoptable by nobody's component team as-is. Angular matters in banking specifically.</td><td>6–8 wks</td></tr>
+              <tr><td><b>npm publishing, semver releases, changelog automation</b></td><td class="sev-block">Blocker</td><td>Governance describes a release model that has no release mechanism behind it.</td><td>2 wks</td></tr>
+              <tr><td><b>Storybook</b></td><td class="sev-major">Major</td><td>The documentation site is excellent for evaluation and useless as a component workbench.</td><td>2–3 wks</td></tr>
+              <tr><td><b>Style Dictionary build</b> from <code>tokens.json</code></td><td class="sev-major">Major</td><td>The JSON exists and nothing consumes it. Emit CSS, JS, Swift, Kotlin, Figma.</td><td>2 wks</td></tr>
+              <tr><td><b>SSR and tree-shaking</b></td><td class="sev-major">Major</td><td>Assumed by every modern enterprise front end.</td><td>Folded into the package work</td></tr>
+              <tr><td><b>Browser floor decision</b></td><td class="sev-major">Major</td><td>CSS custom properties are load-bearing everywhere. If a client still requires IE11 — some banks do — this system cannot be used at all without a compiled fallback build.</td><td>Decision, then 3–4 wks if needed</td></tr>
+              <tr><td><b>Performance budget</b></td><td class="sev-minor">Minor</td><td>No bundle-size ceiling, no render benchmarks.</td><td>1 wk</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Accessibility and compliance</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Missing</th><th>Severity</th><th>Note</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td><b>Third-party audit and VPAT / ACR</b></td><td class="sev-block">Blocker</td><td>Procurement asks for the document, not the intention. Required for US federal (Section 508), most healthcare, and increasingly EU under the European Accessibility Act.</td><td>4–8 wks plus external cost</td></tr>
+              <tr><td><b>Forced-colors / Windows High Contrast</b></td><td class="sev-block">Blocker</td><td>Unsupported by the base system — state carried by fills disappears entirely. <b>Now addressed</b> in the <a href="enterprise.html">enterprise subset</a>.</td><td class="sev-done">Done</td></tr>
+              <tr><td><b>High-contrast theme</b></td><td class="sev-major">Major</td><td>AAA palette for users who need it and for procurement checklists. <b>Now addressed</b> in the subset, measured at ≥ 8:1.</td><td class="sev-done">Done</td></tr>
+              <tr><td><b>Screen-reader test matrix</b></td><td class="sev-block">Blocker</td><td>Claims are made; results are not published. NVDA/JAWS/VoiceOver × browser, per component.</td><td>3–4 wks</td></tr>
+              <tr><td><b>WCAG 2.2 review</b></td><td class="sev-major">Major</td><td>The system targets 2.1. 2.2 adds focus-appearance and target-size criteria that mostly favour it, but the delta is unassessed.</td><td>1–2 wks</td></tr>
+              <tr><td><b>Cognitive accessibility patterns</b></td><td class="sev-minor">Minor</td><td>Error recovery, plain language, timeout extension — specified nowhere.</td><td>2 wks</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Internationalisation</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Missing</th><th>Severity</th><th>Note</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td><b>RTL</b></td><td class="sev-block">Blocker</td><td>Zero support. Not a mechanical flip either — the dot rail, the travelling loop and the curl boundary all encode direction and need deliberate mirroring. Rules must move to logical properties throughout.</td><td>3–6 wks</td></tr>
+              <tr><td><b>Locale typography</b></td><td class="sev-major">Major</td><td>CJK line-height and vertical rhythm are untested; German compound words will break control widths sized in <code>ch</code>; Devanagari and Tamil ascender/descender behaviour untested despite the system's own origins.</td><td>3–4 wks</td></tr>
+              <tr><td><b>Number, date and currency formatting</b></td><td class="sev-major">Major</td><td>No tabular-figure rule, no negative-value convention, no currency alignment guidance. Fintech-critical.</td><td>2 wks</td></tr>
+              <tr><td><b>Translation expansion</b></td><td class="sev-minor">Minor</td><td>No 30–40% expansion testing on labels and buttons.</td><td>1 wk</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Design tooling and organisation</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Missing</th><th>Severity</th><th>Note</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td><b>Figma library</b></td><td class="sev-block">Blocker</td><td>Designers cannot use this today at all. Variables for the seed, three colour modes, density as a mode, published components.</td><td>4–6 wks</td></tr>
+              <tr><td><b>Code Connect / design-to-code mapping</b></td><td class="sev-minor">Minor</td><td>Nice once the Figma library and React package both exist.</td><td>1–2 wks</td></tr>
+              <tr><td><b>Funded team and SLA</b></td><td class="sev-block">Blocker</td><td>Enterprises adopt systems that will still exist in three years. A one-person side project does not clear that bar however good it is — this is an organisational fact, not a quality judgement.</td><td>—</td></tr>
+              <tr><td><b>Adoption metrics and migration tooling</b></td><td class="sev-minor">Minor</td><td>Codemods are promised in governance and do not exist.</td><td>2–3 wks</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DOMAINS ============ -->
+    <section class="doc-section" id="domains">
+      <h2>Domain fit</h2>
+      <p class="sub">The three verticals are not equally good matches, and healthcare is the one to be careful about.</p>
+
+      <div class="doc-sub">
+        <h3>Fintech — the strongest fit</h3>
+        <div class="grid-2">
+          <div class="panel" style="border-top:var(--kambi-3) solid var(--color-success)">
+            <h3>Works in its favour</h3>
+            <ul class="bullets">
+              <li><b>Compact density</b> is genuinely well-suited to ops, reconciliation and trading surfaces, and it is derived rather than hacked.</li>
+              <li><b>Measured contrast discipline</b> matters as consumer banking moves toward hard accessibility conformance in the EU.</li>
+              <li><b>The email and print layer</b> — statements, confirmations, regulatory correspondence. Rare and directly useful.</li>
+              <li><b>Dark theme is native</b>, not an inversion, which suits long-session monitoring work.</li>
+            </ul>
+          </div>
+          <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+            <h3>Blocks it today</h3>
+            <ul class="bullets">
+              <li><b>No data grid.</b> A styled <code>&lt;table&gt;</code> is not a grid. This alone rules out most applications.</li>
+              <li><b>No number system</b> — tabular figures, negative-value conventions by locale, precision and rounding display rules, currency alignment.</li>
+              <li><b>No real-time value pattern</b> — updating figures without layout shift or focus loss.</li>
+              <li><b>No audit-trail, session-timeout or step-up-authentication patterns.</b></li>
+              <li><b>Disclosure typography</b> — regulated fine print has minimum-size and prominence rules the type scale does not address.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Healthcare — the hardest fit</h3>
+        <div class="callout danger"><b>In clinical software a novel affordance is a patient-safety question, not a branding one.</b> If a clinician misreads a checkbox on a medication screen, that is a harm event. Usability engineering under IEC 62366 will ask you to justify every deviation from convention, and you do not want to spend that argument on the shape of a mark. <b>Use the <a href="enterprise.html">regulated profile</a>, which reverts the novel controls, or do not use the interface layer at all.</b></div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Specific hazards</h3>
+            <ul class="bullets">
+              <li><b>The crossing checkbox.</b> An X reads as <em>remove</em> to many software users. Reverted in the regulated profile.</li>
+              <li><b>Red and green</b> carry established clinical meanings that will collide with generic success and danger semantics.</li>
+              <li><b>The pattern layer near clinical data</b> — the density ceiling is not enough; it should be absent entirely.</li>
+              <li><b>Compact density</b> is questionable with gloves, styluses, shared workstations and users who are standing. The regulated profile refuses to go below default.</li>
+              <li><b>PHI masking and reveal</b>, screen-privacy states, and alert-fatigue hierarchies are entirely unaddressed.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>What could still be used</h3>
+            <ul class="bullets">
+              <li>The <b>token architecture</b> and derivation discipline — domain-neutral.</li>
+              <li>The <b>density model</b>, at default and comfortable.</li>
+              <li>The <b>accessibility floors</b> and the high-contrast theme.</li>
+              <li>The <b>governance model</b>, which is arguably the most transferable artefact here.</li>
+              <li>Nothing from the expressive layer, and none of the redesigned controls.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Large service organisations</h3>
+        <p>These hit multi-brand and localisation walls before they hit component gaps. Forking is well-specified — under twenty lines — but there is no white-label tooling, no theme-management story at scale, and no RTL, which rules out any organisation operating in the Gulf, Israel or much of South Asia's Urdu-language market. The <b>strongest single argument</b> for this system in a service organisation is the email and print layer, because large services send an enormous volume of both and almost no design system covers them.</p>
+      </div>
+    </section>
+
+    <!-- ============ ROADMAP ============ -->
+    <section class="doc-section" id="roadmap">
+      <h2>Roadmap</h2>
+      <p class="sub">Sequenced by what unlocks the next thing, not by what is most interesting. Durations assume one designer and two engineers; halve the team and roughly triple the calendar.</p>
+
+      <div class="phase now">
+        <span class="when">Phase 0 · 2 weeks · decide</span>
+        <h3>Choose the target before building anything</h3>
+        <ul class="bullets">
+          <li><b>Pick one vertical.</b> Fintech is the strongest fit. Trying to serve all three produces a system that fits none.</li>
+          <li><b>Decide the expressive layer in or out</b> for that vertical, using <a href="#cultural">the cultural test</a> below.</li>
+          <li><b>Decide build versus adopt</b> per hard component. Grid, combobox, date picker and floating elements should almost certainly be headless libraries wearing these tokens.</li>
+          <li><b>Set the browser floor.</b> If IE11 is required, stop — this system's architecture is incompatible and that must be known now.</li>
+        </ul>
+        <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)"><b>Unlocks:</b> everything. Getting this wrong wastes the following nine months.</p>
+      </div>
+
+      <div class="phase">
+        <span class="when">Phase 1 · 8–10 weeks · make it consumable</span>
+        <h3>From a website into something a team can install</h3>
+        <ul class="bullets">
+          <li>Style Dictionary build from <code>tokens.json</code> → CSS, JS, Figma.</li>
+          <li>React package with TypeScript types, SSR-safe, tree-shakeable. npm, semver, automated changelog.</li>
+          <li>Storybook for the thirteen existing components.</li>
+          <li>Figma library: seed as number variables, three colour modes, density as a mode.</li>
+        </ul>
+        <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)"><b>Unlocks:</b> a designer and an engineer can both use it. Until this exists nothing else matters.</p>
+      </div>
+
+      <div class="phase">
+        <span class="when">Phase 2 · 6–8 weeks · clear the accessibility floor</span>
+        <h3>Turn good practice into evidence</h3>
+        <ul class="bullets">
+          <li>RTL throughout — logical properties, and deliberate mirroring of the rail, the loop travel and the curl boundary.</li>
+          <li>Screen-reader test matrix published per component.</li>
+          <li>WCAG 2.2 delta review.</li>
+          <li>Third-party audit → VPAT / ACR.</li>
+          <li>CI: contrast recomputation, target-size assertion, duration allow-list, forced-colors smoke test.</li>
+        </ul>
+        <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)"><b>Unlocks:</b> procurement conversations. Without a VPAT most regulated buyers cannot proceed regardless of quality.</p>
+      </div>
+
+      <div class="phase">
+        <span class="when">Phase 3 · 12–20 weeks · coverage to viable</span>
+        <h3>The twenty-five components that unblock a real application</h3>
+        <ul class="bullets">
+          <li>Floating layer: menu, tooltip, popover, drawer — on Floating UI.</li>
+          <li>Input layer: combobox, multiselect, date and range picker, number, search, file upload, slider.</li>
+          <li>Navigation layer: breadcrumb, pagination, tree, toolbar, command palette.</li>
+          <li>Feedback layer: skeleton, spinner, banner, notification centre.</li>
+          <li><b>Data grid</b>, skinned onto a headless base rather than built.</li>
+        </ul>
+        <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)"><b>Unlocks:</b> a team can build a full product without leaving the system.</p>
+      </div>
+
+      <div class="phase">
+        <span class="when">Phase 4 · ongoing · harden</span>
+        <h3>The work that never finishes</h3>
+        <ul class="bullets">
+          <li>Locale typography, number and currency systems, translation expansion.</li>
+          <li>Charting layer with accessible data tables behind every visualisation.</li>
+          <li>Multi-brand tooling; performance budget; migration codemods.</li>
+          <li>Vertical patterns — audit trails, session timeout, PHI masking, bulk operations.</li>
+          <li>LTS policy alongside the annual Margazhi break.</li>
+        </ul>
+      </div>
+
+      <div class="callout"><b>Realistic total to a credible v1.0 for one vertical: nine to twelve months</b> with a designer and two engineers, assuming headless libraries are adopted for the hard components rather than built. Solo, at two or three days a week, is closer to two years — which is a legitimate choice for a portfolio and a bad one for a product.</div>
+    </section>
+
+    <!-- ============ COST ============ -->
+    <section class="doc-section" id="cost">
+      <h2>Team and cost</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Minimum viable team</h3>
+          <ul class="speclist">
+            <li><span>Design systems designer</span><b>1.0 FTE</b></li>
+            <li><span>Front-end engineers</span><b>2.0 FTE</b></li>
+            <li><span>Accessibility specialist</span><b>0.3 FTE</b></li>
+            <li><span>Technical writer</span><b>0.2 FTE</b></li>
+            <li><span>External audit</span><b>one-off</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Below roughly 2.5 FTE sustained, enterprise design systems tend to stall at the point where maintenance load equals build capacity.</p>
+        </div>
+        <div class="panel">
+          <h3>The cheaper path</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Do not build a component library.</b> Take the token architecture, the density model, the accessibility floors, the motion spec and the governance model — which is the genuinely valuable and genuinely finished part — and apply them <em>on top of</em> an existing headless or unstyled component library.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">That is three months rather than twelve, it inherits somebody else's accessibility testing, and it loses almost nothing that this system is actually good at. The components were never the contribution.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CULTURAL ============ -->
+    <section class="doc-section" id="cultural">
+      <h2>The cultural decision</h2>
+      <p class="sub">The question no gap analysis covers, and the one that should be settled first.</p>
+
+      <div class="prose">
+        <p>Should a global bank or a US hospital network use a kolam-derived visual language at all? <a href="origins.html#why">This system's own documentation says no</a>: for a product with no relationship to that context it reads as ornament borrowed for novelty. That is a real ceiling on generic enterprise adoption, and it is not solved by doing the borrowing more tastefully.</p>
+        <p><b>It is also separable.</b> The measurement layer, the governance model, the motion specification and the accessibility floors are entirely domain-neutral. An enterprise can adopt all of that and never draw a kolam — which is exactly what the <a href="enterprise.html">enterprise subset</a> is for.</p>
+      </div>
+
+      <div class="callout"><b>The better market is more specific than "enterprises".</b> Indian fintech, insurance, health-tech and public-sector products are an enormous and fast-moving sector, and very nearly all of them are built on Material or Carbon — Western visual defaults applied without much deliberation. A rigorously built, accessibility-serious system derived from an Indian tradition is <em>differentiating</em> there in a way it will never be for a bank in Frankfurt. That is where this should be pointed, and it is where the cultural argument stops being a liability and becomes the product.</div>
+
+      <div class="doc-sub">
+        <h3>The three-question test</h3>
+        <ul class="bullets">
+          <li><b>Does the organisation have a genuine relationship to the context?</b> Indian market, Indian users, Indian heritage. If no, the expressive layer is off.</li>
+          <li><b>Is the surface regulated?</b> If clinical or safety-critical, the expressive layer is off and the controls revert regardless of the answer above.</li>
+          <li><b>Can the organisation credit the source properly?</b> Naming kolam practice and the formal-grammar research in its own documentation, not just inheriting ours. If it will not, it should not use the visual language.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ EVALUATE ============ -->
+    <section class="doc-section" id="evaluate">
+      <h2>Evaluate it yourself</h2>
+      <p class="sub">The checklist an enterprise evaluator should run against this or any other design system. Most of these questions have a public answer here; the ones that do not are marked.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Question</th><th>Answer for Pulli</th></tr></thead>
+          <tbody>
+            <tr><td>Can a product accidentally reach past the semantic layer?</td><td class="sev-done">No — and it is lint-enforceable</td></tr>
+            <tr><td>Are contrast figures measured or asserted?</td><td class="sev-done">Measured, published, both themes</td></tr>
+            <tr><td>Do target sizes hold at the densest tier?</td><td class="sev-done">Yes — floored inside the token</td></tr>
+            <tr><td>Is there a forced-colors story?</td><td class="sev-done">Yes, in the enterprise subset</td></tr>
+            <tr><td>Is there a VPAT?</td><td class="sev-block">No</td></tr>
+            <tr><td>Is there a screen-reader test matrix?</td><td class="sev-block">No</td></tr>
+            <tr><td>Does RTL work?</td><td class="sev-block">No</td></tr>
+            <tr><td>Is there a data grid?</td><td class="sev-major">Read-heavy yes, editing no</td></tr>
+            <tr><td>Is the component inventory published?</td><td class="sev-done">Yes — 46 of 58, auditable</td></tr>
+            <tr><td>Can designers use it?</td><td class="sev-block">No Figma library</td></tr>
+            <tr><td>Can engineers install it?</td><td class="sev-block">No package</td></tr>
+            <tr><td>Is deprecation specified and tooled?</td><td class="sev-major">Specified, not tooled</td></tr>
+            <tr><td>Will it exist in three years?</td><td class="sev-block">Unfunded — the honest answer is unknown</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>Publishing this table is the point.</b> A system that cannot say what it lacks will cost an evaluator two weeks to find out, and they will find out anyway. Six of the twelve answers here are "no". That is a fair summary of a foundation, and a more useful artefact than a feature list.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

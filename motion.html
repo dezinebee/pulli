@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion — Pulli</title>
+<meta name="description" content="Motion guidelines: the three kolam moves, duration as distance, choreography, the animatable-property rule, the draw-on spec and reduced-motion policy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<style>
+  .curve{ display:block; width:100%; height:auto; background:var(--color-bg); border-radius:var(--radius-surface); }
+  .curve .grid{ stroke:var(--color-border); stroke-width:1; }
+  .curve .plot{ fill:none; stroke:var(--color-accent); stroke-width:3; stroke-linecap:round; }
+  .curve .guide{ stroke:var(--color-border-strong); stroke-width:1; stroke-dasharray:3 3; }
+  .curve .cp{ fill:var(--color-text-tertiary); }
+
+  .runner{
+    position:relative; height:calc(var(--p)*6);
+    background-image:linear-gradient(var(--color-border-strong), var(--color-border-strong));
+    background-size:calc(100% - var(--p)*6) var(--kambi-2);
+    background-position:center; background-repeat:no-repeat;
+    margin:var(--idai-3) 0 var(--idai-2);
+  }
+  .runner i{
+    position:absolute; top:calc(var(--p)*1.5); left:0;
+    width:calc(var(--p)*3); height:calc(var(--p)*3);
+    border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+    transform:translateX(0);
+  }
+  .runner.go i{ transform:translateX(calc(100% * 0 + (100cqw - var(--p)*3) * 0)); }
+
+  .stagger-demo{ display:flex; gap:var(--idai-1); margin:var(--idai-3) 0; }
+  .stagger-demo span{
+    flex:1; height:calc(var(--p)*8); border-radius:var(--radius-surface);
+    background:var(--color-accent-subtle); border:var(--kambi-2) solid var(--color-accent);
+    opacity:0; transform:translateY(calc(var(--p)*2));
+  }
+  .stagger-demo.go span{ opacity:1; transform:translateY(0); }
+
+  .prop-ok{ color:var(--color-success); font-weight:600; }
+  .prop-no{ color:var(--color-danger); font-weight:600; }
+  .toggle-anatomy{ display:grid; grid-template-columns:1fr 1fr; gap:var(--idai-4); align-items:center; }
+  @media (max-width:820px){ .toggle-anatomy{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html" aria-current="page">08 · Motion</a>
+          <ul class="nav-sub">
+            <li><a href="#premise">The premise</a></li>
+            <li><a href="#moves">The three moves</a></li>
+            <li><a href="#duration">Duration is distance</a></li>
+            <li><a href="#stagger">Choreography</a></li>
+            <li><a href="#toggle">The toggle</a></li>
+            <li><a href="#properties">What may animate</a></li>
+            <li><a href="#drawon">The draw-on</a></li>
+            <li><a href="#reduced">Reduced motion</a></li>
+            <li><a href="#dodont">Do &amp; don't</a></li>
+            <li><a href="#testing">Testing motion</a></li>
+          </ul>
+        </li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">08 — Motion</div>
+      <h1>Motion is the line being drawn.</h1>
+      <p class="lede">A kolam is not a static object — it is the record of a hand moving through a grid without lifting. That gives this system something most motion specifications lack: a physical referent. Duration is distance travelled, easing is one of three moves the line can make, and choreography is the order the line visits things. Nothing here was chosen for feel.</p>
+    </div>
+
+    <!-- ============ PREMISE ============ -->
+    <section class="doc-section" id="premise">
+      <h2>The premise</h2>
+      <p class="sub">Three questions every motion system has to answer, and where this one gets its answers from.</p>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>How long?</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Distance.</b> 30ms per dot the line passes. A state change is four dots; a reveal is eight; a page is twelve. Durations are not round numbers picked for feel — they are counts.</p>
+        </div>
+        <div class="panel">
+          <h3>What shape?</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">The move.</b> A kolam line does exactly three things: it turns around a dot, it spirals inward and settles, or it releases and travels on. Three curves, no more.</p>
+        </div>
+        <div class="panel">
+          <h3>In what order?</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><b style="color:var(--color-text)">Path order.</b> Things do not arrive together; they arrive in the order a single line would reach them, one dot apart. That is what makes a stagger interval derivable rather than tuned.</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>The constraint this buys you.</b> "Make it feel snappier" is not a reviewable request. "This is a reveal, so it is eight dots" is. Motion arguments are the least falsifiable in design review, and pinning them to a physical metaphor with numbers attached is the only way found so far to make them settleable.</div>
+    </section>
+
+    <!-- ============ MOVES ============ -->
+    <section class="doc-section" id="moves">
+      <h2>The three moves</h2>
+      <p class="sub">Press each one. The loop travels the same distance in each case — only the curve differs.</p>
+
+      <div class="grid-3">
+
+        <div class="panel">
+          <h3>neli · the turn</h3>
+          <svg class="curve" viewBox="-6 -6 112 112" role="img" aria-label="Easing curve for neli: symmetric, cubic-bezier 0.65, 0, 0.35, 1">
+            <path class="grid" d="M0 100 L100 100 M0 100 L0 0" fill="none"/>
+            <line class="guide" x1="0" y1="100" x2="65" y2="100"/>
+            <line class="guide" x1="100" y1="0" x2="35" y2="0"/>
+            <circle class="cp" cx="65" cy="100" r="2.5"/><circle class="cp" cx="35" cy="0" r="2.5"/>
+            <path class="plot" d="M0 100 C 65 100, 35 0, 100 0"/>
+          </svg>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Symmetric in and out — the line enters a turn and leaves it at the same rate. Use for anything the user is <b>directly manipulating</b>: hover, press, colour change, toggle travel.</p>
+          <p class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-accent);margin-top:var(--idai-1)">cubic-bezier(0.65, 0, 0.35, 1)</p>
+          <div class="runner" data-runner="neli"><i></i></div>
+          <button class="btn btn-secondary btn-sm" data-play="neli">Play</button>
+        </div>
+
+        <div class="panel">
+          <h3>chuzhi · the spiral in</h3>
+          <svg class="curve" viewBox="-6 -6 112 112" role="img" aria-label="Easing curve for chuzhi: decelerating, cubic-bezier 0.33, 0, 0.15, 1">
+            <path class="grid" d="M0 100 L100 100 M0 100 L0 0" fill="none"/>
+            <line class="guide" x1="0" y1="100" x2="33" y2="100"/>
+            <line class="guide" x1="100" y1="0" x2="15" y2="0"/>
+            <circle class="cp" cx="33" cy="100" r="2.5"/><circle class="cp" cx="15" cy="0" r="2.5"/>
+            <path class="plot" d="M0 100 C 33 100, 15 0, 100 0"/>
+          </svg>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Fast departure, long settle — the spiral tightening toward its centre. Use for <b>things arriving</b>: reveals, expansions, content entering, page transitions.</p>
+          <p class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-accent);margin-top:var(--idai-1)">cubic-bezier(0.33, 0, 0.15, 1)</p>
+          <div class="runner" data-runner="chuzhi"><i></i></div>
+          <button class="btn btn-secondary btn-sm" data-play="chuzhi">Play</button>
+        </div>
+
+        <div class="panel">
+          <h3>vidu · the release</h3>
+          <svg class="curve" viewBox="-6 -6 112 112" role="img" aria-label="Easing curve for vidu: accelerating, cubic-bezier 0.5, 0, 0.9, 0.4">
+            <path class="grid" d="M0 100 L100 100 M0 100 L0 0" fill="none"/>
+            <line class="guide" x1="0" y1="100" x2="50" y2="100"/>
+            <line class="guide" x1="100" y1="0" x2="90" y2="60"/>
+            <circle class="cp" cx="50" cy="100" r="2.5"/><circle class="cp" cx="90" cy="60" r="2.5"/>
+            <path class="plot" d="M0 100 C 50 100, 90 60, 100 0"/>
+          </svg>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Slow start, accelerating away — the line leaving a dot behind. Use for <b>things departing</b>: dismissals, exits, collapse. Always shorter than the matching entrance.</p>
+          <p class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-accent);margin-top:var(--idai-1)">cubic-bezier(0.5, 0, 0.9, 0.4)</p>
+          <div class="runner" data-runner="vidu"><i></i></div>
+          <button class="btn btn-secondary btn-sm" data-play="vidu">Play</button>
+        </div>
+
+      </div>
+
+      <div class="callout"><b>Out is faster than in.</b> <code>--motion-exit</code> is 120ms where <code>--motion-reveal</code> is 240ms. Arriving content earns the user's attention and can afford to settle; leaving content is already dismissed in the user's head and every millisecond after that decision is latency. This asymmetry is the single highest-value motion rule in the system.</div>
+    </section>
+
+    <!-- ============ DURATION ============ -->
+    <section class="doc-section" id="duration">
+      <h2>Duration is distance</h2>
+      <p class="sub">One dot is 30ms. Everything else is a count of dots.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Token</th><th>Dots</th><th>Value</th><th>Applies to</th></tr></thead>
+          <tbody>
+            <tr><td class="name">--nagarthal-dot</td><td class="derive">1</td><td class="mono">30ms</td><td>The quantum. Also the stagger interval between siblings.</td></tr>
+            <tr><td class="name">--nagarthal-1</td><td class="derive">4</td><td class="mono">120ms</td><td>Hover, press, focus, colour, anything under the pointer</td></tr>
+            <tr><td class="name">--nagarthal-2</td><td class="derive">8</td><td class="mono">240ms</td><td>Reveal, expand, toggle travel, accordion</td></tr>
+            <tr><td class="name">--nagarthal-3</td><td class="derive">12</td><td class="mono">360ms</td><td>Page and route transitions, pane changes</td></tr>
+            <tr><td class="name">--nagarthal-4</td><td class="derive">20</td><td class="mono">600ms</td><td><b>The ceiling.</b> Nothing a user waits on exceeds it — including any staggered sequence, measured end to end.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top:var(--idai-4)">
+        <div class="panel">
+          <h3>Semantic roles</h3>
+          <ul class="speclist">
+            <li><span>--motion-state</span><b>120ms neli</b></li>
+            <li><span>--motion-reveal</span><b>240ms chuzhi</b></li>
+            <li><span>--motion-exit</span><b>120ms vidu</b></li>
+            <li><span>--motion-page</span><b>360ms chuzhi</b></li>
+            <li><span>--motion-stagger</span><b>30ms</b></li>
+            <li><span>--motion-cap</span><b>600ms</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Components reference roles, never raw durations — the same rule as every other token category.</p>
+        </div>
+        <div class="panel">
+          <h3>The ceiling is a total, not a step</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">A common failure is capping each individual animation and letting a staggered sequence run for two seconds because nobody measured the whole thing. <code>--motion-cap</code> applies <b>end to end</b>: last element finished minus first element started. If a sequence would exceed it, the stagger shrinks — the count of items is never allowed to set the duration.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">The <a href="#drawon">draw-on</a> is the worked example, and it is where this rule was found the hard way.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STAGGER ============ -->
+    <section class="doc-section" id="stagger">
+      <h2>Choreography</h2>
+      <p class="sub">A kolam line reaches things one at a time, in path order. So does a list.</p>
+
+      <div class="panel">
+        <h3>Stagger · one dot between siblings</h3>
+        <div class="stagger-demo" id="staggerDemo"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div style="display:flex;gap:var(--space-inline);align-items:center;flex-wrap:wrap">
+          <button class="btn btn-secondary btn-sm" id="playStagger">Play</button>
+          <span class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)" id="staggerReadout">6 items · 30ms stagger · 240ms reveal · 390ms total</span>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:var(--idai-4)">
+        <div class="prose">
+          <p><b>The interval is one dot.</b> 30ms between siblings — enough to read as a sequence rather than a group, short enough that six items still land inside a third of a second.</p>
+          <p><b>The order is path order, not DOM order</b>, when they differ. A grid staggers along the reading path — left to right, top to bottom — not down each column, because the metaphor is a single line travelling, and a line does not teleport between columns.</p>
+          <p><b>The total is capped.</b> Beyond twelve items the stagger shrinks so the sequence still finishes inside 600ms; beyond about twenty, drop the stagger entirely and fade the group as one. A staggered list of fifty rows is not choreography, it is a wait.</p>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Items</th><th>Stagger</th><th>Total</th><th>Verdict</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">3</td><td class="mono">30ms</td><td class="mono">300ms</td><td class="derive">ideal</td></tr>
+              <tr><td class="mono">6</td><td class="mono">30ms</td><td class="mono">390ms</td><td class="derive">ideal</td></tr>
+              <tr><td class="mono">12</td><td class="mono">30ms</td><td class="mono">570ms</td><td class="derive">at the ceiling</td></tr>
+              <tr><td class="mono">24</td><td class="mono">15ms</td><td class="mono">585ms</td><td class="derive">stagger shrinks</td></tr>
+              <tr><td class="mono">50+</td><td class="mono">0</td><td class="mono">240ms</td><td class="derive">fade as one group</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOGGLE ============ -->
+    <section class="doc-section" id="toggle">
+      <h2>The toggle</h2>
+      <p class="sub">The reference case: a component whose entire visual identity <em>is</em> the motion metaphor.</p>
+
+      <div class="toggle-anatomy">
+        <div class="demo">
+          <div class="demo-stage stack">
+            <label class="switch"><input type="checkbox" checked><span class="track"></span>Show pulli</label>
+            <label class="switch"><input type="checkbox"><span class="track"></span>Include crossings</label>
+            <label class="switch"><input type="checkbox" disabled><span class="track"></span>Locked setting</label>
+          </div>
+          <div class="demo-spec">box 6P × 3P · local pitch 3P · loop r 1.5P · dots 0.5P · travel 3P · neli 240ms</div>
+        </div>
+        <div class="prose">
+          <p>The control is a <b>two-dot lattice at a local pitch of 3P</b>. Its loop radius is 1.5P — exactly half that local pitch — so the meeting condition <code>r = P/2</code> holds <em>inside</em> the component as well as across the system.</p>
+          <p>Off is the line looping the left dot. On is the same loop having travelled to wrap the right one. The travel is a <b>neli</b>: the turn a kolam line makes around a dot, which is why it uses the symmetric curve rather than a decelerating one — the loop is not arriving anywhere, it is passing around something.</p>
+          <p>The loop is <b>hollow</b>, so the dot it wraps stays visible inside it. That is not decoration: it is the difference between a line curving around a dot and a blob covering one.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Why this and not a pill</h3>
+          <ul class="bullets">
+            <li><b>It is derived.</b> A pill track with a filled thumb has no relationship to the lattice; this has a local pitch, a loop radius, and a travel distance that are all lattice values.</li>
+            <li><b>Position leads, colour follows.</b> The loop moves 3P — a full local pitch. State survives greyscale, and the accent shift is reinforcement rather than the signal.</li>
+            <li><b>The motion explains the form.</b> You can see what the animation is <em>of</em>: a line moving from one dot to the next. A pill thumb sliding explains nothing.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Rules</h3>
+          <ul class="bullets">
+            <li><b>Immediate effect only.</b> A switch that needs a save button is a checkbox. See <a href="components.html#choice">Components → Choice</a>.</li>
+            <li><b>Wrap the input in its label</b> so the text is part of the 44px target.</li>
+            <li><b>Never animate the label.</b> Only the loop travels; text that shifts on toggle reads as instability.</li>
+            <li><b>Under reduced motion the loop jumps.</b> Position and colour still carry the state — nothing is lost, only the travel.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROPERTIES ============ -->
+    <section class="doc-section" id="properties">
+      <h2>What may animate</h2>
+      <p class="sub">Two reasons to restrict this, and only one of them is performance.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Property</th><th>Allowed</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">transform</td><td class="prop-ok">yes</td><td>Compositor-only. Does not touch layout, so it cannot move anything off the lattice.</td></tr>
+            <tr><td class="mono">opacity</td><td class="prop-ok">yes</td><td>Compositor-only. The safest property in the system.</td></tr>
+            <tr><td class="mono">stroke-dashoffset</td><td class="prop-ok">yes</td><td>The draw-on. Paints rather than reflows, and is the one animation the pattern layer owns.</td></tr>
+            <tr><td class="mono">color · background-color · border-color</td><td class="prop-ok">yes</td><td>Paint-only. Cheap enough at these durations and cannot disturb geometry.</td></tr>
+            <tr><td class="mono">outline-color</td><td class="prop-ok">yes</td><td>Focus rings may fade in. The ring's <em>presence</em> must not be animated — it appears at full strength or not at all.</td></tr>
+            <tr><td class="mono">width · height · padding · margin</td><td class="prop-no">no</td><td>Triggers layout every frame, and — more importantly here — animates <em>through</em> values that are not lattice steps. For 240ms the interface is off-grid.</td></tr>
+            <tr><td class="mono">top · left · right · bottom</td><td class="prop-no">no</td><td>Same problem. Use <code>transform: translate()</code>, which moves the painted result without touching the box.</td></tr>
+            <tr><td class="mono">box-shadow</td><td class="prop-no">no</td><td>Expensive to animate, and elevation is a three-step scale in this system — there are no intermediate depths to travel through.</td></tr>
+            <tr><td class="mono">font-size · letter-spacing</td><td class="prop-no">no</td><td>Reflows text and passes through sizes that are not on the √2 scale.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>The second reason is the interesting one.</b> Most systems ban layout animation for performance. Here there is a stronger argument: a padding animating from 16px to 24px spends a quarter of a second passing through 17, 18, 19 — <b>values the system does not contain</b>. Principle 01 says nothing is chosen and everything is derived; an animation that interpolates across the scale is the one place a component can silently stop being derived. Transform sidesteps it by moving the painted result rather than the box.</div>
+
+      <div class="doc-sub">
+        <h3>Expanding and collapsing</h3>
+        <p>The most common request that runs into this rule. Height cannot be animated, so:</p>
+        <pre><span class="c">/* transform-based: scaleY on a wrapper, counter-scaled content */</span>
+.panel        { transform-origin: top; transition: transform <span class="k">var(--motion-reveal)</span>; }
+.panel[hidden]{ transform: scaleY(0); }
+
+<span class="c">/* or, where the content height is unknown, grid-template-rows —
+   layout-animating but interpolates one value, not a box model */</span>
+.wrap      { display: grid; grid-template-rows: 0fr;
+             transition: grid-template-rows <span class="k">var(--motion-reveal)</span>; }
+.wrap.open { grid-template-rows: 1fr; }</pre>
+        <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The second is a documented exception: it animates layout, but the interpolated value is a fraction rather than a length, so no off-lattice dimension is ever produced. Where an exception is unavoidable, prefer the one that cannot violate the derivation rule.</p>
+      </div>
+    </section>
+
+    <!-- ============ DRAW-ON ============ -->
+    <section class="doc-section" id="drawon">
+      <h2>The draw-on</h2>
+      <p class="sub">The system's signature animation, and the place the ceiling rule was learned.</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="canvas" id="drawStage"></div>
+          <div style="display:flex;gap:var(--space-inline);align-items:center;margin-top:var(--idai-2);flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" id="playDraw">Draw</button>
+            <div class="seg" id="drawSize" style="flex:1">
+              <button type="button" data-n="3" aria-pressed="false">3×3</button>
+              <button type="button" data-n="7" aria-pressed="true">7×7</button>
+              <button type="button" data-n="13" aria-pressed="false">13×13</button>
+            </div>
+          </div>
+          <p class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)" id="drawReadout"></p>
+        </div>
+        <div class="prose">
+          <p><b>Each segment strokes itself in, staggered along the path.</b> The line appears to be drawn rather than to fade in, which is the only animation in the system that is genuinely about the tradition rather than borrowed from it.</p>
+          <p><b>The stagger is computed, not fixed</b> — and this is where the specification changed. The original implementation used a flat 6ms between segments. That is fine for a 3×3 kolam with twelve segments, and at 7×7 with eighty-four segments it ran <b>918ms</b>. At 15×15 it ran <b>2.9 seconds</b>, against a documented ceiling of 600.</p>
+          <p>The fix is to derive the stagger from the cap rather than fix it:</p>
+          <pre>total = SEGMENT_MS + (n − 1) × stagger  ==  CAP_MS
+
+stagger = (600 − 420) / (n − 1)</pre>
+          <p>Now a 3×3 and a 15×15 both finish in exactly 600ms — the larger one simply draws faster, which is also what a practised hand does. Switch the grid size above and watch the readout.</p>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Grid</th><th>Segments</th><th>Stagger</th><th>Total</th><th>Before the fix</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">3 × 3</td><td class="mono">12</td><td class="mono">16.36ms</td><td class="mono">600ms</td><td class="mono">486ms</td></tr>
+            <tr><td class="mono">7 × 7</td><td class="mono">84</td><td class="mono">2.17ms</td><td class="mono">600ms</td><td class="mono" style="color:var(--color-danger)">918ms</td></tr>
+            <tr><td class="mono">11 × 11</td><td class="mono">220</td><td class="mono">0.82ms</td><td class="mono">600ms</td><td class="mono" style="color:var(--color-danger)">1734ms</td></tr>
+            <tr><td class="mono">15 × 15</td><td class="mono">420</td><td class="mono">0.43ms</td><td class="mono">600ms</td><td class="mono" style="color:var(--color-danger)">2934ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn"><b>Found by writing the guidelines, not by using the system.</b> The ceiling had been documented on the accessibility page since the beginning and the generator had been violating it since the beginning, because nobody had multiplied a per-item stagger by a realistic item count. This is the ordinary way motion specifications fail: the rule is stated per-animation and the violation happens per-sequence.</div>
+    </section>
+
+    <!-- ============ REDUCED ============ -->
+    <section class="doc-section" id="reduced">
+      <h2>Reduced motion</h2>
+      <p class="sub">Reduced motion is not slower motion. It is the removal of motion that carries no information.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Motion</th><th>Carries</th><th>Under reduced motion</th></tr></thead>
+          <tbody>
+            <tr><td>Hover, press, colour</td><td class="derive">feedback</td><td>Instant. The colour still changes — the information is kept, the transition dropped.</td></tr>
+            <tr><td>Toggle travel</td><td class="derive">state</td><td>Instant. Loop position and colour still communicate on/off.</td></tr>
+            <tr><td>Reveal, expand</td><td class="derive">continuity of place</td><td>Instant. Content appears in its final position.</td></tr>
+            <tr><td>Stagger</td><td class="derive">sequence, weakly</td><td>Removed. All items appear together.</td></tr>
+            <tr><td>Page transition</td><td class="derive">spatial relationship</td><td>Removed entirely. <b>Cross-fade is not a substitute</b> — it triggers the same vestibular response.</td></tr>
+            <tr><td><b>Kolam draw-on</b></td><td class="derive">nothing — decoration</td><td><b>Removed entirely.</b> The static kolam renders immediately; any accompanying status stays as text.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top:var(--idai-4)">
+        <div class="panel">
+          <h3>Two mechanisms, because one is not enough</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The stylesheet collapses every duration, and the generator checks the same query in JavaScript before running its draw-on. A CSS-only guard would leave the JS path setting <code>strokeDashoffset</code> on every segment — invisible, but still work, and still wrong.</p>
+          <pre style="margin-top:var(--idai-2)">@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: .001ms !important;
+    animation-duration:  .001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}</pre>
+        </div>
+        <div class="panel">
+          <h3>Hard limits, regardless of preference</h3>
+          <ul class="bullets">
+            <li><b>Nothing loops indefinitely</b> except a loading indicator, which stops when loading does.</li>
+            <li><b>No parallax</b>, no scroll-linked motion, no autoplay.</li>
+            <li><b>Nothing flashes</b> more than three times per second. The draw-on staggers; it never blinks.</li>
+            <li><b>600ms ceiling</b> on anything a user is waiting for, measured end to end.</li>
+            <li><b>No motion as the sole carrier</b> of any information. If removing it loses meaning, it was not decoration and should not have been motion.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DO / DON'T ============ -->
+    <section class="doc-section" id="dodont">
+      <h2>Do &amp; don't</h2>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Make exits faster than entrances. <code>--motion-exit</code> 120ms against <code>--motion-reveal</code> 240ms.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Use one duration for both directions. Symmetrical timing makes dismissal feel like the interface is arguing.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Animate <code>transform</code> and <code>opacity</code>, and let the box stay where the lattice put it.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Animate <code>height</code> or <code>padding</code>. For a quarter of a second the component is sitting on values the system does not contain.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Measure a staggered sequence end to end and shrink the interval if it exceeds 600ms.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Cap each item and assume the sequence is fine. That is exactly how the draw-on ran for 2.9 seconds.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Remove decorative motion entirely under <code>prefers-reduced-motion</code>.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Shorten it to 150ms and call it accommodated. The preference is about vestibular response, not impatience.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Say "this is a reveal, so eight dots" in review.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Say "it feels a bit slow". Then nobody can tell whether the next version is right.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ TESTING ============ -->
+    <section class="doc-section" id="testing">
+      <h2>Testing motion</h2>
+      <p class="sub">Motion is the least-tested layer of most design systems, which is why it drifts.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Automated</h3>
+          <ul class="bullets">
+            <li><b>Duration allow-list.</b> Every <code>transition-duration</code> and <code>animation-duration</code> in the codebase must resolve to a <code>--nagarthal-*</code> value. A literal <code>200ms</code> fails.</li>
+            <li><b>Property allow-list.</b> Fail on any transition naming <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, <code>padding</code>, <code>margin</code>, <code>box-shadow</code> or <code>font-size</code>.</li>
+            <li><b>Sequence ceiling.</b> For every staggered sequence, assert <code>duration + (n−1) × stagger ≤ 600</code> at the maximum realistic <code>n</code>. This is the check that would have caught the draw-on.</li>
+            <li><b>Reduced-motion path.</b> Assert the JS guard exists wherever animation is set from script, not only in CSS.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Manual</h3>
+          <ul class="bullets">
+            <li><b>Run every flow with reduced motion on.</b> Confirm removal, not shortening, and that nothing became unintelligible.</li>
+            <li><b>Watch the longest list in the product</b> load. Staggers that feel elegant at six items are a wait at forty.</li>
+            <li><b>Throttle the CPU to 6×</b> and check that nothing animating is also blocking input.</li>
+            <li><b>Toggle a switch fifty times.</b> Interruption behaviour is where easing choices actually show, and where a mis-set curve feels broken rather than merely wrong.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script>
+(function () {
+  "use strict";
+  var EASE = {
+    neli:   "cubic-bezier(0.65, 0, 0.35, 1)",
+    chuzhi: "cubic-bezier(0.33, 0, 0.15, 1)",
+    vidu:   "cubic-bezier(0.5, 0, 0.9, 0.4)"
+  };
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- easing runners ---- */
+  document.querySelectorAll("[data-play]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var name = btn.getAttribute("data-play");
+      var track = document.querySelector('[data-runner="' + name + '"]');
+      var dot = track.querySelector("i");
+      var travel = track.clientWidth - dot.offsetWidth;
+      dot.style.transition = "none";
+      dot.style.transform = "translateX(0)";
+      // force reflow so the reset is not coalesced with the move
+      void dot.offsetWidth;
+      dot.style.transition = reduced ? "none" : "transform 240ms " + EASE[name];
+      dot.style.transform = "translateX(" + travel + "px)";
+    });
+  });
+
+  /* ---- stagger ---- */
+  var demo = document.getElementById("staggerDemo");
+  document.getElementById("playStagger").addEventListener("click", function () {
+    var items = demo.querySelectorAll("span");
+    var n = items.length, stagger = reduced ? 0 : 30, dur = reduced ? 0 : 240;
+    items.forEach(function (s) { s.style.transition = "none"; s.style.opacity = 0; s.style.transform = "translateY(16px)"; });
+    void demo.offsetWidth;
+    items.forEach(function (s, i) {
+      s.style.transition = "opacity " + dur + "ms " + EASE.chuzhi + " " + (i * stagger) + "ms, " +
+                           "transform " + dur + "ms " + EASE.chuzhi + " " + (i * stagger) + "ms";
+      s.style.opacity = 1; s.style.transform = "translateY(0)";
+    });
+    document.getElementById("staggerReadout").textContent =
+      n + " items · " + stagger + "ms stagger · " + dur + "ms reveal · " + (dur + (n - 1) * stagger) + "ms total";
+  });
+
+  /* ---- draw-on ---- */
+  var stage = document.getElementById("drawStage");
+  var drawN = 7;
+  function paintDraw(animate) {
+    var meta = Kolam.render(stage, { dots: drawN, seed: 1229, crossing: 0.2, stroke: 3 }, animate);
+    var CAP = 600, SEG = 420, n = meta.segments;
+    var stagger = n > 1 ? (CAP - SEG) / (n - 1) : 0;
+    document.getElementById("drawReadout").textContent =
+      n + " segments · stagger " + stagger.toFixed(2) + "ms · total " +
+      (SEG + (n - 1) * stagger).toFixed(0) + "ms · cap 600ms";
+  }
+  document.getElementById("playDraw").addEventListener("click", function () { paintDraw(true); });
+  document.getElementById("drawSize").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+    b.setAttribute("aria-pressed", "true");
+    drawN = parseInt(b.getAttribute("data-n"), 10);
+    paintDraw(true);
+  });
+  paintDraw(false);
+})();
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

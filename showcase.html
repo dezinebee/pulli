@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Showcase — Pulli</title>
+<meta name="description" content="Five surfaces built from the same tokens: an operations dashboard, a mobile app, a marketing website, a web application, and email &amp; print where there are no variables at all.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/showcase.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html" aria-current="page">11 · Showcase</a>
+          <ul class="nav-sub">
+            <li><a href="#read">How to read these</a></li>
+            <li><a href="#forks">The five forks</a></li>
+            <li><a href="#surfaces">Surfaces</a></li>
+            <li><a href="#learned">What they proved</a></li>
+          </ul>
+        </li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">11 — Showcase</div>
+      <h1>Five surfaces, one lattice.</h1>
+      <p class="lede">A token model is a claim until something is built with it. Four of these surfaces are built entirely from the semantic layer — no bespoke values, no per-surface overrides — and two of them run brand forks to prove the palette can change without the geometry noticing. The fifth has no CSS variables at all, and is the one that decides whether any of this is a real abstraction.</p>
+    </div>
+
+    <section class="doc-section" id="read">
+      <h2>How to read these</h2>
+      <p class="sub">Each showcase page carries the same four things.</p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>On every page</h3>
+          <ul class="bullets">
+            <li><b>The surface itself</b>, live and interactive, inside a frame.</li>
+            <li><b>A density switch.</b> The surface is scoped to the tier it was designed for, but you can change it and watch the whole thing re-derive.</li>
+            <li><b>The fork.</b> The exact CSS that produced its palette — usually under twenty lines.</li>
+            <li><b>What it stresses</b>, and what broke or nearly broke while building it.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What none of them do</h3>
+          <ul class="bullets">
+            <li><b>No new tokens.</b> Nothing was added to the system to make these work.</li>
+            <li><b>No raw values.</b> Every dimension resolves through the semantic layer.</li>
+            <li><b>No component forks.</b> The button on the marketing page is the button in the dashboard.</li>
+            <li><b>No pattern above 10%.</b> Including the marketing hero, where it was tempting.</li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Email and print are the exception to all four: they cannot reference tokens at runtime, so they resolve them at build time instead. That page documents the cost.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="forks">
+      <h2>The five forks</h2>
+      <p class="sub">A fork replaces palette values and reassigns semantic roles. It never touches primitives, and it may not change <code>r = P/2</code>.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Surface</th><th>Fork</th><th>Density</th><th>Accent light / dark</th><th>Contrast</th></tr></thead>
+          <tbody>
+            <tr><td><a href="showcase-dashboard.html">Dashboard</a></td><td class="derive">neelam · indigo</td><td class="derive">compact · P = 6</td><td class="mono">#33509B / #9DB6E8</td><td class="mono">7.36 / 9.11</td></tr>
+            <tr><td><a href="showcase-mobile.html">Mobile app</a></td><td class="derive">ilai · leaf</td><td class="derive">comfortable · P = 10</td><td class="mono">#2E6B45 / #84C291</td><td class="mono">6.15 / 8.95</td></tr>
+            <tr><td><a href="showcase-website.html">Website</a></td><td class="derive">kavi · canonical</td><td class="derive">default · P = 8</td><td class="mono">#A34524 / #E7936A</td><td class="mono">5.92 / 7.77</td></tr>
+            <tr><td><a href="showcase-webapp.html">Web application</a></td><td class="derive">kavi · canonical</td><td class="derive">default · P = 8</td><td class="mono">#A34524 / #E7936A</td><td class="mono">5.92 / 7.77</td></tr>
+            <tr><td><a href="showcase-email-print.html">Email &amp; print</a></td><td class="derive">kavi · <b>resolved</b></td><td class="derive">P = 8px / P = 2mm</td><td class="mono">#A34524 / light only</td><td class="mono">5.92 · paper white</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>Two forks, two canonicals — deliberately.</b> If every showcase had its own palette, the demonstration would be about colour. Keeping two on the canonical kavi shows that the difference between a marketing site and a productivity app is density, layout and which components appear — not brand paint.</div>
+    </section>
+
+    <section class="doc-section" id="surfaces">
+      <h2>Surfaces</h2>
+      <p class="sub">Each stresses a different part of the system.</p>
+
+      <div class="grid-auto">
+        <a class="tile" href="showcase-dashboard.html">
+          <span class="n">01 · compact</span>
+          <h3>Operations dashboard</h3>
+          <p>Storage capacity console. Stresses density at P = 6 — where target-size floors engage and the 44px override earns its place. Dense tables, KPI cards, SVG charts, status badges. Pattern layer: absent by design.</p>
+        </a>
+        <a class="tile" href="showcase-mobile.html">
+          <span class="n">02 · comfortable</span>
+          <h3>Mobile application</h3>
+          <p>Three screens at P = 10. Stresses target sizes, thumb reach, and the expressive layer in onboarding — the one place a small screen can afford a full kolam.</p>
+        </a>
+        <a class="tile" href="showcase-website.html">
+          <span class="n">03 · default</span>
+          <h3>Marketing website</h3>
+          <p>Where the expressive layer gets its budget. Stresses the type scale at display sizes, the 10% density ceiling, and one primary action per view.</p>
+        </a>
+        <a class="tile" href="showcase-webapp.html">
+          <span class="n">04 · default</span>
+          <h3>Web application</h3>
+          <p>Three-pane pattern library manager. Stresses continuity — list, detail, and edit without a modal — plus the generator as a working feature rather than decoration.</p>
+        </a>
+        <a class="tile" href="showcase-email-print.html" style="border-color:var(--color-accent)">
+          <span class="n">05 · resolved</span>
+          <h3>Email &amp; print</h3>
+          <p>The surface without variables. Outlook renders with Word and paper renders nothing — no <code>var()</code>, no flexbox, no <code>max()</code>, no SVG, no JavaScript. Tokens must be resolved at build time, and the lattice re-seeded in millimetres. The hardest test, and the one that broke the most.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="doc-section" id="learned">
+      <h2>What they proved — and what they broke</h2>
+      <p class="sub">The four token-consuming surfaces surfaced three problems. The fifth surfaced five more on its own, and they are a different <em>kind</em> of problem — listed separately below.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Found in</th><th>Problem</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="derive">dashboard</td>
+              <td><b>Rail items were unreachable on touch at P = 6.</b> They used <code>--alavu-sm</code>, which resolves to 24px at compact density — visually right, but a 24px target.</td>
+              <td>Rail items now use padding to reach 44px of interactive area while keeping their compact appearance. This is the visual-size vs. target-size split the accessibility page warns about, met in the wild.</td>
+            </tr>
+            <tr>
+              <td class="derive">mobile</td>
+              <td><b>The tab bar had no safe area.</b> At comfortable density the bar looked generous but sat flush against the frame edge.</td>
+              <td>Bottom inset raised to <code>--space-inset-md</code>, which is where a real device inset would go. Density does not substitute for a safe area.</td>
+            </tr>
+            <tr>
+              <td class="derive">website</td>
+              <td><b>The hero kolam crossed the density ceiling.</b> At full strength behind the headline it measured roughly 18% coverage.</td>
+              <td>Moved out from behind the text into its own panel beside it. The rule held and the layout got better — which is usually how it goes.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>The useful result.</b> Nothing needed a new token, and no component needed a variant that did not already exist. Two of the three problems were accessibility floors doing exactly the job they were specified for, and the third was the pattern budget refusing a design that looked good. A system earns trust by being inconvenient in the right places.</div>
+
+      <div class="doc-sub">
+        <h3>The fifth surface is a different kind of failure</h3>
+        <p>Email and print do not consume tokens — they cannot. The semantic layer has to be <em>resolved</em> into literals by a build step, and four of that surface's five problems are the same problem wearing different clothes: <b>a guarantee that was automatic at runtime became a human responsibility at build time.</b></p>
+        <div class="grid-2">
+          <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+            <h3>Guarantees that stopped being automatic</h3>
+            <ul class="bullets">
+              <li><b>The 44px floor.</b> <code>max()</code> does not exist in Outlook, so the target size was computed by hand into padding plus line-height. It now needs a test, because nothing enforces it.</li>
+              <li><b>SVG.</b> Does not render at all; the pattern became a rasterised PNG. Determinism is what makes that safe — the PNG is the same seed, not a lookalike.</li>
+              <li><b>The dual theme.</b> Email dark mode is client-side inversion, not a theme swap. The template declares itself light-only, because the alternative is shipping a variant that gets overridden.</li>
+              <li><b>Two colour roles.</b> <code>--color-border</code> vanishes on paper and tertiary text turns to mud in ink — both re-specified in the print block.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>What survived intact</h3>
+            <ul class="bullets">
+              <li><b>The three-layer split.</b> Only the semantic layer needed resolving. Palette and primitives came through untouched, because nothing consumed them directly — which is the entire argument for the layer rule, tested for the first time.</li>
+              <li><b>The seed relationships.</b> <code>r = P/2</code> and the √2 ratio are meaningful in millimetres and points, so print <b>re-seeds</b> the lattice at P = 2mm rather than scaling pixel values. A system that could only rescale would have failed here.</li>
+              <li><b><code>tokens.json</code>.</b> Written as documentation with nothing consuming it; it turns out to be the only reason a build script can exist. Worth remembering next time a machine-readable export looks like busywork.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

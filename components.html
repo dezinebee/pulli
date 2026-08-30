@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Components — Pulli</title>
+<meta name="description" content="Twelve components with anatomy, states, token specifications and do/don't guidance. No component contains a hardcoded number.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html" aria-current="page">07 · Components</a>
+          <ul class="nav-sub">
+            <li><a href="#contract">The contract</a></li>
+            <li><a href="#button">Button</a></li>
+            <li><a href="#field">Field</a></li>
+            <li><a href="#choice">Choice</a></li>
+            <li><a href="#badge">Badge</a></li>
+            <li><a href="#alert">Alert</a></li>
+            <li><a href="#card">Card</a></li>
+            <li><a href="#tabs">Tabs</a></li>
+            <li><a href="#table">Table</a></li>
+            <li><a href="#stepper">Stepper</a></li>
+            <li><a href="#progress">Progress</a></li>
+            <li><a href="#empty">Empty state</a></li>
+            <li><a href="#toast">Toast</a></li>
+            <li><a href="#modal">Modal</a></li>
+          </ul>
+        </li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">07 — Components</div>
+      <h1>Nothing here has a hardcoded number.</h1>
+      <p class="lede">Thirteen components. Each is documented with its anatomy in lattice terms, its full state set, and the accessibility contract it must satisfy. A component is valid only when its entire box model can be expressed in <code>idai</code>, <code>valai</code> and <code>kambi</code>.</p>
+    </div>
+
+    <!-- ============ CONTRACT ============ -->
+    <section class="doc-section" id="contract">
+      <h2>The contract</h2>
+      <p class="sub">What every component in this library guarantees, and what it requires of you.</p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Every component guarantees</h3>
+          <ul class="bullets">
+            <li><b>Full derivation.</b> Every dimension is a semantic token. Change the pitch and it re-derives correctly.</li>
+            <li><b>Both themes.</b> No component references a palette value directly, so both themes work without per-component overrides.</li>
+            <li><b>A visible focus state</b> at 2px with 2px offset, never removed, never replaced by a colour change alone.</li>
+            <li><b>Target size.</b> Interactive elements meet 44px, including at compact density.</li>
+            <li><b>Reduced motion.</b> All transitions collapse to instant under the media query.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Every component requires</h3>
+          <ul class="bullets">
+            <li><b>A programmatic name.</b> Icon-only controls need <code>aria-label</code>; the library will not invent one.</li>
+            <li><b>State in the markup.</b> <code>aria-selected</code>, <code>aria-expanded</code>, <code>aria-pressed</code> and <code>hidden</code> are your responsibility; the CSS styles them, it does not set them.</li>
+            <li><b>Text alongside colour.</b> Status colour is reinforcement, never the sole carrier of meaning.</li>
+            <li><b>One emphasis per view.</b> See <a href="principles.html#samam">principle 03</a>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BUTTON ============ -->
+    <section class="doc-section" id="button">
+      <h2>Button</h2>
+      <p class="sub">Four variants, three sizes. The variant carries priority; the size carries context.</p>
+
+      <div class="demo">
+        <div class="demo-stage">
+          <button class="btn btn-primary">Draw kolam</button>
+          <button class="btn btn-secondary">Sweep</button>
+          <button class="btn btn-ghost">Undo</button>
+          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-secondary" disabled>Disabled</button>
+        </div>
+        <div class="demo-spec">height max(5.5P, 44px) · pad-x 3P · radius 2r · gap 1P</div>
+      </div>
+      <div class="demo">
+        <div class="demo-stage">
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary">Medium</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+        </div>
+        <div class="demo-spec">sm 4P · md max(5.5P, 44px) · lg max(7P, 48px)</div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Anatomy</h3>
+          <ul class="speclist">
+            <li><span>Height (md)</span><b>max(5.5 P, 44px)</b></li>
+            <li><span>Horizontal padding</span><b>--space-inset-md</b></li>
+            <li><span>Icon gap</span><b>--idai-1</b></li>
+            <li><span>Radius</span><b>--radius-control</b></li>
+            <li><span>Border</span><b>--border-hairline</b></li>
+            <li><span>Label size</span><b>--ezhuthu-small</b></li>
+            <li><span>Focus ring</span><b>--border-edge</b></li>
+            <li><span>Press offset</span><b>--border-hairline</b></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">States</h3>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>State</th><th>Treatment</th></tr></thead>
+              <tbody>
+                <tr><td>Rest</td><td class="derive">--color-accent</td></tr>
+                <tr><td>Hover</td><td class="derive">--color-accent-hover</td></tr>
+                <tr><td>Active</td><td class="derive">translateY(1px), 120ms vidu</td></tr>
+                <tr><td>Focus</td><td class="derive">2px ring, 2px offset</td></tr>
+                <tr><td>Disabled</td><td class="derive">opacity .45, pointer-events none</td></tr>
+                <tr><td>Loading</td><td class="derive">aria-busy, label retained, spinner replaces icon</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>One primary per view. Secondary and ghost carry everything else. If two actions feel equally primary, the view is asking two questions and should be split.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Use <code>btn-danger</code> for anything reversible. Danger is reserved for actions with no return path — which principle 02 already says should be rare.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Keep the label on a loading button and set <code>aria-busy="true"</code>. The user needs to know what is loading.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Replace the label with a spinner. The button changes width, the layout jumps, and screen reader users lose the action name.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ FIELD ============ -->
+    <section class="doc-section" id="field">
+      <h2>Field</h2>
+      <p class="sub">Text, select and textarea share one anatomy so a form reads as one rhythm.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="field">
+            <label for="f1">Grid size <span class="req" aria-hidden="true">*</span></label>
+            <input id="f1" type="text" value="7 × 7" required>
+            <div class="help">Odd numbers only — a kolam needs a centre dot.</div>
+          </div>
+          <div class="field">
+            <label for="f2">Symmetry group</label>
+            <select id="f2"><option>D4 — both mirrors and diagonal</option><option>D2 — mirrors only</option><option>Free</option></select>
+          </div>
+          <div class="field invalid">
+            <label for="f3">Seed</label>
+            <input id="f3" type="text" value="seven" aria-invalid="true" aria-describedby="f3e">
+            <div class="err" id="f3e">Seed must be a whole number between 1 and 9999.</div>
+          </div>
+        </div>
+        <div class="demo-spec">height max(5.5P, 44px) · pad 1P/2P · radius 2r · label gap 1P · field gap 3P</div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Anatomy</h3>
+          <ul class="speclist">
+            <li><span>Label to input</span><b>--space-stack-tight</b></li>
+            <li><span>Input to help</span><b>--space-stack-tight</b></li>
+            <li><span>Field to field</span><b>--idai-3</b></li>
+            <li><span>Border</span><b>--color-border-strong</b></li>
+            <li><span>Focus glow</span><b>2px --color-accent-subtle</b></li>
+            <li><span>Textarea min height</span><b>14 P</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Label-to-input is one step; field-to-field is three. The proximity rule from <a href="lattice.html#spacing">Lattice → spacing</a> requires at least one full step of separation between the two.</p>
+        </div>
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Requirements</h3>
+          <ul class="bullets">
+            <li><b>Always a visible label.</b> Placeholder text is not a label — it disappears exactly when the user needs it.</li>
+            <li><b>Errors are text.</b> Red border plus <code>aria-invalid</code> plus a message that says how to fix it, wired with <code>aria-describedby</code>.</li>
+            <li><b>Required is marked in text</b> or in the label, not by colour alone. The asterisk is <code>aria-hidden</code>; <code>required</code> carries the semantics.</li>
+            <li><b>Border is <code>--color-border-strong</code></b>, which clears 3:1 against the ground. A field boundary is a non-text UI component and is held to that.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Validate on blur and again on submit. Tell the user what to do, not what they did wrong.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Validate on every keystroke. The field turns red while the user is still typing the value that would have been valid.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ CHOICE ============ -->
+    <section class="doc-section" id="choice">
+      <h2>Choice</h2>
+      <p class="sub">Checkbox, radio, switch. Different questions, not different styles of the same control.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <label class="choice"><input type="checkbox" checked> Show pulli</label>
+          <label class="choice"><input type="checkbox"> Include crossings</label>
+          <div style="display:flex;gap:var(--idai-4);flex-wrap:wrap;margin-top:var(--idai-1)">
+            <label class="choice"><input type="radio" name="sym" checked> D4</label>
+            <label class="choice"><input type="radio" name="sym"> D2</label>
+            <label class="choice"><input type="radio" name="sym"> Free</label>
+          </div>
+          <div style="display:flex;gap:var(--idai-4);flex-wrap:wrap;margin-top:var(--idai-1)">
+            <label class="switch"><input type="checkbox" checked><span class="track"></span>Mirror horizontally</label>
+            <label class="switch"><input type="checkbox"><span class="track"></span>Animate draw-on</label>
+          </div>
+        </div>
+        <div class="demo-spec">box 2.5P · row min 44px · switch 6P × 3P · local pitch 3P · loop r 1.5P · travel 3P · 240ms neli</div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>The switch is a kolam</h3>
+        <div class="grid-2">
+          <div class="prose">
+            <p>The control is a <b>two-dot lattice at a local pitch of 3P</b>, with the loop radius at 1.5P — exactly half that local pitch. The meeting condition <code>r = P/2</code> therefore holds inside the component as well as across the system.</p>
+            <p>Off is the line looping the left dot; on is the same loop having travelled to wrap the right one. The travel is a <b>neli</b> — the turn a kolam line makes around a dot — which is why it uses the symmetric curve rather than a decelerating one. The loop is <b>hollow</b>, so the dot it wraps stays visible inside it: that is the difference between a line curving around a dot and a blob covering one.</p>
+            <p>State is carried by loop <em>position</em> first and colour second, so it survives greyscale and colour-blindness without a second indicator. Full rationale in <a href="motion.html#toggle">Motion → the toggle</a>.</p>
+          </div>
+          <ul class="speclist">
+            <li><span>Box</span><b>6 P × 3 P</b></li>
+            <li><span>Local pitch</span><b>3 P</b></li>
+            <li><span>Loop diameter</span><b>3 P</b></li>
+            <li><span>Loop radius</span><b>1.5 P = local P/2</b></li>
+            <li><span>Loop stroke</span><b>--border-edge</b></li>
+            <li><span>Pulli diameter</span><b>0.5 P</b></li>
+            <li><span>Kambi length</span><b>3 P, dot to dot</b></li>
+            <li><span>Travel</span><b>3 P</b></li>
+            <li><span>Easing</span><b>--motion-reveal</b></li>
+            <li><span>Row target</span><b>--alavu-md</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Both are the line, using different moves</h3>
+        <p>Radio and checkbox stay distinguishable — round versus square, exclusive versus independent — but the marks inside them are now the system's own vocabulary rather than a borrowed dot and tick.</p>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Radio · the loop closes</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Unselected is a pulli inside a <b>dashed</b> ring — the line is there but has not closed. Selected is the same ring <b>solid</b>, in accent. <a href="principles.html#sikku">Continuity itself</a> carries the state, so it reads in greyscale without depending on a fill.</p>
+            <ul class="speclist" style="margin-top:var(--idai-2)">
+              <li><span>Control</span><b>2.5 P</b></li>
+              <li><span>Pulli</span><b>0.5 P</b></li>
+              <li><span>Open loop</span><b>kambi-1 dashed</b></li>
+              <li><span>Closed loop</span><b>kambi-2 solid</b></li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Checkbox · the line crosses</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Unchecked is a pulli in a square enclosure. Checked is <b>tile C — the crossing</b>, which is an X relative to the dot lattice because the kolam line runs diagonally between dots. Indeterminate is a single stroke: the line passing through without crossing.</p>
+            <ul class="speclist" style="margin-top:var(--idai-2)">
+              <li><span>Enclosure</span><b>--radius-control</b></li>
+              <li><span>Crossing arm</span><b>1.5 P × kambi-2</b></li>
+              <li><span>Indeterminate</span><b>one arm, level</b></li>
+              <li><span>Row target</span><b>--alavu-md</b></li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout warn"><b>One risk, named.</b> An X can read as <em>remove</em> rather than <em>selected</em> in software, though it is the older convention on paper forms. It is mitigated here by the square enclosure, by accent rather than danger colour, and by the label — but if your product uses X for dismissal nearby, keep the tick and say so in your fork.</div>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel"><h3>Checkbox</h3><p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Zero or more from a set. Takes effect on submit. Supports an indeterminate state for parent rows.</p></div>
+        <div class="panel"><h3>Radio</h3><p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Exactly one from a set of two to five. Above five, use a select. Always pre-select a default.</p></div>
+        <div class="panel"><h3>Switch</h3><p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">A single setting that takes effect <b>immediately</b>. If it needs a save button, it is a checkbox. Rendered as a travelling kolam loop — see below.</p></div>
+      </div>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Wrap the input in its <code>&lt;label&gt;</code> so the text is part of the target. That is what gets the row to 44px.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Use a switch inside a form with a submit button. The user toggles it, presses Cancel, and reasonably expects it not to have applied.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ BADGE ============ -->
+    <section class="doc-section" id="badge">
+      <h2>Badge</h2>
+      <p class="sub">Status at a glance. Colour reinforces the label; it never replaces it.</p>
+
+      <div class="demo">
+        <div class="demo-stage">
+          <span class="badge ok">Continuous</span>
+          <span class="badge warn">Open ends</span>
+          <span class="badge info">Symmetric</span>
+          <span class="badge bad">Broken line</span>
+          <span class="badge plain">Draft</span>
+        </div>
+        <div class="demo-spec">height 3P · pad-y 0.5P · pad-x 2P · radius pill · dot r · caption weight 600</div>
+      </div>
+
+      <div class="callout"><b>The dot is not the status.</b> It is a repetition of the text colour at a size that survives being scanned quickly. Remove the label and the badge conveys nothing to a colour-blind user, a screen reader, or a greyscale printout — which is why <code>.plain</code> exists for badges that carry no status at all.</div>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Use one badge per row. Two competing badges is the emphasis-inflation problem in miniature.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Make a badge interactive. If it can be clicked it is a filter chip or a button, and needs a 44px target.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ ALERT ============ -->
+    <section class="doc-section" id="alert">
+      <h2>Alert</h2>
+      <p class="sub">Persistent, in-page messages. The accent bar is <code>--kambi-3</code> — one loop radius, the drawn line.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="alert info"><div><h3>Determinism</h3><p>This kolam was generated from seed 1729 and will be identical on every machine.</p></div></div>
+          <div class="alert ok"><div><h4>Line closed</h4><p>All 84 path segments join. Zero open endpoints.</p></div></div>
+          <div class="alert warn"><div><h5>Density above limit</h5><p>Pattern coverage is 14% of the viewport. The ceiling is 10%.</p></div></div>
+          <div class="alert bad" role="alert"><div><h5>Even grid rejected</h5><p>A kolam needs a centre dot. Choose an odd number of pulli.</p></div></div>
+        </div>
+        <div class="demo-spec">pad 3P · accent bar r (kambi-3) · radius 0 2r 2r 0 · title/body gap 0.5P</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Semantics</h3>
+          <ul class="bullets">
+            <li><b>Errors that interrupt</b> get <code>role="alert"</code>.</li>
+            <li><b>Status that updates</b> gets <code>role="status"</code> — polite, does not interrupt.</li>
+            <li><b>Informational content</b> gets neither. An alert role on a passive message makes screen reader use exhausting.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Placement</h3>
+          <ul class="bullets">
+            <li><b>Form errors</b> go next to the field, not in a summary at the top — or in both, with the summary linking down.</li>
+            <li><b>Page-level alerts</b> sit above the content they concern, inside the same container.</li>
+            <li><b>Never stack more than two.</b> Three alerts is a page that needs restructuring.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CARD ============ -->
+    <section class="doc-section" id="card">
+      <h2>Card</h2>
+      <p class="sub">A container with a generated media area. The pattern comes from the engine, so no two cards need the same asset.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-media"><div data-kolam='{"dots":5,"seed":881,"crossing":0.3,"stroke":4,"showDots":false}'></div></div>
+          <div class="card-body"><h3>Margazhi set</h3><p>Thirty kolams, one for each morning of the month. Generated, never repeated.</p></div>
+          <div class="card-foot"><button class="btn btn-secondary btn-sm">Open</button></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><div data-kolam='{"dots":5,"seed":246,"crossing":0.3,"stroke":4,"showDots":false}'></div></div>
+          <div class="card-body"><h4>Boundary studies</h4><p>Corner loops and half-loops at every grid size from three to fifteen.</p></div>
+          <div class="card-foot"><button class="btn btn-secondary btn-sm">Open</button></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><div data-kolam='{"dots":5,"seed":1357,"crossing":0.3,"stroke":4,"showDots":false}'></div></div>
+          <div class="card-body"><h5>Crossing weaves</h5><p>What happens above a crossing probability of 0.5, and why it stops being a kolam.</p></div>
+          <div class="card-foot"><button class="btn btn-secondary btn-sm">Open</button></div>
+        </div>
+      </div>
+
+      <ul class="speclist" style="margin-top:var(--idai-4)">
+        <li><span>Radius</span><b>--radius-panel</b></li>
+        <li><span>Body padding</span><b>--space-inset-md</b></li>
+        <li><span>Media height</span><b>12 P</b></li>
+        <li><span>Grid gutter</span><b>--space-gutter</b></li>
+        <li><span>Border</span><b>hairline, --color-border</b></li>
+      </ul>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Give each card a stable seed derived from its content id. The same item then always carries the same kolam, which makes it recognisable.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Randomise on every render. The card changes appearance on refresh and stops being an identity.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ TABS ============ -->
+    <section class="doc-section" id="tabs">
+      <h2>Tabs</h2>
+      <p class="sub">The selection indicator is <code>--kambi-2</code> — the same weight as a drawn edge, never thicker.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="tabs" role="tablist" aria-label="Kolam properties">
+            <button role="tab" id="t1" aria-controls="p1" aria-selected="true">Lattice</button>
+            <button role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1">Loops</button>
+            <button role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1">Crossings</button>
+          </div>
+          <div class="tabpanel" id="p1" role="tabpanel" aria-labelledby="t1">Dots sit on a square lattice at pitch P. Cells between four dots are the unit of composition.</div>
+          <div class="tabpanel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>Each loop is a quarter arc of radius P/2 centred on a dot. Loops meet at edge midpoints.</div>
+          <div class="tabpanel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>A crossing replaces two arcs with two straight lines. Above 0.5 probability the pattern reads as a weave.</div>
+        </div>
+        <div class="demo-spec">dot 0.5P on the kambi · loop 2.5P · gap 3P · loop scale 0→1 over 240ms neli</div>
+      </div>
+
+      <div class="callout"><b>The indicator is a loop, not an underline.</b> The tab rail <em>is</em> the kambi; each tab has a pulli sitting on it; the current tab's dot is wrapped. This is the same construction as the <a href="#choice">toggle</a> and the <a href="#stepper">stepper</a> — one primitive, three components. The rule and its limits are in <a href="line.html#rail">04 · The Line</a>.</div>
+
+      <div class="callout"><b>Keyboard behaviour ships with the library.</b> Left and right arrows move between tabs and select on arrival; <code>tabindex</code> is managed so the tab list is a single stop in the page tab order. You supply <code>role</code>, <code>aria-controls</code> and <code>aria-labelledby</code> in the markup.</div>
+    </section>
+
+    <!-- ============ STEPPER ============ -->
+    <section class="doc-section" id="stepper">
+      <h2>Stepper</h2>
+      <p class="sub">The dot rail laid out as progress. Completed and current steps are wrapped; the rest are dots the line has not reached.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <ol class="stepper" style="--steps:4">
+            <li data-done>Lay the pulli</li>
+            <li data-done>Choose symmetry</li>
+            <li aria-current="step">Draw the line</li>
+            <li>Close the boundary</li>
+          </ol>
+        </div>
+        <div class="demo-spec">dot 0.5P · loop 3P · kambi hairline · label caption · current in accent, done in secondary</div>
+      </div>
+
+      <ul class="bullets">
+        <li><b>Set <code>--steps</code></b> to the number of items so the kambi spans dot to dot rather than edge to edge.</li>
+        <li><b><code>aria-current="step"</code></b> on the current item; <code>data-done</code> on completed ones. The CSS reacts to state, it does not set it.</li>
+        <li><b>Completed and current are distinguished by colour, not by shape</b> — both are wrapped, because both have been reached. If that distinction carries real meaning in your flow, add a label, not a second loop style.</li>
+        <li><b>Not for more than about six steps.</b> Beyond that the dots crowd and the labels truncate; use a progress bar and a count.</li>
+      </ul>
+    </section>
+
+    <!-- ============ TABLE ============ -->
+    <section class="doc-section" id="table">
+      <h2>Table</h2>
+      <p class="sub">Hairline rules only. A table with heavy borders is a grid competing with its own contents.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <table class="data-table">
+            <thead><tr>
+              <th scope="col" aria-sort="none">Pattern</th>
+              <th scope="col" aria-sort="none">Grid</th>
+              <th scope="col" aria-sort="descending">Seed<span class="dir"></span></th>
+              <th scope="col" aria-sort="none">Segments</th>
+              <th scope="col">Status</th>
+            </tr></thead>
+            <tbody>
+              <tr aria-selected="true"><td>Margazhi 02</td><td class="mono">9 × 9</td><td class="mono">2024</td><td class="mono">144</td><td><span class="badge ok">Closed</span></td></tr>
+              <tr><td>Margazhi 01</td><td class="mono">7 × 7</td><td class="mono">1729</td><td class="mono">84</td><td><span class="badge ok">Closed</span></td></tr>
+              <tr><td>Boundary study</td><td class="mono">3 × 3</td><td class="mono">11</td><td class="mono">12</td><td><span class="badge info">Draft</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="demo-spec">header kambi + pulli per sortable column · sorted dot wrapped · selected row wraps its leading dot</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>A table is already a lattice</b> — rows crossing columns — so two things follow without inventing anything.</p>
+          <p><b>The header rule is a kambi, and each sortable column is a pulli on it.</b> The sorted column's dot is wrapped. That is the same primitive as <a href="#tabs">tabs</a>, and correctly so: choosing a sort column <em>is</em> choosing among options along a line. Direction stays an arrow in text — the loop says <em>which</em> column, the arrow says <em>which way</em>, and one mark should not carry both.</p>
+          <p><b>A selected row wraps the dot in its leading cell</b> rather than relying on a fill alone. One loop per selection is not line work at frequency, so the density objection does not apply — a loop on <em>every</em> row would be, which is why hover stays a tint.</p>
+        </div>
+        <ul class="bullets">
+          <li><b>Numbers are monospaced and right-aligned</b> where they are compared down a column.</li>
+          <li><b>Row actions</b> use <code>--alavu-sm</code> visually but must carry a 44px hit area on touch.</li>
+          <li><b>Wide tables scroll inside their own container.</b> The page body never scrolls horizontally.</li>
+          <li><b><code>aria-sort</code> drives the loop</b> — <code>none</code> shows a bare pulli, <code>ascending</code> or <code>descending</code> wraps it. The CSS reacts to the attribute; it does not set it.</li>
+          <li><b><code>aria-selected</code> on the row</b> drives the selection loop.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ PROGRESS ============ -->
+    <section class="doc-section" id="progress">
+      <h2>Progress</h2>
+      <p class="sub">Height is one loop radius, so a progress bar is a kambi laid flat.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="progress" role="progressbar" style="--value:62" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Generating patterns"></div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-secondary)">62% — 18 of 30 kolams generated</p>
+          <div class="progress" role="progressbar" style="--value:24" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100" aria-label="Exporting"></div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-secondary)">24% — exporting</p>
+        </div>
+        <div class="demo-spec">kambi hairline · pulli 0.5P spaced · drawn line kambi-2 · head loop 2P · set --value 0–100</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>Progress is how far the line has travelled.</b> The track is a kambi with pulli along it; the traversed portion is drawn at full weight in accent; and the head carries a loop — the turn the line is making right now.</p>
+          <p>This is the <a href="#stepper">stepper</a> generalised to a continuous scale, which is why they look related: a stepper is progress with named stops, and progress is a stepper with unnamed ones.</p>
+        </div>
+        <ul class="speclist">
+          <li><span>Track</span><b>--border-hairline</b></li>
+          <li><span>Pulli</span><b>0.5 P, spaced</b></li>
+          <li><span>Drawn line</span><b>--border-edge</b></li>
+          <li><span>Head loop</span><b>2 P</b></li>
+          <li><span>Value</span><b>--value: 0–100</b></li>
+          <li><span>Transition</span><b>--motion-reveal</b></li>
+        </ul>
+      </div>
+
+      <div class="callout"><b>Determinate or nothing.</b> If the duration is unknown, use the kolam draw-on loader instead — an indeterminate bar that sweeps forever tells the user less than a sentence does. Always pair either with a text status, and always set <code>aria-valuenow</code> alongside <code>--value</code>; the CSS variable draws, the ARIA announces.</div>
+    </section>
+
+    <!-- ============ EMPTY ============ -->
+    <section class="doc-section" id="empty">
+      <h2>Empty state</h2>
+      <p class="sub">The one place the pattern layer gets to be the main event.</p>
+
+      <div class="demo">
+        <div class="demo-stage" style="justify-content:center">
+          <div class="empty">
+            <div class="art" data-kolam='{"dots":5,"seed":333,"crossing":0.1,"stroke":3.5,"showDots":true}' aria-hidden="true"></div>
+            <h3>No kolams yet</h3>
+            <p>Patterns you generate will collect here. Each one is stored as its seed, so the set stays small however many you keep.</p>
+            <button class="btn btn-primary">Draw the first one</button>
+          </div>
+        </div>
+        <div class="demo-spec">art 16P · pad 8P/4P · stack 2P · illustration aria-hidden</div>
+      </div>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Say what will appear here, and give the action that makes it appear. An empty state is an instruction with an illustration attached.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Leave the kolam without <code>aria-hidden</code>. It is decoration; announcing it adds nothing and delays the sentence that matters.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ TOAST ============ -->
+    <section class="doc-section" id="toast">
+      <h2>Toast</h2>
+      <p class="sub">The return path that makes principle 02 affordable. Destructive actions are cheap when undo is one click away.</p>
+
+      <div class="demo">
+        <div class="demo-stage">
+          <div class="toast" role="status"><span>Kolam swept.</span><button class="btn btn-ghost btn-sm">Undo</button></div>
+        </div>
+        <div class="demo-spec">pad 2P/3P · radius 2r · elevation overlay · max width 48P</div>
+      </div>
+
+      <ul class="bullets">
+        <li><b>Undo is the point.</b> A toast without an action is a notification, and belongs somewhere the user can find it again.</li>
+        <li><b>Minimum eight seconds</b> when it carries an action, and the timer pauses on hover and on focus.</li>
+        <li><b><code>role="status"</code>, not <code>alert</code>.</b> A toast is polite by definition; if it must interrupt, it should not have been a toast.</li>
+        <li><b>One at a time.</b> Queue them. Stacked toasts cover content and expire before they are read.</li>
+      </ul>
+    </section>
+
+    <!-- ============ MODAL ============ -->
+    <section class="doc-section" id="modal">
+      <h2>Modal</h2>
+      <p class="sub">The component principle 02 constrains hardest. Every modal must state its return path before it is approved.</p>
+
+      <div class="demo">
+        <div class="demo-stage" style="justify-content:center;background:var(--color-surface-sunken)">
+          <div class="modal-demo">
+            <div class="modal-head"><h3>Sweep this kolam?</h3></div>
+            <div class="modal-body"><p>The pattern is stored as seed 1729 and can be redrawn at any time. Nothing is permanently lost.</p></div>
+            <div class="modal-foot">
+              <button class="btn btn-secondary">Keep</button>
+              <button class="btn btn-primary">Sweep</button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-spec">max width 52P · pad 4P · radius 4r · elevation overlay · action gap 2P</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Required behaviour</h3>
+          <ul class="bullets">
+            <li><b>Focus moves in</b> on open, to the first focusable element or the heading.</li>
+            <li><b>Focus is trapped</b> while open and <b>restored</b> to the trigger on close.</li>
+            <li><b>Escape closes</b> — always, without exception, and without losing entered data.</li>
+            <li><b><code>role="dialog"</code> and <code>aria-modal="true"</code></b>, labelled by the heading.</li>
+            <li><b>Background is inert</b>, not merely covered.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>The continuity test</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Before a modal ships, answer in the pull request: <b>where does the user land if they dismiss this, and what happens to what they typed?</b> If the answer is "an unknown state" or "it is lost", the modal fails principle 02 and needs a different pattern — usually an inline expansion or a dedicated route.</p>
+        </div>
+      </div>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Label the confirming button with the verb — <b>Sweep</b>. The user reads buttons before they read prose.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Label it <b>OK</b>. Now the destructive path and the safe path are equally uninformative and the dialog is doing no work.</p></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website showcase — Pulli</title>
+<meta name="description" content="A marketing site at default density on the canonical kavi palette — where the expressive layer gets its budget and the type scale runs to display sizes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/showcase.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html" aria-current="page">— Website</a>
+          <ul class="nav-sub">
+            <li><a href="#surface">The surface</a></li>
+            <li><a href="#budget">The pattern budget</a></li>
+            <li><a href="#stress">What it stresses</a></li>
+          </ul>
+        </li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">11.03 — Showcase · Website</div>
+      <h1>Marketing site.</h1>
+      <p class="lede">The canonical palette, default density, and the one surface where the expressive layer is allowed to lead. This is also where the type scale finally runs to display sizes and where the 10% pattern ceiling had to be enforced against a design that looked better breaking it.</p>
+    </div>
+
+    <section class="doc-section" id="surface">
+      <h2>The surface</h2>
+
+      <div class="surface-meta">
+        <div><dt>Density</dt><dd>default · P = 8</dd></div>
+        <div><dt>Fork</dt><dd>kavi · canonical, unforked</dd></div>
+        <div><dt>Pattern coverage</dt><dd>~9% — under the ceiling</dd></div>
+        <div><dt>New tokens needed</dt><dd>none</dd></div>
+      </div>
+
+      <div class="density-switch">
+        <span>Density</span>
+        <div class="seg" data-density-switch="#siteSurface">
+          <button type="button" data-d="compact" aria-pressed="false">Compact</button>
+          <button type="button" data-d="default" aria-pressed="true">Default</button>
+          <button type="button" data-d="comfortable" aria-pressed="false">Comfortable</button>
+        </div>
+      </div>
+
+      <div class="frame">
+        <div class="frame-bar">
+          <div class="frame-dots"><i></i><i></i><i></i></div>
+          <div class="frame-url">margazhi.studio</div>
+        </div>
+        <div class="frame-body">
+          <div id="siteSurface" data-density="default">
+
+            <div class="mk-nav">
+              <span class="logo">Margazhi</span>
+              <nav>
+                <a href="#surface">Patterns</a>
+                <a href="#surface">Method</a>
+                <a href="#surface">Pricing</a>
+                <a href="#surface">Docs</a>
+              </nav>
+              <button class="btn btn-primary btn-sm">Start drawing</button>
+            </div>
+
+            <div class="mk-hero">
+              <div>
+                <h2>A year of patterns, stored as thirty numbers.</h2>
+                <p>Generative kolams for brand systems. Every pattern is reproducible from its seed, so your asset library is a config file rather than a folder.</p>
+                <div class="cta">
+                  <button class="btn btn-primary btn-lg">Start drawing</button>
+                  <button class="btn btn-ghost btn-lg">See the method</button>
+                </div>
+                <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);font-family:var(--face-ui);margin-top:var(--idai-3)">Free while in beta · no card required</p>
+              </div>
+              <div class="mk-art">
+                <div data-kolam='{"dots":9,"seed":1229,"crossing":0.2,"stroke":2.5,"showDots":true}' data-animate aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="mk-band">
+              <h2>Three things it does</h2>
+              <p>Every pattern is continuous by construction, symmetric by constraint, and identical on every machine that asks for the same seed.</p>
+              <div class="mk-cols">
+                <div class="mk-col">
+                  <div class="ico"><div data-kolam='{"dots":3,"seed":5,"crossing":0,"stroke":6,"showDots":false}' aria-hidden="true"></div></div>
+                  <h3>Never breaks</h3>
+                  <p>The line closes on itself, always. Not checked after the fact — guaranteed by the way the tiles compose.</p>
+                </div>
+                <div class="mk-col">
+                  <div class="ico"><div data-kolam='{"dots":3,"seed":19,"crossing":0.3,"stroke":6,"showDots":false}' aria-hidden="true"></div></div>
+                  <h3>Reproducible</h3>
+                  <p>Same seed, same pattern, every time. Commit five numbers instead of a folder of SVGs nobody can regenerate.</p>
+                </div>
+                <div class="mk-col">
+                  <div class="ico"><div data-kolam='{"dots":3,"seed":73,"crossing":0.15,"stroke":6,"showDots":false}' aria-hidden="true"></div></div>
+                  <h3>Themes with you</h3>
+                  <p>The pattern colour is a semantic role. Fork your palette and the kolams come along.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mk-band">
+              <h2>Pricing</h2>
+              <p>One primary action on the page. The featured plan is the only element permitted to break symmetry.</p>
+              <div class="mk-price">
+                <div class="plan">
+                  <span class="badge plain">Solo</span>
+                  <span class="amt">$0<small> / month</small></span>
+                  <ul>
+                    <li>Unlimited patterns</li>
+                    <li>SVG export</li>
+                    <li>Seed history</li>
+                  </ul>
+                  <button class="btn btn-secondary btn-block" style="margin-top:auto">Start free</button>
+                </div>
+                <div class="plan featured">
+                  <span class="badge ok">Studio</span>
+                  <span class="amt">$18<small> / month</small></span>
+                  <ul>
+                    <li>Everything in Solo</li>
+                    <li>Brand palette forks</li>
+                    <li>Token export</li>
+                    <li>Shared libraries</li>
+                  </ul>
+                  <button class="btn btn-primary btn-block" style="margin-top:auto">Start drawing</button>
+                </div>
+                <div class="plan">
+                  <span class="badge plain">Team</span>
+                  <span class="amt">$54<small> / month</small></span>
+                  <ul>
+                    <li>Everything in Studio</li>
+                    <li>Design-system sync</li>
+                    <li>Audit log</li>
+                  </ul>
+                  <button class="btn btn-secondary btn-block" style="margin-top:auto">Talk to us</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mk-band" style="display:flex;align-items:center;justify-content:space-between;gap:var(--idai-4);flex-wrap:wrap">
+              <div>
+                <h2 style="margin-bottom:calc(var(--p)*.5)">Draw the first one.</h2>
+                <p style="margin:0">It takes about four seconds and you keep the seed.</p>
+              </div>
+              <button class="btn btn-primary btn-lg">Start drawing</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="budget">
+      <h2>The pattern budget</h2>
+      <p class="sub">This surface is the reason the 10% ceiling exists, and the place it was hardest to hold.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The first version put the hero kolam behind the headline</b> — full bleed, 15% opacity, dots hidden. It looked, honestly, better than what shipped. It measured roughly 18% coverage at the 1280px breakpoint and considerably more at 375px, where the pattern kept its size while the text reflowed around it.</p>
+          <p>Two things were wrong with it, and only one was the number. Text sat directly on line work with no opaque surface between them, which the <a href="accessibility.html#pattern">pattern layer rules</a> forbid outright — reduced opacity is not a substitute for a solid ground. And the coverage failed at the smallest viewport, which is where the rule is measured.</p>
+          <p><b>The fix was to move the kolam out from behind the text and give it its own panel.</b> Coverage fell to about 9%, the headline got a clean ground, and the hero became a two-column layout that holds its structure down to 820px instead of degrading into text-over-texture.</p>
+        </div>
+        <div>
+          <div class="dd" style="margin-top:0">
+            <div class="dont" style="grid-column:1 / -1">
+              <span class="tag">Rejected</span>
+              <p>Full-bleed kolam behind the headline at 15% opacity. ~18% coverage; text on line art with no opaque surface. Looked better, broke two rules.</p>
+            </div>
+          </div>
+          <div class="dd">
+            <div class="do" style="grid-column:1 / -1">
+              <span class="tag">Shipped</span>
+              <p>Kolam in its own panel beside the headline, at full strength with dots visible. ~9% coverage, text on solid ground, and a layout that survives narrow viewports.</p>
+            </div>
+          </div>
+          <div class="callout"><b>The general case.</b> When a density limit rejects a design, the usual outcome is not a worse design — it is a different structure that solves a problem you had not noticed yet. That is what a budget is for.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="stress">
+      <h2>What it stresses</h2>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Held up</h3>
+          <ul class="bullets">
+            <li><b>The type scale at the top end.</b> This is the first surface to use <code>--ezhuthu-h1</code> and the display face at size. The √2 ratio gives enough distance between the headline and the lede that no intermediate step was wanted.</li>
+            <li><b>One primary per view, four times.</b> Every band has exactly one primary button and they are all the same action. The emphasis budget from <a href="principles.html#samam">principle 03</a> turns out to be ordinary marketing-page discipline.</li>
+            <li><b>The featured plan</b> is the only deliberate asymmetry on the page — an accent top border at <code>--kambi-3</code>. One break, and it reads instantly.</li>
+            <li><b>Generated icons.</b> The three feature marks are 3×3 kolams with different seeds. No icon set, no illustrator, and they fork with the palette.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Worth noting</h3>
+          <ul class="bullets">
+            <li><b>Comfortable density suits this surface better than default.</b> Try the switch — a marketing page at P = 10 reads more confidently than at P = 8, which suggests the tier naming is product-shaped rather than surface-shaped. A real adoption would probably pin this page to comfortable.</li>
+            <li><b>The draw-on animation runs once on the hero</b> and is removed entirely under reduced motion. It is decoration on a page the user sees once, which is the only place a 600ms animation is defensible.</li>
+            <li><b>No new components.</b> The pricing plan is a card with a different border treatment; the nav is flex and links. Marketing surfaces are where teams usually fork the component library, and this one did not need to.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

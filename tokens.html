@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokens — Pulli</title>
+<meta name="description" content="The three-layer token model, full reference, naming grammar, JSON export, theming rules and anti-patterns.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html" aria-current="page">05 · Tokens</a>
+          <ul class="nav-sub">
+            <li><a href="#layers">Three layers</a></li>
+            <li><a href="#naming">Naming grammar</a></li>
+            <li><a href="#palette">Palette</a></li>
+            <li><a href="#semantic">Semantic roles</a></li>
+            <li><a href="#type">Type</a></li>
+            <li><a href="#motion">Motion</a></li>
+            <li><a href="#consume">Consuming tokens</a></li>
+            <li><a href="#theming">Theming</a></li>
+            <li><a href="#antipatterns">Anti-patterns</a></li>
+          </ul>
+        </li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">05 — Tokens</div>
+      <h1>Three layers, one direction.</h1>
+      <p class="lede">Palette, primitives, semantics. Each layer may reference only the layer above it, and product code may reference only the last one. That single directional rule is what lets the pitch, the palette and the theme change underneath a product without touching it.</p>
+    </div>
+
+    <!-- ============ LAYERS ============ -->
+    <section class="doc-section" id="layers">
+      <h2>Three layers</h2>
+      <p class="sub">The dependency direction is the contract. Break it and the system silently becomes a stylesheet.</p>
+
+      <div class="grid-3">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-text-tertiary)">
+          <h3>1 · Palette</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Raw, theme-independent values named for the material they come from — <code>--maa-100</code>, <code>--kavi-600</code>. Never referenced by a component or a product. Changing one changes both themes at once.</p>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-info)">
+          <h3>2 · Primitives</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Derived geometry and motion — <code>--idai-3</code>, <code>--valai-2</code>, <code>--nagarthal-2</code>. Every value is a function of <code>--p</code>. Internal to the system.</p>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-accent)">
+          <h3>3 · Semantics</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Role names — <code>--space-inset-lg</code>, <code>--color-text-secondary</code>, <code>--motion-reveal</code>. <b>The only layer product code may use.</b></p>
+        </div>
+      </div>
+
+      <pre><span class="c">/* the direction of reference, and the only legal one */</span>
+
+  palette      <span class="k">--kavi-600: #A34524;</span>
+      ↓
+  primitive    <span class="k">--idai-3: calc(var(--p) * 3);</span>
+      ↓
+  semantic     <span class="k">--space-inset-md: var(--idai-3);</span>
+               <span class="k">--color-accent:   var(--kavi-600);</span>
+      ↓
+  component    <span class="k">padding: var(--space-inset-md);</span>
+               <span class="k">background: var(--color-accent);</span>
+
+<span class="c">/* illegal: skips a layer, and will break on theme change */</span>
+  .thing { background: <span class="k">var(--kavi-600)</span>; }</pre>
+
+      <div class="callout"><b>Why the ban on skipping.</b> <code>--kavi-600</code> is the accent in the light theme and <em>not</em> in the dark one, where the accent is <code>--kavi-400</code>. A component that reaches past the semantic layer looks correct until someone switches theme, then fails invisibly. The rule is enforceable by lint.</div>
+    </section>
+
+    <!-- ============ NAMING ============ -->
+    <section class="doc-section" id="naming">
+      <h2>Naming grammar</h2>
+      <p class="sub">Two grammars, one per layer, both parseable by a human at a glance.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Primitives</h3>
+          <pre>--{concept}-{step}
+
+--idai-3        <span class="c">spacing, step 3</span>
+--valai-2       <span class="c">radius, step 2</span>
+--kambi-1       <span class="c">stroke, step 1</span>
+--nagarthal-2   <span class="c">duration, step 2</span></pre>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The Tamil term carries the concept; the step carries the magnitude. Steps are ordinal, not pixel values — <code>--idai-3</code> stays <code>--idai-3</code> at every pitch.</p>
+        </div>
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">Semantics</h3>
+          <pre>--{category}-{role}-{variant}
+
+--space-inset-lg
+--color-text-secondary
+--color-accent-hover
+--radius-control
+--motion-reveal</pre>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Category first so tokens sort usefully in autocomplete. No component names — <code>--button-padding</code> is a fourth layer nobody agreed to maintain.</p>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Concept</th><th>Tamil</th><th>Governs</th></tr></thead>
+          <tbody>
+            <tr><td class="name">idai</td><td>இடை · gap</td><td>Spacing steps along the lattice</td></tr>
+            <tr><td class="name">valai</td><td>வளை · curve</td><td>Corner radii, multiples of the loop radius</td></tr>
+            <tr><td class="name">kambi</td><td>கம்பி · wire, line</td><td>Stroke and border weights</td></tr>
+            <tr><td class="name">alavu</td><td>அளவு · measure</td><td>Control heights</td></tr>
+            <tr><td class="name">ezhuthu</td><td>எழுத்து · letter</td><td>Type sizes on the √2 scale</td></tr>
+            <tr><td class="name">niram</td><td>நிறம் · colour</td><td>Palette families</td></tr>
+            <tr><td class="name">nagarthal</td><td>நகர்தல் · movement</td><td>Durations and easing curves</td></tr>
+            <tr><td class="name">nilai</td><td>நிலை · level</td><td>Elevation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:var(--idai-2)">Terms are used with glosses everywhere they appear, and the source practice is credited in the README. Naming a system in the language of the tradition it derives from is only respectful if the naming is explained rather than exotic.</p>
+    </section>
+
+    <!-- ============ PALETTE ============ -->
+    <section class="doc-section" id="palette">
+      <h2>Palette</h2>
+      <p class="sub">Five materials: rice flour, swept earth, red ochre, and the coloured powders used on festival days. Nothing was invented.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-family:var(--face-ui);font-size:var(--ezhuthu-caption);text-transform:uppercase;letter-spacing:.12em;color:var(--color-text-tertiary);margin-bottom:var(--idai-2)">maa · rice flour</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><td class="name">--maa-0</td><td class="derive">#FFFFFF</td><td><span class="swatch" style="background:var(--maa-0)"></span></td></tr>
+            <tr><td class="name">--maa-50</td><td class="derive">#FDFBF7</td><td><span class="swatch" style="background:var(--maa-50)"></span></td></tr>
+            <tr><td class="name">--maa-100</td><td class="derive">#F5EFE4</td><td><span class="swatch" style="background:var(--maa-100)"></span></td></tr>
+            <tr><td class="name">--maa-200</td><td class="derive">#E6DCC9</td><td><span class="swatch" style="background:var(--maa-200)"></span></td></tr>
+            <tr><td class="name">--maa-350</td><td class="derive">#BFB299</td><td><span class="swatch" style="background:var(--maa-350)"></span></td></tr>
+          </tbody></table></div>
+
+          <h3 style="font-family:var(--face-ui);font-size:var(--ezhuthu-caption);text-transform:uppercase;letter-spacing:.12em;color:var(--color-text-tertiary);margin:var(--idai-4) 0 var(--idai-2)">kavi · red ochre</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><td class="name">--kavi-100</td><td class="derive">#F6E4DA</td><td><span class="swatch" style="background:var(--kavi-100)"></span></td></tr>
+            <tr><td class="name">--kavi-300</td><td class="derive">#F3AE8B</td><td><span class="swatch" style="background:var(--kavi-300)"></span></td></tr>
+            <tr><td class="name">--kavi-400</td><td class="derive">#E7936A</td><td><span class="swatch" style="background:var(--kavi-400)"></span></td></tr>
+            <tr><td class="name">--kavi-600</td><td class="derive">#A34524</td><td><span class="swatch" style="background:var(--kavi-600)"></span></td></tr>
+            <tr><td class="name">--kavi-700</td><td class="derive">#7E331A</td><td><span class="swatch" style="background:var(--kavi-700)"></span></td></tr>
+            <tr><td class="name">--kavi-900</td><td class="derive">#33221A</td><td><span class="swatch" style="background:var(--kavi-900)"></span></td></tr>
+          </tbody></table></div>
+        </div>
+
+        <div>
+          <h3 style="font-family:var(--face-ui);font-size:var(--ezhuthu-caption);text-transform:uppercase;letter-spacing:.12em;color:var(--color-text-tertiary);margin-bottom:var(--idai-2)">mann · swept earth</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><td class="name">--mann-300</td><td class="derive">#998A75</td><td><span class="swatch" style="background:var(--mann-300)"></span></td></tr>
+            <tr><td class="name">--mann-350</td><td class="derive">#94836F</td><td><span class="swatch" style="background:var(--mann-350)"></span></td></tr>
+            <tr><td class="name">--mann-400</td><td class="derive">#7C6B5C</td><td><span class="swatch" style="background:var(--mann-400)"></span></td></tr>
+            <tr><td class="name">--mann-500</td><td class="derive">#786249</td><td><span class="swatch" style="background:var(--mann-500)"></span></td></tr>
+            <tr><td class="name">--mann-550</td><td class="derive">#5C4E42</td><td><span class="swatch" style="background:var(--mann-550)"></span></td></tr>
+            <tr><td class="name">--mann-700</td><td class="derive">#3A2E23</td><td><span class="swatch" style="background:var(--mann-700)"></span></td></tr>
+            <tr><td class="name">--mann-850</td><td class="derive">#211A14</td><td><span class="swatch" style="background:var(--mann-850)"></span></td></tr>
+            <tr><td class="name">--mann-900</td><td class="derive">#17120E</td><td><span class="swatch" style="background:var(--mann-900)"></span></td></tr>
+          </tbody></table></div>
+
+          <h3 style="font-family:var(--face-ui);font-size:var(--ezhuthu-caption);text-transform:uppercase;letter-spacing:.12em;color:var(--color-text-tertiary);margin:var(--idai-4) 0 var(--idai-2)">festival powders</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><td class="name">--ilai-*</td><td class="derive">leaf · success</td><td><span class="swatch" style="background:var(--ilai-600)"></span></td></tr>
+            <tr><td class="name">--manjal-*</td><td class="derive">turmeric · warning</td><td><span class="swatch" style="background:var(--manjal-600)"></span></td></tr>
+            <tr><td class="name">--neelam-*</td><td class="derive">indigo · info</td><td><span class="swatch" style="background:var(--neelam-600)"></span></td></tr>
+            <tr><td class="name">--kumkumam-*</td><td class="derive">kumkum · danger</td><td><span class="swatch" style="background:var(--kumkumam-600)"></span></td></tr>
+          </tbody></table></div>
+        </div>
+      </div>
+
+      <div class="callout"><b>Dark is the native theme.</b> Kolam is rice flour on a swept, water-darkened floor — light marks on a dark ground. The dark theme is therefore the faithful one and light is the inversion, not the other way round. Both are complete; neither is an afterthought.</div>
+    </section>
+
+    <!-- ============ SEMANTIC ============ -->
+    <section class="doc-section" id="semantic">
+      <h2>Semantic roles</h2>
+      <p class="sub">The public API. Everything a product is permitted to reference is on this page.</p>
+
+      <div class="doc-sub">
+        <h3>Colour</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Use for</th><th>Sample</th></tr></thead>
+            <tbody>
+              <tr><td class="name">--color-bg</td><td class="derive">maa-50</td><td class="derive">mann-900</td><td>Page ground</td><td><span class="swatch" style="background:var(--color-bg)"></span></td></tr>
+              <tr><td class="name">--color-surface</td><td class="derive">maa-0</td><td class="derive">mann-850</td><td>Cards, panels, raised areas</td><td><span class="swatch" style="background:var(--color-surface)"></span></td></tr>
+              <tr><td class="name">--color-surface-sunken</td><td class="derive">maa-100</td><td class="derive">mann-800</td><td>Wells, table headers, inputs in cards</td><td><span class="swatch" style="background:var(--color-surface-sunken)"></span></td></tr>
+              <tr><td class="name">--color-text</td><td class="derive">mann-900</td><td class="derive">maa-100</td><td>Primary text</td><td><span class="swatch" style="background:var(--color-text)"></span></td></tr>
+              <tr><td class="name">--color-text-secondary</td><td class="derive">mann-550</td><td class="derive">maa-350</td><td>Body copy, descriptions</td><td><span class="swatch" style="background:var(--color-text-secondary)"></span></td></tr>
+              <tr><td class="name">--color-text-tertiary</td><td class="derive">mann-500</td><td class="derive">mann-300</td><td>Captions, metadata, hints</td><td><span class="swatch" style="background:var(--color-text-tertiary)"></span></td></tr>
+              <tr><td class="name">--color-border</td><td class="derive">maa-200</td><td class="derive">mann-700</td><td>Dividers, decorative edges</td><td><span class="swatch" style="background:var(--color-border)"></span></td></tr>
+              <tr><td class="name">--color-border-strong</td><td class="derive">mann-350</td><td class="derive">mann-350</td><td>Control boundaries — meets 3:1 on bg, surface <i>and</i> sunken</td><td><span class="swatch" style="background:var(--color-border-strong)"></span></td></tr>
+              <tr><td class="name">--color-accent</td><td class="derive">kavi-600</td><td class="derive">kavi-400</td><td>Primary action, links, kolam line</td><td><span class="swatch" style="background:var(--color-accent)"></span></td></tr>
+              <tr><td class="name">--color-accent-subtle</td><td class="derive">kavi-100</td><td class="derive">kavi-900</td><td>Accent backgrounds, focus glow</td><td><span class="swatch" style="background:var(--color-accent-subtle)"></span></td></tr>
+              <tr><td class="name">--color-on-accent</td><td class="derive">maa-50</td><td class="derive">mann-900</td><td>Text on accent fill</td><td><span class="swatch" style="background:var(--color-on-accent)"></span></td></tr>
+              <tr><td class="name">--color-success</td><td class="derive">ilai-600</td><td class="derive">ilai-400</td><td>Confirmation, positive state</td><td><span class="swatch" style="background:var(--color-success)"></span></td></tr>
+              <tr><td class="name">--color-warning</td><td class="derive">manjal-600</td><td class="derive">manjal-400</td><td>Caution, needs attention</td><td><span class="swatch" style="background:var(--color-warning)"></span></td></tr>
+              <tr><td class="name">--color-info</td><td class="derive">neelam-600</td><td class="derive">neelam-400</td><td>Neutral information</td><td><span class="swatch" style="background:var(--color-info)"></span></td></tr>
+              <tr><td class="name">--color-danger</td><td class="derive">kumkumam-600</td><td class="derive">kumkumam-400</td><td>Errors, destructive actions</td><td><span class="swatch" style="background:var(--color-danger)"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Measured contrast for every pair is published in <a href="accessibility.html#contrast">Accessibility → Contrast matrix</a> and recomputed in CI.</p>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Space, radius, border</h3>
+        <div class="grid-3">
+          <div class="panel">
+            <h3>space</h3>
+            <ul class="speclist">
+              <li><span>inset-xs → xl</span><b>1–6 P</b></li>
+              <li><span>stack-tight</span><b>1 P</b></li>
+              <li><span>stack</span><b>2 P</b></li>
+              <li><span>stack-loose</span><b>4 P</b></li>
+              <li><span>section</span><b>12 P</b></li>
+              <li><span>inline</span><b>2 P</b></li>
+              <li><span>gutter</span><b>3 P</b></li>
+              <li><span>page-margin</span><b>4 P</b></li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>radius</h3>
+            <ul class="speclist">
+              <li><span>radius-control</span><b>2 r</b></li>
+              <li><span>radius-surface</span><b>2 r</b></li>
+              <li><span>radius-panel</span><b>4 r</b></li>
+              <li><span>radius-pill</span><b>full</b></li>
+            </ul>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Control and surface share a radius deliberately — a button sitting on a card should read as the same material.</p>
+          </div>
+          <div class="panel">
+            <h3>border</h3>
+            <ul class="speclist">
+              <li><span>border-hairline</span><b>1px</b></li>
+              <li><span>border-edge</span><b>2px</b></li>
+            </ul>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Hairline is a literal pixel, not a derived value — see <a href="lattice.html#breaks">where derivation breaks</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TYPE ============ -->
+    <section class="doc-section" id="type">
+      <h2>Type</h2>
+      <p class="sub">The lattice diagonal is P√2. That ratio — 1.414, the same one behind ISO paper sizes — sets the scale.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Token</th><th>Step</th><th>Size</th><th>Line height</th><th>Face</th><th>Specimen</th></tr></thead>
+          <tbody>
+            <tr><td class="name">--ezhuthu-caption</td><td class="derive">16 ÷ √2²</td><td>11px</td><td class="derive">1.6</td><td class="derive">ui</td><td style="font-size:var(--ezhuthu-caption)">Pulli kolam</td></tr>
+            <tr><td class="name">--ezhuthu-small</td><td class="derive">half-step</td><td>13px</td><td class="derive">1.6</td><td class="derive">ui</td><td style="font-size:var(--ezhuthu-small)">Pulli kolam</td></tr>
+            <tr><td class="name">--ezhuthu-body</td><td class="derive">base</td><td>16px</td><td class="derive">1.6</td><td class="derive">ui</td><td style="font-size:var(--ezhuthu-body)">Pulli kolam</td></tr>
+            <tr><td class="name">--ezhuthu-lead</td><td class="derive">16 × √2</td><td>23px</td><td class="derive">1.35</td><td class="derive">display</td><td style="font-size:var(--ezhuthu-lead);font-family:var(--face-display)">Pulli kolam</td></tr>
+            <tr><td class="name">--ezhuthu-h2</td><td class="derive">16 × √2²</td><td>32px</td><td class="derive">1.15</td><td class="derive">display</td><td style="font-size:var(--ezhuthu-h2);font-family:var(--face-display);line-height:1">Pulli</td></tr>
+            <tr><td class="name">--ezhuthu-h1</td><td class="derive">16 × √2³</td><td>45px</td><td class="derive">1.15</td><td class="derive">display</td><td style="font-size:var(--ezhuthu-h1);font-family:var(--face-display);line-height:1">Pulli</td></tr>
+            <tr><td class="name">--ezhuthu-display</td><td class="derive">16 × √2⁴</td><td>64px</td><td class="derive">1.15</td><td class="derive">display</td><td style="font-size:var(--ezhuthu-h1);font-family:var(--face-display);line-height:1">Pulli</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top:var(--idai-4)">
+        <div class="panel">
+          <h3>Faces</h3>
+          <ul class="speclist">
+            <li><span>--face-display</span><b>Spectral</b></li>
+            <li><span>--face-ui</span><b>Inter</b></li>
+            <li><span>--face-mono</span><b>JetBrains Mono</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">A serif for display and a grotesque for interface: the drawn line and the printed instruction are different registers in the tradition too. Every face has a full system fallback stack.</p>
+        </div>
+        <div class="panel">
+          <h3>Rules</h3>
+          <ul class="bullets">
+            <li><b>One step per level.</b> Never skip two steps between a heading and its body — the √2 ratio is already large.</li>
+            <li><b>Display face above lead only.</b> Below 23px, Spectral loses its distinction and costs legibility.</li>
+            <li><b>No type in the pattern layer.</b> Text never sits on a kolam without a solid ground behind it.</li>
+            <li><b>Type is pitch-independent.</b> Density changes space, not reading size.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MOTION ============ -->
+    <section class="doc-section" id="motion">
+      <h2>Motion</h2>
+      <p class="sub">Duration is distance travelled — 30ms per dot the line passes. Easing curves are the three moves a kolam line can make. This is the token reference; the rationale, choreography rules and the animatable-property restriction are in <a href="motion.html">08 · Motion</a>.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Token</th><th>Derivation</th><th>Value</th><th>Use for</th></tr></thead>
+          <tbody>
+            <tr><td class="name">--nagarthal-1</td><td class="derive">4 dots × 30ms</td><td>120ms</td><td>Hover, press, colour change</td></tr>
+            <tr><td class="name">--nagarthal-2</td><td class="derive">8 dots × 30ms</td><td>240ms</td><td>Reveal, expand, toggle travel</td></tr>
+            <tr><td class="name">--nagarthal-3</td><td class="derive">12 dots × 30ms</td><td>360ms</td><td>Page and route transitions</td></tr>
+            <tr><td class="name">--nagarthal-4</td><td class="derive">20 dots × 30ms</td><td>600ms</td><td>Kolam draw-on — decorative only</td></tr>
+            <tr><td class="name">--neli</td><td class="derive">the turn</td><td class="derive">cubic-bezier(0.65, 0, 0.35, 1)</td><td>Symmetric — in and out of a state</td></tr>
+            <tr><td class="name">--chuzhi</td><td class="derive">the spiral in</td><td class="derive">cubic-bezier(0.33, 0, 0.15, 1)</td><td>Entering and settling</td></tr>
+            <tr><td class="name">--vidu</td><td class="derive">the release</td><td class="derive">cubic-bezier(0.5, 0, 0.9, 0.4)</td><td>Leaving — accelerates away</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-3" style="margin-top:var(--idai-4)">
+        <div class="panel"><h3>--motion-state</h3><p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><code>120ms neli</code> — anything the user is directly manipulating.</p></div>
+        <div class="panel"><h3>--motion-reveal</h3><p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><code>240ms chuzhi</code> — content arriving. Decelerates into place.</p></div>
+        <div class="panel"><h3>--motion-exit</h3><p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><code>120ms vidu</code> — content leaving. Faster out than in, always.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ CONSUMING ============ -->
+    <section class="doc-section" id="consume">
+      <h2>Consuming tokens</h2>
+      <p class="sub">CSS is the source of truth. Everything else is generated from it.</p>
+
+      <div class="doc-sub">
+        <h3>CSS</h3>
+        <pre>.invoice-card {
+  padding:       <span class="k">var(--space-inset-lg)</span>;
+  gap:           <span class="k">var(--space-stack)</span>;
+  border-radius: <span class="k">var(--radius-panel)</span>;
+  border:        <span class="k">var(--border-hairline)</span> solid <span class="k">var(--color-border)</span>;
+  background:    <span class="k">var(--color-surface)</span>;
+  color:         <span class="k">var(--color-text)</span>;
+  transition:    border-color <span class="k">var(--motion-state)</span>;
+}</pre>
+      </div>
+
+      <div class="doc-sub">
+        <h3>JSON export</h3>
+        <p><code>assets/tokens.json</code> carries the same tree in a format that maps cleanly onto Figma variables and Style Dictionary. Values are expressed as formulas, not resolved pixels, so a consumer can re-derive at any pitch.</p>
+        <pre>{
+  "seed": { "p": { "value": 8, "unit": "px" }, "r": { "value": "{seed.p} / 2" } },
+  "primitive": {
+    "idai": { "3": { "value": "{seed.p} * 3", "type": "dimension" } },
+    "valai": { "2": { "value": "{seed.r} * 1", "type": "dimension" } }
+  },
+  "semantic": {
+    "space":  { "inset-md": { "value": "{primitive.idai.3}" } },
+    "color":  { "accent":   { "light": "{palette.kavi.600}", "dark": "{palette.kavi.400}" } }
+  }
+}</pre>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Figma</h3>
+        <ul class="bullets">
+          <li><b>Number variables</b> for the seed: <code>p</code> and <code>r</code>. Every spacing and radius variable is a mode-independent multiple of these.</li>
+          <li><b>Three modes</b> on the colour collection: light, dark, and high-contrast. Semantic names only — never publish palette variables to the team library, or designers will reach past the semantic layer exactly as developers do.</li>
+          <li><b>Density as a mode</b> on the number collection: compact / default / comfortable maps to p = 6 / 8 / 10.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ THEMING ============ -->
+    <section class="doc-section" id="theming">
+      <h2>Theming</h2>
+      <p class="sub">A fork replaces the palette and reassigns the semantic layer. It never touches primitives.</p>
+
+      <pre><span class="c">/* a brand fork: new palette, same geometry, same contract */</span>
+:root {
+  --brand-500: #1F5F4E;
+  --brand-300: #7FC4AE;
+}
+:root { <span class="k">--color-accent: var(--brand-500);</span> }
+:root[data-theme="dark"] { <span class="k">--color-accent: var(--brand-300);</span> }</pre>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>What a fork may change</h3>
+          <ul class="bullets">
+            <li>Any palette value</li>
+            <li>Any semantic → palette assignment</li>
+            <li>The seed pitch and density mapping</li>
+            <li>Type faces (the √2 ratio stays)</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What a fork may not change</h3>
+          <ul class="bullets">
+            <li><b>r = P/2.</b> Break it and the pattern engine and the radius scale decouple.</li>
+            <li><b>The layer direction.</b> Semantics may not reference components.</li>
+            <li><b>Accessibility floors.</b> 44px targets, 3:1 non-text contrast, 4.5:1 text contrast.</li>
+            <li><b>The √2 type ratio.</b> Sizes may shift; the ratio is structural.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ANTIPATTERNS ============ -->
+    <section class="doc-section" id="antipatterns">
+      <h2>Anti-patterns</h2>
+      <p class="sub">Every one of these has been done by a real team, usually for a good reason, usually on a deadline.</p>
+
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p><code>padding: var(--space-inset-lg)</code> — a role, resolved by the system.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p><code>padding: var(--idai-4)</code> — a primitive. Works today, breaks the contract, and gives the system no way to change inset spacing without touching every call site.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p><code>color: var(--color-text-secondary)</code></p></div>
+        <div class="dont"><span class="tag">Don't</span><p><code>color: var(--mann-550)</code> — correct in light, invisible in dark, and it will ship because nobody tested the other theme.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Add a semantic role when a genuinely new need appears, and document what it is for.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Add <code>--color-text-secondary-dark-alt-2</code>. A fourth qualifier means the role model is wrong, not that it needs another entry.</p></div>
+      </div>
+      <div class="dd">
+        <div class="do"><span class="tag">Do</span><p>Put an unavoidable exception in <code>tokens.css</code> with a comment naming the constraint that forced it.</p></div>
+        <div class="dont"><span class="tag">Don't</span><p>Put <code>margin-top: -3px</code> in a component to fix optical alignment. It will be copied into four other components before anyone asks why.</p></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

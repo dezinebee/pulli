@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web application showcase — Pulli</title>
+<meta name="description" content="A three-pane pattern library manager at default density, stressing continuity — edit in place, no modal, undo everywhere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/showcase.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html" aria-current="page">— Web application</a>
+          <ul class="nav-sub">
+            <li><a href="#surface">The surface</a></li>
+            <li><a href="#continuity">Continuity in practice</a></li>
+            <li><a href="#stress">What it stresses</a></li>
+          </ul>
+        </li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">11.04 — Showcase · Web application</div>
+      <h1>Pattern library manager.</h1>
+      <p class="lede">Three panes, default density, canonical palette. This surface exists to test the principle that does the most product work and is the easiest to talk about without proving: continuity. Nothing here opens a modal, nothing loses work, and every destructive action has a return path.</p>
+    </div>
+
+    <section class="doc-section" id="surface">
+      <h2>The surface</h2>
+
+      <div class="surface-meta">
+        <div><dt>Density</dt><dd>default · P = 8</dd></div>
+        <div><dt>Fork</dt><dd>kavi · canonical, unforked</dd></div>
+        <div><dt>Pattern coverage</dt><dd>content, not decoration</dd></div>
+        <div><dt>Modals</dt><dd>zero</dd></div>
+      </div>
+
+      <div class="density-switch">
+        <span>Density</span>
+        <div class="seg" data-density-switch="#appSurface">
+          <button type="button" data-d="compact" aria-pressed="false">Compact</button>
+          <button type="button" data-d="default" aria-pressed="true">Default</button>
+          <button type="button" data-d="comfortable" aria-pressed="false">Comfortable</button>
+        </div>
+      </div>
+
+      <div class="frame">
+        <div class="frame-bar">
+          <div class="frame-dots"><i></i><i></i><i></i></div>
+          <div class="frame-url">studio.margazhi / library / margazhi-12</div>
+        </div>
+        <div class="frame-body">
+          <div class="app" id="appSurface" data-density="default">
+
+            <nav class="app-rail" aria-label="Sections">
+              <a href="#surface" aria-current="true" aria-label="Library"><i></i></a>
+              <a href="#surface" aria-label="Drafts"><i style="border-radius:var(--radius-pill)"></i></a>
+              <a href="#surface" aria-label="Exports"><i style="transform:rotate(45deg)"></i></a>
+              <a href="#surface" aria-label="Settings" style="margin-top:auto"><i style="border-radius:var(--radius-pill)"></i></a>
+            </nav>
+
+            <div class="app-list">
+              <header>
+                <h3>Library</h3>
+                <span class="badge plain">30</span>
+                <button class="btn btn-primary btn-sm">New</button>
+              </header>
+              <div style="padding:var(--space-inset-md) var(--space-inset-md) 0">
+                <div class="field" style="margin:0">
+                  <label for="q" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Filter patterns</label>
+                  <input id="q" type="text" placeholder="Filter by name or seed">
+                </div>
+              </div>
+              <div style="overflow:auto">
+                <div class="app-item" aria-current="true">
+                  <div class="t"><b>Margazhi 12</b><span>4471</span></div>
+                  <p>7 × 7 · D4 · 84 segments · edited 2h ago</p>
+                </div>
+                <div class="app-item">
+                  <div class="t"><b>Margazhi 11</b><span>1188</span></div>
+                  <p>9 × 9 · D4 · 144 segments · edited yesterday</p>
+                </div>
+                <div class="app-item">
+                  <div class="t"><b>Doorstep study</b><span>302</span></div>
+                  <p>5 × 5 · D2 · 44 segments · draft</p>
+                </div>
+                <div class="app-item">
+                  <div class="t"><b>Threshold border</b><span>8890</span></div>
+                  <p>7 × 7 · D2 · 84 segments · edited 3 days ago</p>
+                </div>
+                <div class="app-item">
+                  <div class="t"><b>Crossing weave</b><span>6013</span></div>
+                  <p>11 × 11 · free · 220 segments · edited last week</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-detail">
+              <div style="display:flex;align-items:center;gap:var(--space-inline);flex-wrap:wrap">
+                <h3 style="font-family:var(--face-display);font-size:var(--ezhuthu-lead);margin-right:auto">Margazhi 12</h3>
+                <span class="badge ok">Closed line</span>
+                <button class="btn btn-secondary btn-sm">Export</button>
+                <button class="btn btn-primary btn-sm">Save</button>
+              </div>
+
+              <div class="preview">
+                <div><div data-kolam='{"dots":7,"seed":4471,"crossing":0.2,"stroke":3,"showDots":true}' aria-hidden="true"></div></div>
+              </div>
+
+              <div class="grid-2" style="gap:var(--idai-3)">
+                <div>
+                  <div class="ctrl">
+                    <label for="wDots">Grid <var>7 × 7</var></label>
+                    <input type="range" id="wDots" min="3" max="15" step="2" value="7">
+                  </div>
+                  <div class="ctrl">
+                    <label for="wCross">Crossing <var>0.20</var></label>
+                    <input type="range" id="wCross" min="0" max="0.7" step="0.05" value="0.2">
+                  </div>
+                  <div class="ctrl">
+                    <label id="wsym">Symmetry</label>
+                    <div class="seg" role="group" aria-labelledby="wsym">
+                      <button type="button" aria-pressed="true">D4</button>
+                      <button type="button" aria-pressed="false">D2</button>
+                      <button type="button" aria-pressed="false">Free</button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <ul class="speclist">
+                    <li><span>Seed</span><b>4471</b></li>
+                    <li><span>Segments</span><b>84</b></li>
+                    <li><span>Boundary loops</span><b>12</b></li>
+                    <li><span>Open endpoints</span><b>0</b></li>
+                    <li><span>Stored size</span><b>5 numbers</b></li>
+                  </ul>
+                  <div class="app-toolbar" style="margin-top:var(--idai-3)">
+                    <button class="btn btn-ghost btn-sm">Duplicate</button>
+                    <button class="btn btn-ghost btn-sm">Sweep</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="toast" role="status" style="align-self:flex-start">
+                <span>Crossing changed to 0.20.</span>
+                <button class="btn btn-ghost btn-sm">Undo</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">The detail pane is a static mock; the live, fully wired version of these controls is on the <a href="generator.html#play">Generator</a> page.</p>
+    </section>
+
+    <section class="doc-section" id="continuity">
+      <h2>Continuity in practice</h2>
+      <p class="sub"><a href="principles.html#sikku">Principle 02</a> is easy to agree with and hard to hold. Here is what holding it actually changed.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Usual pattern</th><th>What this does instead</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Click an item → modal editor → Save / Cancel</td>
+              <td><b>Three-pane, edit in place.</b> Selection changes the detail pane; the list stays visible and navigable throughout.</td>
+              <td>The user never loses their position in the list, and Cancel never means "return to an unknown state".</td>
+            </tr>
+            <tr>
+              <td>Delete → confirmation dialog → gone</td>
+              <td><b>Sweep → toast with Undo</b>, eight seconds, timer paused on hover and focus.</td>
+              <td>A return path is cheaper than a confirmation and less annoying. Confirmations are reserved for actions that genuinely cannot be undone.</td>
+            </tr>
+            <tr>
+              <td>Change a setting → nothing until Save</td>
+              <td><b>Every parameter change is applied and announced</b>, with Undo on the change itself.</td>
+              <td>The preview <em>is</em> the feedback. A Save button that gates a live preview is two mental models fighting.</td>
+            </tr>
+            <tr>
+              <td>Navigating away silently discards edits</td>
+              <td><b>Parameters are the document.</b> There is no unsaved buffer to lose — the pattern is five numbers, and they are in the URL.</td>
+              <td>The strongest form of the principle: design the data so the failure mode cannot occur, rather than warning about it.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>Note the URL in the frame bar.</b> <code>/library/margazhi-12</code> — the selected item is a route, not component state. Continuity includes the back button, and a three-pane app that cannot be linked into has failed the principle regardless of how smooth its transitions are.</div>
+    </section>
+
+    <section class="doc-section" id="stress">
+      <h2>What it stresses</h2>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Held up</h3>
+          <ul class="bullets">
+            <li><b>Three panes with no new layout tokens.</b> The rail is <code>8 P</code>, the list <code>34 P</code>, the detail fluid — all lattice multiples, all collapsing predictably at 900px.</li>
+            <li><b>The generator as a feature.</b> Every control here is the same control documented on the <a href="generator.html">Generator</a> page. The pattern engine is product functionality on this surface, not decoration — which is the case the density ceiling was never meant to restrict.</li>
+            <li><b>Selection without colour alone.</b> The current list item carries an accent left border, an accent background, <em>and</em> <code>aria-current</code>. Three signals, because one of them is invisible to some users and one is invisible to assistive technology.</li>
+            <li><b>The toast doing real work.</b> It is the component that makes the no-confirmation-dialog decision affordable.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Worth noting</h3>
+          <ul class="bullets">
+            <li><b>Compact density suits this surface.</b> Try the switch — a three-pane tool at P = 6 fits noticeably more of the list without hurting legibility, since type does not follow the pitch. Density tiers are a per-surface decision, not a per-product one.</li>
+            <li><b>Icon-only rail items</b> each carry an <code>aria-label</code>. The library styles the rail; it cannot invent names, and an unlabelled icon rail is the most common accessibility failure in this layout.</li>
+            <li><b>The detail pane scrolls, the list scrolls, the page does not.</b> Independent scroll regions are what make three-pane layouts usable and what make them easy to get wrong.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Origins — Pulli</title>
+<meta name="description" content="Why a kolam was chosen to carry a design system, how the tradition has changed, the mathematics behind it, and the threshold traditions it shares its structure with.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<style>
+  .timeline{ border-left:var(--kambi-3) solid var(--color-border); padding-left:var(--idai-4); margin:var(--idai-4) 0; }
+  .timeline > div{ position:relative; margin-bottom:var(--idai-5); }
+  .timeline > div::before{
+    content:""; position:absolute; left:calc(var(--idai-4) * -1 - var(--kambi-3) / 1 - var(--p) * .375);
+    top:calc(var(--p) * .75); width:calc(var(--p) * .75); height:calc(var(--p) * .75);
+    border-radius:var(--radius-pill); background:var(--color-accent);
+  }
+  .timeline .when{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-accent); letter-spacing:.06em; }
+  .timeline h4{ font-family:var(--face-display); font-size:var(--ezhuthu-lead); margin:calc(var(--p)*.25) 0 calc(var(--p)*.75); font-weight:500; }
+  .timeline p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); max-width:70ch; }
+  .contested{ border-left-color:var(--color-warning); }
+  .refs li{ margin-bottom:var(--idai-2); font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+  .refs b{ color:var(--color-text); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html" aria-current="page">01 · Origins</a>
+          <ul class="nav-sub">
+            <li><a href="#why">Why a kolam</a></li>
+            <li><a href="#evolution">How it changed</a></li>
+            <li><a href="#maths">The mathematics</a></li>
+            <li><a href="#universal">Elsewhere in the world</a></li>
+            <li><a href="#took">What this system took</a></li>
+            <li><a href="#reading">Sources</a></li>
+          </ul>
+        </li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">01 — Origins</div>
+      <h1>Why a kolam.</h1>
+      <p class="lede">Design systems borrow visual traditions all the time, and almost always they borrow the surface — a palette, a motif, a texture. This one borrows a grammar. That distinction is the whole argument for the choice, and it only holds because the kolam is one of the few folk traditions that is genuinely, formally rule-governed rather than merely patterned.</p>
+    </div>
+
+    <!-- ============ WHY ============ -->
+    <section class="doc-section" id="why">
+      <h2>Why a kolam</h2>
+      <p class="sub">Four properties, each of which turned into a load-bearing part of the system rather than a decorative reference.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>1 · It is a rule set, not a style</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">A kolam is specified before it is drawn: a dot count, a grid shape, a rule about how the line may move. The composition follows from the specification. That is the same relationship a design token has to a component, which is why the metaphor survives contact with implementation instead of stopping at the mood board.</p>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">→ became <a href="principles.html#pulli">principle 01</a> and the entire <a href="lattice.html">lattice</a>.</p>
+        </div>
+        <div class="panel">
+          <h3>2 · It has a correctness condition</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">This is the rare part. Most visual traditions can be done well or badly but not <em>wrongly</em>. A kolam can: in the looped form, if the line breaks, the drawing has failed. A tradition with a pass/fail condition can be tested, and a design system that can be tested is a different kind of object from one that can only be reviewed.</p>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">→ became <a href="principles.html#sikku">principle 02</a> and the generator's zero-open-endpoints guarantee.</p>
+        </div>
+        <div class="panel">
+          <h3>3 · It is generative</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">One grid produces unlimited valid, distinct patterns. An identity built on it does not need an asset library — it needs a function and a seed. Very few visual traditions can be compressed to five numbers without losing what makes them recognisable.</p>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">→ became the <a href="generator.html">generator</a>.</p>
+        </div>
+        <div class="panel">
+          <h3>4 · It is meant to be erased</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Drawn at dawn, walked over all day, swept away, drawn again. A tradition whose value is in the drawing rather than the artefact has something useful to say to an industry whose systems mostly die of accretion — nothing is ever removed, so eventually nobody can tell which version is current.</p>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">→ became <a href="principles.html#kaalai">principle 04</a> and the <a href="governance.html#deprecation">deprecation policy</a>.</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>The test for whether a borrowed metaphor is doing work.</b> Remove the source and see what collapses. Take kolam out of this system and you lose the derivation rule, the continuity requirement, the pattern engine and the release model — that is, most of it. Take the visual reference out of a system that borrowed a motif and you lose the motif. The first is a foundation; the second is a skin.</div>
+
+      <div class="doc-sub">
+        <h3>The honest part</h3>
+        <p class="prose">A rationale that only lists advantages is a sales pitch. Three things should be said plainly.</p>
+        <ul class="bullets">
+          <li><b>The mathematics came after the practice, and mostly from outside it.</b> Kolam artists were not applying graph theory. Researchers recognised structure in what was already being done — which is a real intellectual contribution, and also not the same as the tradition being "secretly mathematical". The order matters.</li>
+          <li><b>Choosing a tradition with formal structure is partly self-serving.</b> Kolam suits a design system unusually well, which makes it easy to mistake convenience for respect. The <a href="accessibility.html#cultural">cultural handling</a> rules exist because that mistake is the default.</li>
+          <li><b>“Kolam” here means the looped form.</b> The word covers a whole family — including <i>pulli</i> kolams drawn as separate strokes between dots, which are not one continuous line. Everything in this documentation says simply <em>kolam</em>, and everywhere it makes a claim about continuity it means the looped, single-line form the generator draws. Naming that once is more readable than qualifying it forty times, but it is a simplification and this is where it is declared.</li>
+          <li><b>This system captures a narrow slice.</b> Square kolams on odd grids. Not <em>padi</em> kolams, not freehand, not the diamond and looped-mesh forms, not any of the coloured festival work. What is documented here is one construction, described precisely — not the tradition, described adequately.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ EVOLUTION ============ -->
+    <section class="doc-section" id="evolution">
+      <h2>How it changed</h2>
+      <p class="sub">The chronology is genuinely contested, and the disagreement is more interesting than either answer.</p>
+
+      <div class="callout warn"><b>Read the dates carefully.</b> Popular writing about kolam tends to reach for the oldest date available. The scholarly picture is not settled, and the most conservative reading comes from the same researcher whose mathematics this system depends on — which is worth sitting with rather than resolving.</div>
+
+      <div class="timeline">
+        <div>
+          <span class="when">c. 300 BCE – 300 CE · contested</span>
+          <h3>Sangam-era references</h3>
+          <p>Some writers trace floor-decoration practices in the Tamil region to Sangam literature. The references are indirect and describe decorated ground rather than the specific dot-lattice construction, so they establish an ancestry for floor art rather than for the kolam as practised now.</p>
+        </div>
+        <div>
+          <span class="when">7th – 8th century CE</span>
+          <h3>Āṇṭāḷ</h3>
+          <p>The poems of the Vaishnava saint-poet Āṇṭāḷ are commonly cited as the earliest clear literary reference to the practice. This is the point most accounts treat as firm ground.</p>
+        </div>
+        <div class="contested">
+          <span class="when">16th century · the conservative reading</span>
+          <h3>The word itself</h3>
+          <p><b>Gift Siromoney argued that common threshold patterns are not very ancient</b> — that the practice of decorating the floor in this way may go back about six hundred years and not more. He noted that the word <i>kolam</i>, used for patterns drawn on the floor, appears for the first time in the 16th-century Kuravanji <i>Madurai Meenatchiammai Kuram</i>, and a little later in the 17th-century <i>Kutrala Kuravanji</i>.</p>
+        </div>
+        <div>
+          <span class="when">1970s</span>
+          <h3>Formalisation</h3>
+          <p>Gift and Rani Siromoney, at Madras Christian College, treat kolam designs as two-dimensional picture languages with definable syntactic rules, and show that many complex patterns are generable by context-free array grammars. The model becomes known as the Siromoney matrix grammar. This is the moment the tradition acquires a formal description — and the moment this design system becomes possible.</p>
+        </div>
+        <div>
+          <span class="when">1980s – 1990s</span>
+          <h3>Ethnomathematics and computation</h3>
+          <p>Marcia Ascher's work places kolam alongside other non-Western mathematical practices. Prusinkiewicz and Hanan apply L-systems to South Indian folk patterns. Naranan and collaborators construct kolams from Fibonacci and generalised Fibonacci sequences. Yanagisawa and Nagata contribute numerical and diagrammatic analyses and digitalisation studies.</p>
+        </div>
+        <div>
+          <span class="when">Materially, across the same period</span>
+          <h3>Flour to vinyl</h3>
+          <p>Rice flour — traditionally also a small daily act of feeding ants and birds — gives way in many households to stone powder, chalk and synthetic colour, which last longer and feed nothing. Daily ephemeral drawing gives way in urban apartments to painted permanent designs, printed stickers and moulded plastic mats. Competitions and Margazhi-month displays professionalise a domestic practice. Software, including this, digitises it.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>What changed</h3>
+          <ul class="bullets">
+            <li><b>Material</b> — rice flour to stone powder, chalk, acrylic, vinyl.</li>
+            <li><b>Permanence</b> — daily and swept to painted and kept.</li>
+            <li><b>Setting</b> — the earth threshold of a house to a tiled apartment landing, a competition floor, a screen.</li>
+            <li><b>Who draws</b> — a near-universal daily practice among women in many households, now unevenly transmitted and often performed rather than lived.</li>
+            <li><b>Why</b> — protective and auspicious ritual, increasingly also aesthetic and civic display.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What did not</h3>
+          <ul class="bullets">
+            <li><b>The dot grid comes first.</b> Every construction still begins by laying the pulli.</li>
+            <li><b>The continuity rule for kolams.</b> One line, no lifting, closed.</li>
+            <li><b>Symmetry as the default</b> and departure from it as an event.</li>
+            <li><b>The threshold as the site.</b> Whatever the material, it is drawn where inside meets outside.</li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">The four invariants are exactly the four this system took. That is not a coincidence — they are what survives medium change, which is a decent test of what is structural.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MATHS ============ -->
+    <section class="doc-section" id="maths">
+      <h2>The mathematics</h2>
+      <p class="sub">Five distinct bodies of work, of which this system uses two.</p>
+
+      <div class="doc-sub">
+        <h3>Mirror curves and the dot lattice</h3>
+        <div class="grid-2">
+          <div class="prose">
+            <p>The standard formalisation treats a kolam as a <b>mirror curve</b>: a line travelling diagonally through a lattice of dots, reflecting off the boundary and off "mirrors" placed between dots. The curve is not drawn freely — it is the deterministic consequence of where the mirrors are.</p>
+            <p>This is the family the generator belongs to. Its three-tile decomposition is the same construction expressed per-cell rather than as a travelling particle: a tile is a statement about which way the line turns in that square, and the arcs meet at cell-edge midpoints because the loop radius is exactly half the pitch. Same geometry, different bookkeeping.</p>
+          </div>
+          <div>
+            <div class="canvas" data-kolam='{"dots":7,"seed":1729,"crossing":0,"stroke":3}' aria-hidden="true"></div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-1);text-align:center">A mirror curve with no crossings — every turn is a quarter arc around a dot.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>One line or several — the gcd result</h3>
+        <p>The question a kolam poses is whether the whole figure is a <b>single closed curve</b> or several disjoint ones. For the classical constructions this is not an aesthetic outcome; it is arithmetic.</p>
+        <p>When the grid parameters are coprime, the traversal closes into a single Eulerian circuit — one line, one loop, the ideal the form is named for. When the greatest common divisor of the parameters is greater than one, the same construction yields <b>multiple disjoint closed loops</b>, and the count is governed by that divisor. A practitioner choosing a dot count is choosing, whether or not in these terms, how many separate lines the finished drawing will contain.</p>
+        <div class="callout"><b>Why this system does not rely on it.</b> Pulli's generator guarantees closure but not <em>single-line</em> closure — it produces a finite set of closed curves with zero open endpoints, which may be one loop or several depending on the tiles drawn. Guaranteeing a single circuit would mean constraining the tile choice, which would collapse the variety the system needs. The <a href="generator.html#boundary">boundary proof</a> states exactly this, and it is the honest weaker claim.</div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Formal grammars</h3>
+        <p>The Siromoneys' contribution was to treat kolam as a <b>two-dimensional picture language</b>. Where a one-dimensional grammar generates strings, an array or matrix grammar generates two-dimensional arrays of symbols — and many complex kolam patterns turn out to be generable by context-free array grammars, with new patterns produced by simple transformations: rotation, reflection, half-turn, conjugation.</p>
+        <p>The claim being made is precise and stronger than "kolams are mathematical". It is that the set of kolams is a <em>formal language</em> — that there exist production rules whose closure is the set of valid patterns. That is the intellectual result this entire system rests on, and it is worth naming its authors every time.</p>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Two more, not used here</h3>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>L-systems</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Prusinkiewicz and Hanan applied Lindenmayer systems — parallel rewriting rules originally devised for plant growth — to South Indian folk patterns. L-systems capture the <em>recursive</em> character of kolam growth, where a larger pattern contains transformed copies of a smaller one, better than a per-cell tiling does.</p>
+          </div>
+          <div class="panel">
+            <h3>Fibonacci constructions</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Naranan and collaborators built square and rectangular kolams of arbitrary size from Fibonacci and generalised Fibonacci numbers. A pleasing result, and a caution: that kolams <em>can</em> be constructed this way is not evidence that they historically <em>were</em>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>What the system actually uses</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Mathematical idea</th><th>Used here?</th><th>Where</th></tr></thead>
+            <tbody>
+              <tr><td>Mirror curves on a dot lattice</td><td class="derive" style="color:var(--color-success)">yes</td><td>The three-tile decomposition in <a href="generator.html#tiles">the generator</a></td></tr>
+              <tr><td>Point symmetry groups (D4, D2)</td><td class="derive" style="color:var(--color-success)">yes</td><td>Tile-grid constraints, and the layout vocabulary in <a href="principles.html#samam">principle 03</a></td></tr>
+              <tr><td>Closure / no open endpoints</td><td class="derive" style="color:var(--color-success)">yes</td><td>The <a href="generator.html#boundary">boundary-closure proof</a></td></tr>
+              <tr><td>Eulerian single-circuit condition</td><td class="derive" style="color:var(--color-warning)">no</td><td>Would over-constrain tile choice — closure is guaranteed, single-line is not</td></tr>
+              <tr><td>Array / matrix grammars</td><td class="derive" style="color:var(--color-warning)">no</td><td>The intellectual foundation, but not the implementation</td></tr>
+              <tr><td>L-systems</td><td class="derive" style="color:var(--color-warning)">no</td><td>—</td></tr>
+              <tr><td>Fibonacci constructions</td><td class="derive" style="color:var(--color-warning)">no</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="prose" style="margin-top:var(--idai-2)">Two of seven. A system that claimed all of them would be more impressive and less true.</p>
+      </div>
+    </section>
+
+    <!-- ============ UNIVERSAL ============ -->
+    <section class="doc-section" id="universal">
+      <h2>Elsewhere in the world</h2>
+      <p class="sub">Threshold marks, endless lines and protective patterns recur across unconnected cultures. Some of the parallels are loose. Two of them are startlingly exact.</p>
+
+      <div class="doc-sub">
+        <h3>Across South Asia</h3>
+        <p>The same domestic practice carries a different name and idiom in nearly every region — closely related traditions rather than distant parallels.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Name</th><th>Region</th><th>Character</th></tr></thead>
+            <tbody>
+              <tr><td class="name">kolam</td><td>Tamil Nadu</td><td>Dot lattice; the looped, continuous-line form is the one this system uses</td></tr>
+              <tr><td class="name">muggu</td><td>Andhra Pradesh, Telangana</td><td>Closely related dot-grid tradition</td></tr>
+              <tr><td class="name">rangoli</td><td>Maharashtra, and the general term</td><td>Broader, often filled and coloured</td></tr>
+              <tr><td class="name">mandana</td><td>Rajasthan</td><td>Painted on walls as well as floors, red ground with white</td></tr>
+              <tr><td class="name">alpana / alpona</td><td>West Bengal</td><td>Rice paste, flowing freehand rather than lattice-bound</td></tr>
+              <tr><td class="name">aripan</td><td>Mithila, Bihar</td><td>Finger-drawn geometric patterns in rice paste (<i>pithar</i>)</td></tr>
+              <tr><td class="name">chowk / chowkpurana</td><td>Uttar Pradesh</td><td>Ritual squares</td></tr>
+              <tr><td class="name">jhoti / chita</td><td>Odisha</td><td>Rice-paste threshold and wall drawing</td></tr>
+              <tr><td class="name">kalamezhuthu</td><td>Kerala</td><td>Coloured powder, ritual figures rather than lattice patterns</td></tr>
+              <tr><td class="name">sathiya</td><td>Gujarat</td><td>Threshold auspicious marks</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>The two exact parallels</h3>
+        <p>These are the ones worth taking seriously, because the correspondence is structural rather than thematic — the same mathematical constraints, arrived at independently.</p>
+
+        <div class="grid-2">
+          <div class="panel" style="border-top:var(--kambi-3) solid var(--color-accent)">
+            <h3>sona · Chokwe, Angola</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><i>Sona</i> (sing. <i>lusona</i>) are sand drawings of the Chokwe and neighbouring peoples of eastern Angola, north-west Zambia and parts of Congo, used in storytelling and initiation. They are <b>mirror curves on a dot lattice</b> — the same formal object as a kolam.</p>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Paulus Gerdes documented the tradition and reconstructed its algorithms. The reported Chokwe aesthetic preference is for curves that <b>(1) separate each dot from the others, (2) form a single monolineal Eulerian circuit, and (3) are symmetric</b>.</p>
+            <div class="callout" style="margin-bottom:0"><b>Those are the three constraints of a kolam</b>, stated in the same order, by a culture with no contact with Tamil Nadu. The mathematics of drawing a single closed line around a field of dots appears to have a small number of good answers, and unconnected traditions found the same ones.</div>
+          </div>
+          <div class="panel" style="border-top:var(--kambi-3) solid var(--color-accent)">
+            <h3>sandroing · Vanuatu</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Practised across some eighty language groups of central and northern Vanuatu, and inscribed on UNESCO's Representative List of the Intangible Cultural Heritage of Humanity in 2008 (proclaimed 2003). With one finger, the drawer traces <b>a continuous meandering line on an imagined grid</b> in sand, volcanic ash or clay.</p>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">The drawings are mnemonic as well as graphic — encoding ritual, mythology, kinship, song cycles, farming and craft knowledge. Marcia Ascher analysed their mathematical properties in the 1980s.</p>
+            <div class="callout" style="margin-bottom:0"><b>And they are ephemeral by design</b> — traced, spoken over, then wiped out or left to the wind. The fourth kolam property, the one that became this system's release policy, independently again.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Looser parallels</h3>
+        <p>Related by theme — endlessness, interlace, protection at a boundary — rather than by construction.</p>
+        <div class="grid-3">
+          <div class="panel">
+            <h3>Celtic, Saxon, Norse interlace</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Endless knotwork, widely read as apotropaic — protecting the wearer or owner from harm. Continuous and interlaced, but built from strapwork rather than generated on a dot lattice.</p>
+          </div>
+          <div class="panel">
+            <h3>Girih</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Interlaced strapwork in Islamic architecture — the term is from the Persian for <i>knot</i> — reaching complex tilings by the 11th century. Deeply mathematical, but the mathematics is tiling and symmetry rather than single-curve traversal.</p>
+          </div>
+          <div class="panel">
+            <h3>Apotropaic threshold marks</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">In English vernacular buildings, hexafoils or "daisy wheels", mazes and diagonal lines were scribed near doors, windows and hearths — the vulnerable points — to catch or turn away evil. Same site, same intent, no continuous line.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>What the recurrence does and does not mean</h3>
+        <div class="dd">
+          <div class="do">
+            <span class="tag">Fair to say</span>
+            <p>Three elements recur widely and independently: <b>a threshold</b>, <b>a line without an end</b>, and <b>an ordering or protective intent</b>. Where a tradition draws a single continuous line through a field of dots, it converges on the same mathematics — because there are only so many ways to do it.</p>
+          </div>
+          <div class="dont">
+            <span class="tag">Not fair to say</span>
+            <p>That these are "the same tradition", or that one derived from another, or that they share a meaning. Sona encode narrative; Vanuatu sand drawings encode kinship and song; kolam is auspicious and domestic; a daisy wheel scratched by a Suffolk carpenter is defensive. <b>Convergent structure is not shared meaning</b>, and flattening them into a universal symbol erases the specific thing each one is.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOK ============ -->
+    <section class="doc-section" id="took">
+      <h2>What this system took</h2>
+      <p class="sub">Stated plainly, so an adopter can judge whether the borrowing is proportionate.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Taken</h3>
+          <ul class="bullets">
+            <li><b>The dot lattice</b> as a generating function for spacing and geometry.</li>
+            <li><b>The meeting condition</b> <code>r = P/2</code>, which is the tradition's geometry, not an invention.</li>
+            <li><b>The continuity requirement</b>, as both a pattern guarantee and a product principle.</li>
+            <li><b>Symmetry as default, asymmetry as signal.</b></li>
+            <li><b>Impermanence</b>, as a release and deprecation model.</li>
+            <li><b>Vocabulary</b> — the Tamil terms, used with glosses throughout.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Deliberately not taken</h3>
+          <ul class="bullets">
+            <li><b>Ritual configurations.</b> The generator produces secular looped patterns; a denylist of festival- and mourning-specific forms ships with it.</li>
+            <li><b>Religious meaning.</b> No claim is made that a generated pattern is auspicious, protective, or anything other than a figure.</li>
+            <li><b>The claim of authority.</b> This is one reading by a design system, not documentation of a living practice.</li>
+            <li><b>Coloured festival forms</b>, freehand traditions, and every regional variant listed above.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout"><b>Where the credit goes.</b> The practice belongs to the households and communities who draw it, overwhelmingly women, across generations, almost entirely uncredited. The formal insight that made a generator possible belongs to named researchers. Neither is licensed by anyone here, and the code being MIT does not change that — see <a href="governance.html#credit">Governance → credit</a>.</div>
+    </section>
+
+    <!-- ============ READING ============ -->
+    <section class="doc-section" id="reading">
+      <h2>Sources</h2>
+      <p class="sub">Where the claims on this page come from. Where accounts disagree, both are cited.</p>
+
+      <ul class="bullets refs">
+        <li><b>Siromoney, G. &amp; Siromoney, R. — “Array Grammars and Kolam”.</b> The formalisation of kolam as a two-dimensional picture language generable by context-free array grammars. <a href="https://www.semanticscholar.org/paper/Array-Grammars-and-Kolam-Siromoney-Siromoney/41e716f3f281fea512e39938c80230cc772050bd">Semantic Scholar</a></li>
+        <li><b>“Kambi Kolam as Algorithmic Pattern”</b>, Algorithmic Pattern Salon. Context on the Siromoneys' 1970s work and the treatment of kolam as syntactic picture language. <a href="https://alpaca.pubpub.org/pub/xywz3ebv/release/1">alpaca.pubpub.org</a></li>
+        <li><b>Sahapedia — “Significance of Kolam in Tamil Culture”.</b> Source for the contested chronology, including Siromoney's six-hundred-year reading and the 16th-century <i>Madurai Meenatchiammai Kuram</i> attestation alongside the Sangam and Āṇṭāḷ claims. <a href="http://www.sahapedia.org/significance-of-kolam-tamil-culture">sahapedia.org</a></li>
+        <li><b>Gerdes, P. — <i>Sona Geometry from Angola: Mathematics of an African Tradition</i></b> (originally published in Portuguese, 1993). Documentation and algorithmic reconstruction of Chokwe sand drawings. <a href="https://en.wikipedia.org/wiki/Paulus_Gerdes">Overview</a></li>
+        <li><b>Chavey, D. — “Mathematical Experiments with African Sona Designs”</b>, Bridges 2009. Source for mirror curves, common divisors, Eulerian cycles and the stated Chokwe aesthetic preferences. <a href="https://archive.bridgesmathart.org/2009/bridges2009-305.pdf">bridgesmathart.org</a></li>
+        <li><b>UNESCO — “Vanuatu sand drawings”.</b> Inscribed 2008 on the Representative List; source for the continuous line on an imagined grid, the ~80 language groups, and the mnemonic function. <a href="https://ich.unesco.org/en/RL/vanuatu-sand-drawings-00073">ich.unesco.org</a></li>
+        <li><b>“Extending Hridaya Kolam to Multiple Loops: A Study of Non-Coprime Dot–Arm Structures”</b>, arXiv. Source for the gcd result — where the divisor exceeds one, the construction yields multiple disjoint closed loops rather than a single Eulerian circuit. <a href="https://arxiv.org/pdf/2510.18907">arxiv.org</a></li>
+        <li><b>“Kolam Designs Based on Fibonacci Numbers”</b> (Naranan et al.). <a href="https://www.nieuwarchief.nl/serie5/pdf/naw5-2019-20-3-195.pdf">Nieuw Archief voor Wiskunde</a></li>
+        <li><b>Yanagisawa &amp; Nagata — “Fundamental Study on Design System of Kolam Pattern”.</b> Numerical and diagrammatic analysis, and digitalisation of kolam construction. <a href="https://www.researchgate.net/publication/237442288_Fundamental_Study_on_Design_System_of_Kolam_Pattern">ResearchGate</a></li>
+        <li><b>Britannica — “Rangoli”</b>, and Memeraki, “Floor Paintings of India”. Sources for the regional names table. <a href="https://www.britannica.com/art/rangoli">britannica.com</a> · <a href="https://www.memeraki.com/blogs/posts/floor-paintings-of-india">memeraki.com</a></li>
+        <li><b>Historic England — “What Are Witches' Marks?”</b> Source for apotropaic threshold marks at doors, windows and hearths. <a href="https://historicengland.org.uk/whats-new/features/discovering-witches-marks/what-are-witches-marks/">historicengland.org.uk</a></li>
+      </ul>
+
+      <div class="callout"><b>A note on sourcing.</b> Popular writing about kolam is abundant and frequently repeats the oldest available date without attribution. Where this page states a date it names who is claiming it. Where two accounts disagree — as they do on almost everything before the 16th century — both are given and neither is presented as settled.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

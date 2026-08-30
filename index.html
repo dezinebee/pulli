@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulli — A design system generated from the dot</title>
+<meta name="description" content="An open design system derived from the kolam: two seeds, a derived token model, a deterministic pattern generator, and a component library.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html" aria-current="page">00 · Overview</a>
+          <ul class="nav-sub">
+            <li><a href="#what">What it is</a></li>
+            <li><a href="#seed">The seed</a></li>
+            <li><a href="#start">Quick start</a></li>
+            <li><a href="#map">Map of the system</a></li>
+            <li><a href="#fit">Is this right for you</a></li>
+          </ul>
+        </li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">Open design system · MIT</div>
+      <h1>A design system generated from the dot.</h1>
+      <p class="lede">The kolam is not decoration. It is a rule set: a lattice of dots, a fixed loop radius, and — in the looped form this system draws — a line that must never break. Pulli takes those rules literally and derives an entire interface language from them — spacing, geometry, motion, and a pattern engine that emits assets instead of storing them. <a href="origins.html">Why this tradition, and what its mathematics actually says</a>.</p>
+    </div>
+
+    <section class="doc-section" id="what">
+      <h2>What it is</h2>
+      <p class="sub">Three things, in one repository, with no build step and no dependencies.</p>
+      <div class="grid-3">
+        <div class="panel">
+          <h3>A token model</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Three layers — palette, derived primitives, semantic roles. Every geometric value is a function of the pitch. Change one number and the interface re-derives.</p>
+        </div>
+        <div class="panel">
+          <h3>A pattern engine</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">A deterministic kolam generator. Patterns are committed as five numbers, not as binary assets, and are guaranteed continuous and closed.</p>
+        </div>
+        <div class="panel">
+          <h3>A component library</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Twelve components whose entire box model is expressible in lattice terms, each with states, anatomy, and an accessibility contract.</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>What it honestly is.</b> A <em>conventional measurement layer</em> — an 8pt grid, a √2 type scale, standard breakpoints — carrying a <em>genuinely kolam construction layer</em>: the selection language, the enclosure, and the pattern engine. Not a system derived entirely from kolam. <a href="line.html#failure">The system failed its own deletion test</a>, and section 04 is both the correction and the record of it.</div>
+    </section>
+
+    <section class="doc-section" id="seed">
+      <h2>The seed</h2>
+      <p class="sub">Two numbers generate the geometry. Everything else is arithmetic.</p>
+
+      <div class="grid-2" style="align-items:center">
+        <div class="prose">
+          <p>Dots sit on a square lattice at pitch <b>P</b>. The line never touches a dot — it curves around it at radius <b>r</b>. For the loops around two adjacent dots to meet without a gap or an overlap, they must meet at the midpoint of the lattice edge between them. That happens at exactly one value:</p>
+          <pre><span class="k">r = P / 2</span>
+
+<span class="c">P = 8px   →   r = 4px</span>
+<span class="c">spacing   = nP        →  8, 16, 24, 32, 48, 64</span>
+<span class="c">radius    = n·r       →  2, 4, 8, 16</span>
+<span class="c">stroke    = r/4, r/2, r  →  1, 2, 4</span>
+<span class="c">type      = 16 × √2ⁿ   →  11, 16, 23, 32, 45, 64</span></pre>
+          <p>That one constraint locks the spacing scale and the radius scale to each other permanently. It is why a rounded corner in this system is never <em>approximately</em> right — it is the same curve the pattern engine draws.</p>
+          <p class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-3)">current seed · P = <span data-echo="p">8</span>px · r = <span data-echo="r">4</span>px</p>
+        </div>
+        <div class="canvas" data-kolam='{"dots":7,"seed":7181,"crossing":0.15,"stroke":3}' data-animate></div>
+      </div>
+
+      <div class="callout"><b>The pitch control in the header is live.</b> It writes <code>--p</code> on the document root. Every page of this site — padding, corner radii, control heights, switch travel, the token tables — re-derives as you drag it. That is the difference between a system that has a grid and a system made of one.</div>
+    </section>
+
+    <section class="doc-section" id="start">
+      <h2>Quick start</h2>
+      <p class="sub">Adopt in layers. Each one works without the next.</p>
+
+      <div class="doc-sub">
+        <h3>1 · Tokens only</h3>
+        <p>Link the token layer and consume semantic roles. Nothing else changes.</p>
+        <pre>&lt;link rel="stylesheet" href="assets/tokens.css"&gt;
+
+.my-card {
+  padding:       <span class="k">var(--space-inset-lg)</span>;
+  border-radius: <span class="k">var(--radius-panel)</span>;
+  background:    <span class="k">var(--color-surface)</span>;
+  border:        <span class="k">var(--border-hairline)</span> solid <span class="k">var(--color-border)</span>;
+}</pre>
+      </div>
+
+      <div class="doc-sub">
+        <h3>2 · Pattern engine only</h3>
+        <p>Use the generator for brand assets without adopting the tokens.</p>
+        <pre>&lt;script src="assets/kolam.js"&gt;&lt;/script&gt;
+
+<span class="c">// deterministic — same seed, same kolam, forever</span>
+const { svg, meta } = Kolam.generate({
+  dots: 9, symmetry: <span class="k">'d4'</span>, crossing: 0.2, seed: 1729
+});
+document.querySelector(<span class="k">'.hero'</span>).innerHTML = svg;</pre>
+      </div>
+
+      <div class="doc-sub">
+        <h3>3 · Full system</h3>
+        <p>Tokens, components, and declarative pattern rendering.</p>
+        <pre>&lt;link rel="stylesheet" href="assets/tokens.css"&gt;
+&lt;link rel="stylesheet" href="assets/system.css"&gt;
+&lt;script src="assets/kolam.js" defer&gt;&lt;/script&gt;
+&lt;script src="assets/site.js" defer&gt;&lt;/script&gt;
+
+&lt;button class="btn btn-primary"&gt;Draw&lt;/button&gt;
+&lt;div data-kolam='{"dots":5,"seed":42}'&gt;&lt;/div&gt;</pre>
+      </div>
+    </section>
+
+    <section class="doc-section" id="map">
+      <h2>Map of the system</h2>
+      <p class="sub">Read in order if you are adopting it; jump directly if you are looking something up.</p>
+      <div class="grid-auto">
+        <a class="tile" href="origins.html"><span class="n">01</span><h3>Origins</h3><p>Why a kolam was chosen to carry a design system, the contested chronology, the mathematics behind it, and the threshold traditions elsewhere that arrived at the same constraints.</p></a>
+        <a class="tile" href="principles.html"><span class="n">02</span><h3>Principles</h3><p>Four rules taken intact from kolam practice, what each one rules out, and what wins when two of them conflict.</p></a>
+        <a class="tile" href="lattice.html"><span class="n">03</span><h3>Lattice</h3><p>The derivation itself: spacing, sizing, layout grid, breakpoints, density tiers, elevation, and where derivation breaks.</p></a>
+        <a class="tile" href="line.html"><span class="n">04</span><h3>The Line</h3><p>The half the system originally left out: wrap-or-pass as a selection primitive, enclosure by looping instead of by box, and an honest re-run of the deletion test that forced the correction.</p></a>
+        <a class="tile" href="tokens.html"><span class="n">05</span><h3>Tokens</h3><p>The three-layer model, the full reference, naming grammar, JSON export, and theming rules.</p></a>
+        <a class="tile" href="generator.html"><span class="n">06</span><h3>Generator</h3><p>Tile set, algorithm, symmetry groups, the boundary-closure proof, API reference, and asset recipes.</p></a>
+        <a class="tile" href="components.html"><span class="n">07</span><h3>Components</h3><p>Twelve components with anatomy, states, token specs, and do/don't guidance.</p></a>
+        <a class="tile" href="motion.html"><span class="n">08</span><h3>Motion</h3><p>The three kolam moves with live curve plots, duration as distance, choreography, the animatable-property rule, and the draw-on spec.</p></a>
+        <a class="tile" href="accessibility.html"><span class="n">09</span><h3>Accessibility</h3><p>Measured contrast matrix, focus and motion policy, the pattern-density limits, and cultural handling.</p></a>
+        <a class="tile" href="governance.html"><span class="n">10</span><h3>Governance</h3><p>Versioning, the derivation-proof review rule, deprecation lifecycle, adoption tiers, and credit.</p></a>
+        <a class="tile" href="showcase.html"><span class="n">11</span><h3>Showcase</h3><p>Five surfaces built from these tokens — dashboard, mobile app, marketing site, web application, and email &amp; print where there are no variables at all. With the forks that themed them and the eight things they broke.</p></a>
+        <a class="tile" href="readiness.html"><span class="n">12</span><h3>Readiness</h3><p>Honest enterprise assessment: what is production-grade, the 46-of-58 component inventory and what still blocks deployment, domain fit for fintech and healthcare, and a phased roadmap with real durations.</p></a>
+        <a class="tile" href="enterprise.html"><span class="n">13</span><h3>Enterprise subset</h3><p>A conservative profile for regulated contexts — expressive layer off, conventional controls restored, forced-colors support and a measured AAA high-contrast theme.</p></a>
+        <a class="tile" href="grid.html"><span class="n">14</span><h3>Data grid</h3><p>The blocker, built. Ten thousand rows with forty in the DOM — sort, filter, resize, frozen columns, bulk select, keyboard navigation and the ARIA that virtualisation breaks.</p></a>
+        <a class="tile" href="library.html"><span class="n">15</span><h3>Library</h3><p>Forty-six of fifty-eight components with the reference inventory published in full — and a plain statement of why raising a component count barely moves readiness.</p></a>
+      </div>
+    </section>
+
+    <section class="doc-section" id="fit">
+      <h2>Is this right for you</h2>
+      <p class="sub">A system that cannot say who it is wrong for is marketing, not documentation.</p>
+      <div class="dd">
+        <div class="do">
+          <span class="tag">Good fit</span>
+          <p>Products with a genuine connection to South Indian context. Brands that want a generative identity rather than a fixed one. Teams who want token discipline enforced by arithmetic rather than by code review. Anyone who needs a pattern language that scales to infinite unique assets from one function.</p>
+        </div>
+        <div class="dont">
+          <span class="tag">Poor fit</span>
+          <p>Products with no relationship to the tradition, where kolam will read as texture borrowed for novelty. Dense data applications where the expressive layer has nowhere to live. Teams that need a component library today — this is a foundation with twelve components, not fifty.</p>
+        </div>
+      </div>
+      <div class="callout warn"><b>On borrowing.</b> Kolam is a living practice, authored over generations largely by women and largely uncredited. Using its structure is defensible; using its surface as decoration without naming the source is not. The <a href="accessibility.html#cultural">cultural handling</a> section sets out what this system requires of adopters.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam. Tokens, generator, and components, with no dependencies and no build step.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · type ratio √2 · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

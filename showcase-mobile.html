@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile showcase — Pulli</title>
+<meta name="description" content="Three mobile screens at comfortable density running the ilai fork: onboarding, library and detail.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/showcase.css">
+<style>
+/* ============================================================
+   FORK · ilai — leaf. Palette and role assignment only.
+   ============================================================ */
+#mobileSurface{
+  --ilai-100: #E4F0E8;
+  --ilai-500: #2E6B45;
+  --ilai-700: #286038;
+  --ilai-300: #84C291;
+  --ilai-900: #182318;
+
+  --color-accent:        var(--ilai-500);
+  --color-accent-hover:  var(--ilai-700);
+  --color-accent-subtle: var(--ilai-100);
+  --color-on-accent:     var(--maa-50);
+  --color-kolam-line:    var(--ilai-500);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) #mobileSurface{
+    --color-accent:        var(--ilai-300);
+    --color-accent-hover:  #9AD0A6;
+    --color-accent-subtle: var(--ilai-900);
+    --color-on-accent:     var(--mann-900);
+    --color-kolam-line:    var(--ilai-300);
+  }
+}
+:root[data-theme="dark"] #mobileSurface{
+  --color-accent:        var(--ilai-300);
+  --color-accent-hover:  #9AD0A6;
+  --color-accent-subtle: var(--ilai-900);
+  --color-on-accent:     var(--mann-900);
+  --color-kolam-line:    var(--ilai-300);
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html" aria-current="page">— Mobile app</a>
+          <ul class="nav-sub">
+            <li><a href="#surface">The surface</a></li>
+            <li><a href="#fork">The fork</a></li>
+            <li><a href="#stress">What it stresses</a></li>
+          </ul>
+        </li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">11.02 — Showcase · Mobile</div>
+      <h1>Mobile application.</h1>
+      <p class="lede">Three screens at comfortable density. Small surfaces are where target sizes stop being a checklist item and start deciding the layout, and where the expressive layer has to be spent in exactly one place — onboarding — or not at all.</p>
+    </div>
+
+    <section class="doc-section" id="surface">
+      <h2>The surface</h2>
+
+      <div class="surface-meta">
+        <div><dt>Density</dt><dd>comfortable · P = 10</dd></div>
+        <div><dt>Fork</dt><dd>ilai · leaf</dd></div>
+        <div><dt>Pattern coverage</dt><dd>onboarding only</dd></div>
+        <div><dt>New tokens needed</dt><dd>none</dd></div>
+      </div>
+
+      <div class="density-switch">
+        <span>Density</span>
+        <div class="seg" data-density-switch="#mobileSurface">
+          <button type="button" data-d="compact" aria-pressed="false">Compact</button>
+          <button type="button" data-d="default" aria-pressed="false">Default</button>
+          <button type="button" data-d="comfortable" aria-pressed="true">Comfortable</button>
+        </div>
+      </div>
+
+      <div id="mobileSurface" data-density="comfortable">
+        <div class="phones">
+
+          <!-- ===== 1 · onboarding ===== -->
+          <div>
+            <div class="phone">
+              <div class="phone-notch" aria-hidden="true"></div>
+              <div class="phone-screen">
+                <div class="phone-status"><span>9:41</span><span aria-hidden="true">▮▮▮</span></div>
+                <div class="phone-body" style="justify-content:center;text-align:center;padding-bottom:var(--idai-6)">
+                  <div data-kolam='{"dots":5,"seed":1201,"crossing":0.1,"stroke":3.5,"showDots":true}' aria-hidden="true" style="margin:0 auto var(--idai-2);width:70%"></div>
+                  <h3 style="font-family:var(--face-display);font-size:var(--ezhuthu-lead)">One line, every morning</h3>
+                  <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Draw a kolam each day. Each one is stored as a seed, so a year of patterns takes less space than a photograph.</p>
+                  <div style="display:flex;flex-direction:column;gap:var(--space-inline);margin-top:var(--idai-3)">
+                    <button class="btn btn-primary btn-block">Get started</button>
+                    <button class="btn btn-ghost btn-block">I have an account</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="phone-cap">Onboarding — the one screen with a pattern budget</p>
+          </div>
+
+          <!-- ===== 2 · library ===== -->
+          <div>
+            <div class="phone">
+              <div class="phone-notch" aria-hidden="true"></div>
+              <div class="phone-screen">
+                <div class="phone-status"><span>9:41</span><span aria-hidden="true">▮▮▮</span></div>
+                <div class="phone-body">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-inline)">
+                    <h3 style="font-family:var(--face-display);font-size:var(--ezhuthu-lead)">Library</h3>
+                    <span class="badge plain">30 saved</span>
+                  </div>
+                  <div class="field" style="margin:0">
+                    <label for="msearch" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search patterns</label>
+                    <input id="msearch" type="text" placeholder="Search patterns">
+                  </div>
+                  <div style="overflow:hidden">
+                    <div class="list-row">
+                      <div class="thumb"><div data-kolam='{"dots":5,"seed":9,"crossing":0.3,"stroke":5,"showDots":false}' aria-hidden="true"></div></div>
+                      <div class="txt"><b>Margazhi 12</b><span>7 × 7 · seed 4471</span></div>
+                      <span class="badge ok">Closed</span>
+                    </div>
+                    <div class="list-row">
+                      <div class="thumb"><div data-kolam='{"dots":5,"seed":41,"crossing":0.3,"stroke":5,"showDots":false}' aria-hidden="true"></div></div>
+                      <div class="txt"><b>Margazhi 11</b><span>9 × 9 · seed 1188</span></div>
+                      <span class="badge ok">Closed</span>
+                    </div>
+                    <div class="list-row">
+                      <div class="thumb"><div data-kolam='{"dots":5,"seed":77,"crossing":0.3,"stroke":5,"showDots":false}' aria-hidden="true"></div></div>
+                      <div class="txt"><b>Doorstep study</b><span>5 × 5 · seed 302</span></div>
+                      <span class="badge info">Draft</span>
+                    </div>
+                    <div class="list-row">
+                      <div class="thumb"><div data-kolam='{"dots":5,"seed":128,"crossing":0.3,"stroke":5,"showDots":false}' aria-hidden="true"></div></div>
+                      <div class="txt"><b>Margazhi 10</b><span>7 × 7 · seed 8890</span></div>
+                      <span class="badge ok">Closed</span>
+                    </div>
+                  </div>
+                </div>
+                <nav class="phone-tabbar" aria-label="Main">
+                  <a href="#surface" aria-current="true"><i></i>Library</a>
+                  <a href="#surface"><i style="border-radius:var(--radius-pill)"></i>Draw</a>
+                  <a href="#surface"><i></i>Settings</a>
+                </nav>
+              </div>
+            </div>
+            <p class="phone-cap">Library — pattern as identity, at thumbnail size</p>
+          </div>
+
+          <!-- ===== 3 · detail ===== -->
+          <div>
+            <div class="phone">
+              <div class="phone-notch" aria-hidden="true"></div>
+              <div class="phone-screen">
+                <div class="phone-status"><span>9:41</span><span aria-hidden="true">▮▮▮</span></div>
+                <div class="phone-body">
+                  <div style="display:flex;align-items:center;gap:var(--space-inline)">
+                    <button class="btn btn-ghost btn-sm" aria-label="Back" style="min-height:var(--alavu-md);min-width:var(--alavu-md)">←</button>
+                    <h3 style="font-family:var(--face-display);font-size:var(--ezhuthu-lead)">Margazhi 12</h3>
+                  </div>
+                  <div style="background:var(--color-accent-subtle);border-radius:var(--radius-panel);padding:var(--space-inset-md)">
+                    <div data-kolam='{"dots":7,"seed":4471,"crossing":0.15,"stroke":3,"showDots":true}' aria-hidden="true"></div>
+                  </div>
+                  <ul class="speclist" style="font-size:var(--ezhuthu-caption)">
+                    <li><span>Grid</span><b>7 × 7</b></li>
+                    <li><span>Seed</span><b>4471</b></li>
+                    <li><span>Symmetry</span><b>D4</b></li>
+                    <li><span>Segments</span><b>84</b></li>
+                  </ul>
+                  <label class="switch" style="justify-content:space-between;width:100%"><span>Show pulli</span><input type="checkbox" checked><span class="track"></span></label>
+                  <div style="display:flex;gap:var(--space-inline);margin-top:auto;padding-bottom:var(--space-inset-md)">
+                    <button class="btn btn-secondary" style="flex:1">Share</button>
+                    <button class="btn btn-primary" style="flex:1">Redraw</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="phone-cap">Detail — full pattern, with its parameters as content</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="fork">
+      <h2>The fork</h2>
+      <p class="sub">Same shape as the dashboard fork, different palette. Fifteen lines, no primitives touched.</p>
+
+      <pre>#mobileSurface{
+  --ilai-100: #E4F0E8;  --ilai-500: #2E6B45;
+  --ilai-700: #286038;  --ilai-300: #84C291;
+  --ilai-900: #182318;
+
+  <span class="k">--color-accent:</span>        var(--ilai-500);
+  <span class="k">--color-accent-hover:</span>  var(--ilai-700);
+  <span class="k">--color-accent-subtle:</span> var(--ilai-100);
+  <span class="k">--color-on-accent:</span>     var(--maa-50);
+  <span class="k">--color-kolam-line:</span>    var(--ilai-500);
+}
+:root[data-theme="dark"] #mobileSurface{
+  <span class="k">--color-accent:</span>        var(--ilai-300);
+  <span class="k">--color-accent-subtle:</span> var(--ilai-900);
+  <span class="k">--color-on-accent:</span>     var(--mann-900);
+}</pre>
+
+      <div class="callout"><b><code>--color-kolam-line</code> is a semantic role, not an afterthought.</b> Forking the accent without forking the pattern colour would leave green buttons next to an ochre kolam. The pattern layer participates in theming like everything else.</div>
+    </section>
+
+    <section class="doc-section" id="stress">
+      <h2>What it stresses</h2>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Held up</h3>
+          <ul class="bullets">
+            <li><b>Comfortable density on a small screen.</b> P = 10 gives 55px controls and generous list rows without any mobile-specific tokens. The tier exists exactly for this.</li>
+            <li><b>Pattern at thumbnail scale.</b> A 5×5 kolam at 60px still reads as a distinct figure — because it is generated from a stable seed per item, the same row always looks the same, which is what makes it usable as identity rather than decoration.</li>
+            <li><b>The switch component</b> works unchanged in a settings row, with the label stretched and the control right-aligned. No variant needed — just a flex container.</li>
+            <li><b>Full-width buttons</b> via <code>btn-block</code>, keeping the same height token as everywhere else.</li>
+          </ul>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-warning)">
+          <h3>Broke, and the fix</h3>
+          <ul class="bullets">
+            <li><b>The tab bar had no safe area.</b> At comfortable density the bar looked generous, which disguised the fact that it sat flush against the bottom edge — where a home indicator lives on real hardware. Fixed by raising the bottom inset to <code>--space-inset-md</code>. <b>Density is not a substitute for a safe area</b>, and a generous-looking layout is the easiest place to miss one.</li>
+            <li><b>The back button</b> used <code>btn-sm</code> and was a 40px target. It now carries explicit <code>min-height</code> and <code>min-width</code> of <code>--alavu-md</code>. Icon-only controls are the most common place the visual-size trap catches people.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout"><b>One pattern budget, spent on onboarding.</b> The library and detail screens use kolams as content — thumbnails and the thing being viewed — not as ground. Onboarding is the only screen where the pattern is decoration, and it is also the only screen the user sees once.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

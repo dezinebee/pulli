@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Principles — Pulli</title>
+<meta name="description" content="Four rules taken intact from kolam practice, what each one rules out, and what wins when two conflict.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html" aria-current="page">02 · Principles</a>
+          <ul class="nav-sub">
+            <li><a href="#pulli">Nothing is chosen</a></li>
+            <li><a href="#sikku">Continuity</a></li>
+            <li><a href="#samam">Symmetry</a></li>
+            <li><a href="#kaalai">Made to be erased</a></li>
+            <li><a href="#conflict">When they conflict</a></li>
+            <li><a href="#test">Testing compliance</a></li>
+          </ul>
+        </li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">02 — Principles</div>
+      <h1>Four rules borrowed intact.</h1>
+      <p class="lede">Each of these is a working constraint from kolam practice, not a metaphor for one. A principle earns its place by ruling things out — so each is stated with the decisions it forbids and a way to test whether it was followed.</p>
+    </div>
+
+    <!-- ============ 1 ============ -->
+    <section class="doc-section" id="pulli">
+      <h2>01 · Nothing is chosen. Everything is derived.</h2>
+      <p class="sub"><i>pulli</i> — the dot. The kolam begins by laying out the grid. Every line that follows is answerable to it.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The practice.</b> A kolam artist does not improvise the composition and then fit dots to it. She lays the pulli first — a count, a shape, a spacing — and the drawing that follows is constrained by that grid absolutely. The grid is not a guide. It is the specification.</p>
+          <p><b>The rule.</b> Every geometric value in this system is expressed as a function of the pitch <code>P</code> and the loop radius <code>r = P/2</code>. A value that cannot be written that way does not enter the system.</p>
+          <p><b>Why it holds.</b> Most design systems have a spacing scale and a radius scale that were chosen independently and then reconciled by eye. Here they share a generator, which is why a rounded corner and a padding step are never <em>nearly</em> harmonious — they are the same arithmetic.</p>
+        </div>
+        <div class="panel">
+          <h3>Ruled out</h3>
+          <ul class="bullets">
+            <li><b>Magic numbers.</b> <code>padding: 13px</code> is a review block, not a nit.</li>
+            <li><b>Independent scales.</b> No separate radius ramp chosen for looks.</li>
+            <li><b>Per-component exceptions.</b> A component that needs a bespoke value is a component whose spec is wrong.</li>
+            <li><b>Optical tweaks in product code.</b> Corrections belong in the primitive layer where they can be audited, not scattered across features.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Worked example — a button</h3>
+        <p>Nothing here was picked. Each line is read off the lattice.</p>
+        <div class="grid-2">
+          <div class="demo">
+            <div class="demo-stage"><button class="btn btn-primary">Draw kolam</button><button class="btn btn-secondary">Sweep</button></div>
+            <div class="demo-spec">height max(5.5P, 44px) · pad-x 3P · radius 2r · focus 2px</div>
+          </div>
+          <ul class="speclist">
+            <li><span>Height</span><b>5.5 P → 44px</b></li>
+            <li><span>Horizontal padding</span><b>3 P → 24px</b></li>
+            <li><span>Gap to icon</span><b>1 P → 8px</b></li>
+            <li><span>Corner radius</span><b>2 r → 8px</b></li>
+            <li><span>Focus ring</span><b>kambi-2 → 2px</b></li>
+            <li><span>Ring offset</span><b>kambi-2 → 2px</b></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2 ============ -->
+    <section class="doc-section" id="sikku">
+      <h2>02 · Continuity over interruption.</h2>
+      <p class="sub"><i>sikku</i> — the tangle. In the looped form, a kolam is drawn as one line that never lifts from the floor and closes on itself.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The practice.</b> The defining constraint of a kolam is that the line is continuous. It weaves through the whole grid and returns to where it began. A break is not a variation; it is a failure of the form.</p>
+          <p><b>The rule.</b> Interfaces preserve a traversable path. Every state a user can reach has a route back that does not require undoing work or reloading. Transitions move things along that path rather than replacing one screen with another.</p>
+          <p><b>Why it holds.</b> This is the principle that does the most product work. It converts a stylistic idea into a set of interaction requirements that a team can actually argue about in a design review.</p>
+        </div>
+        <div class="panel">
+          <h3>Ruled out</h3>
+          <ul class="bullets">
+            <li><b>Dead-end modals.</b> Any overlay that can only be left by completing or cancelling into an unknown state.</li>
+            <li><b>Destructive actions without a return.</b> Deletion offers undo for the length of a toast, or it offers a confirmation. Never neither.</li>
+            <li><b>Teleporting state.</b> An element that appears in a new location without a transition connecting the two.</li>
+            <li><b>Lost work on navigation.</b> Leaving a form preserves its contents or warns before discarding them.</li>
+            <li><b>Orphan pages.</b> Every route is reachable from navigation, not only from a link someone was sent.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout"><b>The generator obeys this literally.</b> Every kolam it emits is a set of closed curves with zero open endpoints — verified by counting path endpoints, not by inspection. If the pattern layer is allowed to break the rule, nobody will believe the interface layer has to follow it.</div>
+    </section>
+
+    <!-- ============ 3 ============ -->
+    <section class="doc-section" id="samam">
+      <h2>03 · Symmetry is structure; asymmetry is signal.</h2>
+      <p class="sub"><i>samam</i> — evenness. Most kolams are built on a symmetry group, and the eye reads any break in it immediately.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The practice.</b> Kolams are typically four-fold symmetric — invariant under quarter-turn rotation and both mirrors. That regularity is what makes an intentional deviation legible at a glance, from across a courtyard.</p>
+          <p><b>The rule.</b> Layouts default to lattice balance: even gutters, mirrored margins, aligned optical centres. Breaking symmetry is a deliberate act reserved for priority — one primary action per view, one emphasised card per grid, one highlighted row per table.</p>
+          <p><b>Why it holds.</b> Emphasis is a currency and most interfaces are inflationary. Making symmetry the default and asymmetry the exception puts a hard budget on emphasis: spend it more than once per view and it stops meaning anything.</p>
+        </div>
+        <div class="panel">
+          <h3>Ruled out</h3>
+          <ul class="bullets">
+            <li><b>Two primary buttons</b> in one decision.</li>
+            <li><b>Competing emphasis</b> — a badge, a highlight, and a callout on the same row.</li>
+            <li><b>Arbitrary asymmetric layout</b> adopted for visual interest with no hierarchy behind it.</li>
+            <li><b>Uneven gutters</b> as a styling choice rather than a response to content.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>The three symmetry groups</h3>
+        <p>The generator exposes the same vocabulary the layout rules use, so a team can talk about pattern and page in one language.</p>
+        <div class="grid-3">
+          <div>
+            <div class="canvas" data-kolam='{"dots":7,"seed":31,"symmetry":"d4","crossing":0.2}'></div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b class="mono" style="color:var(--color-accent)">d4</b> — both mirrors and the diagonal. Full balance. The default for layout.</p>
+          </div>
+          <div>
+            <div class="canvas" data-kolam='{"dots":7,"seed":31,"symmetry":"d2","crossing":0.2}'></div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b class="mono" style="color:var(--color-accent)">d2</b> — horizontal and vertical mirrors only. Directional without being lopsided.</p>
+          </div>
+          <div>
+            <div class="canvas" data-kolam='{"dots":7,"seed":31,"symmetry":"none","crossing":0.2}'></div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-secondary);margin-top:var(--idai-1)"><b class="mono" style="color:var(--color-accent)">free</b> — no constraint. Reserve it. This is what emphasis costs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4 ============ -->
+    <section class="doc-section" id="kaalai">
+      <h2>04 · Made to be erased.</h2>
+      <p class="sub"><i>kāllai</i> — morning. The kolam is swept away and drawn again the next day. Permanence was never the point.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The practice.</b> A kolam lasts a day. It is walked over, rained on, and swept up, and the next morning a different one is drawn in the same place. The value is in the drawing, not in the artefact.</p>
+          <p><b>The rule.</b> Components are versioned to be replaced. Deprecation is a normal, scheduled event with a migration path — not an admission of failure and not a reason to keep a parallel legacy directory alive indefinitely.</p>
+          <p><b>Why it holds.</b> The most common way a design system dies is accretion: nothing is ever removed, so every component has three variants, and eventually nobody can tell which one is current. A system that plans its own sweeping stays legible.</p>
+        </div>
+        <div class="panel">
+          <h3>Ruled out</h3>
+          <ul class="bullets">
+            <li><b>Permanent legacy directories.</b> A deprecated component gets one minor version, then goes.</li>
+            <li><b>Silent removal.</b> Every sweep ships with a codemod and a migration note.</li>
+            <li><b>Undocumented history.</b> Removed components stay in the ledger with the reasoning that removed them.</li>
+            <li><b>Hand-drawn pattern assets.</b> They cannot be re-derived when the pitch changes, so they cannot be swept and redrawn.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="prose" style="margin-top:var(--idai-3)">The full lifecycle — timing, notice periods, and the annual breaking release — is specified in <a href="governance.html#deprecation">Governance → Deprecation</a>.</p>
+    </section>
+
+    <!-- ============ CONFLICTS ============ -->
+    <section class="doc-section" id="conflict">
+      <h2>When principles conflict</h2>
+      <p class="sub">Principles that never collide are decoration. These do collide, so the precedence is written down rather than relitigated in every review.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Tension</th><th>Wins</th><th>Because</th></tr></thead>
+          <tbody>
+            <tr><td><b>Derivation</b> vs. <b>target size</b></td><td class="name">target size</td><td>A 6px pitch derives a 33px control. Accessibility outranks arithmetic; the floor is absolute and documented as the system's one legitimate override.</td></tr>
+            <tr><td><b>Continuity</b> vs. <b>safety</b></td><td class="name">safety</td><td>A genuinely irreversible action may interrupt. Continuity requires a return path where one can exist — not the removal of confirmation where it cannot.</td></tr>
+            <tr><td><b>Symmetry</b> vs. <b>hierarchy</b></td><td class="name">hierarchy</td><td>Symmetry is the default, not the goal. When content has a real priority order, breaking symmetry is the correct move — that is what the exception is for.</td></tr>
+            <tr><td><b>Erasure</b> vs. <b>stability</b></td><td class="name">stability, for one version</td><td>Sweeping is scheduled, never immediate. Consumers get a full minor version with warnings and a codemod before removal.</td></tr>
+            <tr><td><b>Expression</b> vs. <b>legibility</b></td><td class="name">legibility</td><td>Pattern density is capped at 10% of viewport regardless of how good it looks. The rule exists precisely for the cases where it looks good.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ TESTING ============ -->
+    <section class="doc-section" id="test">
+      <h2>Testing compliance</h2>
+      <p class="sub">Each principle has a check that can be run rather than argued.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Automated</h3>
+          <ul class="bullets">
+            <li><b>Derivation.</b> Lint CSS for length literals outside <code>tokens.css</code>. Any <code>px</code>, <code>rem</code> or <code>em</code> value in component code fails, except values inside a documented accessibility floor.</li>
+            <li><b>Continuity (pattern).</b> Assert every generated kolam has zero path endpoints used other than exactly twice.</li>
+            <li><b>Symmetry.</b> Assert the D4 tile grid is invariant under transpose and both mirrors.</li>
+            <li><b>Contrast.</b> Recompute every published contrast figure from the palette in CI; fail the build if a claim drifts from the measurement.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Manual review</h3>
+          <ul class="bullets">
+            <li><b>Continuity (product).</b> For each new view: can the user get back without losing work? Name the route.</li>
+            <li><b>Emphasis budget.</b> Count the emphasised elements per view. More than one requires justification in the PR.</li>
+            <li><b>Pattern density.</b> Screenshot at the smallest supported viewport and estimate coverage. Over 10% is a change request.</li>
+            <li><b>Sweep readiness.</b> Does this component have a removal story, or is it being added forever by default?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data grid — Pulli</title>
+<meta name="description" content="A virtualised data grid: sort, filter, resize, frozen columns, bulk select, column chooser, full ARIA grid semantics and keyboard navigation. 10,000 rows, ~40 rendered.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/grid.css">
+<style>
+  kbd{
+    font-family:var(--face-mono); font-size:var(--ezhuthu-caption);
+    background:var(--color-surface-sunken); color:var(--color-text);
+    border:var(--border-hairline) solid var(--color-border-strong);
+    border-radius:var(--valai-2); padding:0 calc(var(--p)*.5); white-space:nowrap;
+  }
+  .yes{ color:var(--color-success); font-weight:600; }
+  .no{ color:var(--color-danger); font-weight:600; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html" aria-current="page">14 · Data grid</a>
+          <ul class="nav-sub">
+            <li><a href="#live">Live grid</a></li>
+            <li><a href="#lattice">The grid is a lattice</a></li>
+            <li><a href="#virtual">Virtualisation</a></li>
+            <li><a href="#keyboard">Keyboard</a></li>
+            <li><a href="#aria">ARIA contract</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#missing">What it still does not do</a></li>
+          </ul>
+        </li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">14 — Data grid</div>
+      <h1>The blocker, built.</h1>
+      <p class="lede">The <a href="readiness.html#gaps">readiness assessment</a> named this as the single component whose absence rules out most fintech and healthcare applications. Ten thousand rows, roughly forty in the DOM at any moment, sortable, filterable, resizable, freezable and selectable — with the ARIA that virtualisation breaks if you do not supply it explicitly.</p>
+    </div>
+
+    <!-- ============ LIVE ============ -->
+    <section class="doc-section" id="live">
+      <h2>Live grid</h2>
+      <p class="sub">Real data, generated on load. Drag a column edge to resize. <kbd>Tab</kbd> into it and use the arrow keys — the whole grid is one tab stop.</p>
+
+      <div class="demo" style="margin-bottom:var(--idai-3)">
+        <div class="demo-stage">
+          <button class="btn btn-secondary btn-sm" id="add">Add 10,000 more rows</button>
+          <button class="btn btn-secondary btn-sm" id="clearSel">Clear selection</button>
+          <span class="mono" style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)" id="perf"></span>
+        </div>
+      </div>
+
+      <div id="grid" data-label="Positions"></div>
+
+      <div class="grid-2" style="margin-top:var(--idai-4)">
+        <div class="panel">
+          <h3>Working</h3>
+          <ul class="speclist">
+            <li><span>Row virtualisation</span><b class="yes">yes</b></li>
+            <li><span>Sort — tri-state</span><b class="yes">yes</b></li>
+            <li><span>Per-column filter</span><b class="yes">yes</b></li>
+            <li><span>Global filter</span><b class="yes">yes</b></li>
+            <li><span>Column resize — pointer</span><b class="yes">yes</b></li>
+            <li><span>Frozen columns</span><b class="yes">yes</b></li>
+            <li><span>Bulk select + shift-range</span><b class="yes">yes</b></li>
+            <li><span>Header tri-state checkbox</span><b class="yes">yes</b></li>
+            <li><span>Column chooser</span><b class="yes">yes</b></li>
+            <li><span>Keyboard grid navigation</span><b class="yes">yes</b></li>
+            <li><span>Live-region announcements</span><b class="yes">yes</b></li>
+            <li><span>Forced colors</span><b class="yes">yes</b></li>
+            <li><span>Density tiers</span><b class="yes">yes</b></li>
+          </ul>
+        </div>
+        <div class="prose">
+          <p><b>Tabular figures and locale formatting.</b> Numeric columns use <code>font-variant-numeric: tabular-nums</code> and <code>Intl.NumberFormat</code>, right-aligned so digits line up down the column. That closes part of the <a href="readiness.html#domains">fintech number-system gap</a> as a side effect — a grid is where it matters most.</p>
+          <p><b>Row height follows density.</b> It resolves <code>--alavu-md</code> at runtime, so the virtualisation maths stays correct when you change the pitch in the header or switch density. Drag the pitch control and watch the row count in view change.</p>
+          <p><b>Selection survives filtering.</b> Selected ids are held independently of the current view, so filtering down, selecting, and clearing the filter keeps the selection — which is what users expect and what naive implementations get wrong.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LATTICE ============ -->
+    <section class="doc-section" id="lattice">
+      <h2>The grid is a lattice</h2>
+      <div class="grid-2">
+        <div class="prose">
+          <p>This is the most literal lattice in the system — rows crossing columns, with the intersections where the line would turn. Nothing had to be invented to make it fit.</p>
+          <p><b>The sorted column's header dot is wrapped by a loop</b>, which is the same primitive as <a href="components.html#tabs">tabs</a>, the <a href="components.html#stepper">stepper</a> and the toggle. Correctly so: choosing a sort column <em>is</em> choosing among options along a line.</p>
+          <p><b>Direction stays an arrow.</b> The loop says <em>which</em> column; the arrow says <em>which way</em>. One mark should not carry both, and a loop cannot express direction without becoming a glyph.</p>
+          <p><b>Selection is a fill, not a loop.</b> A loop on every selected row would be line work at frequency, which the <a href="accessibility.html#pattern">density ceiling</a> forbids. This is the distinction the system got wrong once and corrected in <a href="line.html#limits">section 04</a>.</p>
+        </div>
+        <div class="panel">
+          <h3>Tokens consumed</h3>
+          <ul class="speclist">
+            <li><span>Row height</span><b>--alavu-md</b></li>
+            <li><span>Cell padding</span><b>--space-inset-sm</b></li>
+            <li><span>Rules</span><b>--border-hairline</b></li>
+            <li><span>Header ground</span><b>--color-surface-sunken</b></li>
+            <li><span>Selected row</span><b>--color-accent-subtle</b></li>
+            <li><span>Sort loop</span><b>2.5 P, kambi-2</b></li>
+            <li><span>Sort pulli</span><b>0.5 P</b></li>
+            <li><span>Focus ring</span><b>--border-edge inset</b></li>
+            <li><span>Loop reveal</span><b>--motion-reveal</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">One literal in the whole component: the select column is <code>44px</code>, because it is a target and targets are floored rather than derived.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIRTUAL ============ -->
+    <section class="doc-section" id="virtual">
+      <h2>Virtualisation</h2>
+      <div class="grid-2">
+        <div class="prose">
+          <p>The body is a spacer of <code>rowCount × rowHeight</code>, and only the visible window plus overscan is rendered, each row absolutely positioned at <code>index × rowHeight</code>. Scroll handling is throttled to one <code>requestAnimationFrame</code>, and the window is only re-rendered when the start or end index actually changes — scrolling within a row costs nothing.</p>
+          <p><b>The cost is DOM nodes, not arithmetic.</b> Ten thousand rows is the same work as one hundred; what changes is filter and sort time, which is linear and runs once per interaction rather than once per frame.</p>
+        </div>
+        <pre>var rh    = rowHeight();              <span class="c">// resolves --alavu-md</span>
+var start = max(0, floor(top / rh) - overscan);
+var end   = min(n, ceil((top + vh) / rh) + overscan);
+
+body.style.height = n * rh + <span class="k">'px'</span>;
+row.style.top     = i * rh + <span class="k">'px'</span>;
+
+<span class="c">// only repaint when the window moves</span>
+if (start === _start &amp;&amp; end === _end) return;</pre>
+      </div>
+    </section>
+
+    <!-- ============ KEYBOARD ============ -->
+    <section class="doc-section" id="keyboard">
+      <h2>Keyboard</h2>
+      <p class="sub">Roving tabindex over cells — the entire grid is <b>one</b> tab stop, so a keyboard user never has to tab through ten thousand rows to reach the content after it.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Key</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></td><td>Move one cell</td></tr>
+            <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last cell in the row</td></tr>
+            <tr><td><kbd>Ctrl</kbd>+<kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last cell in the grid</td></tr>
+            <tr><td><kbd>PageUp</kbd> / <kbd>PageDown</kbd></td><td>One viewport</td></tr>
+            <tr><td><kbd>Space</kbd></td><td>Toggle row selection — or sort, on a header cell</td></tr>
+            <tr><td><kbd>Shift</kbd>+<kbd>Space</kbd></td><td>Extend selection from the anchor</td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>Activate the row — or sort, on a header cell</td></tr>
+            <tr><td><kbd>←</kbd> <kbd>→</kbd> on a resize handle</td><td>Resize the column by one lattice step</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>Keyboard column resizing is the part most grids skip.</b> Dragging a border is a pointer-only interaction, and a column that cannot be widened by keyboard is a column whose truncated content some users simply cannot read. The handle is a focusable <code>separator</code> with arrow-key handling — one of the few WCAG requirements that is easy to satisfy and almost universally missed.</div>
+    </section>
+
+    <!-- ============ ARIA ============ -->
+    <section class="doc-section" id="aria">
+      <h2>ARIA contract</h2>
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>Virtualisation breaks screen readers unless you compensate.</b> A reader derives row and column counts from the DOM, and in a virtualised grid the DOM contains forty rows out of ten thousand. Without explicit counts it announces "row 3 of 40" when the user is at row 4,812.</p>
+          <p>So the grid supplies them: <code>aria-rowcount</code> and <code>aria-colcount</code> on the grid, <code>aria-rowindex</code> on every row — 1-based with the header as row 1 — and <code>aria-colindex</code> on every cell.</p>
+          <p>A polite live region announces sort changes, filter result counts, selection counts and column resizes, because none of those produce a focus change that a reader would otherwise notice.</p>
+        </div>
+        <pre>&lt;div role="grid" <span class="k">aria-rowcount="10000"</span> <span class="k">aria-colcount="8"</span>&gt;
+  &lt;div role="row" <span class="k">aria-rowindex="1"</span>&gt;
+    &lt;div role="columnheader" <span class="k">aria-colindex="3"</span>
+         <span class="k">aria-sort="descending"</span>&gt;Notional&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div role="row" <span class="k">aria-rowindex="4813"</span>
+       <span class="k">aria-selected="true"</span>&gt;
+    &lt;div role="gridcell" <span class="k">aria-colindex="3"</span>&gt;…&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div role="status" aria-live="polite"&gt;
+  Notional sorted descending
+&lt;/div&gt;</pre>
+      </div>
+
+      <div class="callout warn"><b>Claimed, not yet proven.</b> This follows the ARIA grid pattern correctly as written, but it has not been through a screen-reader test matrix — NVDA, JAWS and VoiceOver each have quirks with virtualised grids that only testing surfaces. That row in the <a href="readiness.html#gaps">gap analysis</a> is still open, and this component does not close it.</div>
+    </section>
+
+    <!-- ============ API ============ -->
+    <section class="doc-section" id="api">
+      <h2>API</h2>
+      <pre>&lt;link rel="stylesheet" href="assets/grid.css"&gt;
+&lt;script src="assets/grid.js"&gt;&lt;/script&gt;
+
+const grid = new <span class="k">PulliGrid</span>('#grid', {
+  columns: [
+    { key: <span class="k">'id'</span>,       label: <span class="k">'ID'</span>,       width: 96,  frozen: <span class="k">true</span> },
+    { key: <span class="k">'book'</span>,     label: <span class="k">'Book'</span>,     width: 150, frozen: <span class="k">true</span> },
+    { key: <span class="k">'notional'</span>, label: <span class="k">'Notional'</span>, width: 150, type: <span class="k">'currency'</span> },
+    { key: <span class="k">'status'</span>,   label: <span class="k">'Status'</span>,   width: 130, type: <span class="k">'status'</span> }
+  ],
+  rows: data,                  <span class="c">// each row needs a stable `id`</span>
+  selectable: <span class="k">true</span>,
+  currency: <span class="k">'USD'</span>,
+  onActivate: row =&gt; open(row)
+});
+
+grid.getSelected();     <span class="c">// rows, not indices — survives filtering</span>
+grid.setRows(next);
+grid.toggleSort(<span class="k">'notional'</span>);
+grid.clearSelection();</pre>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Column option</th><th>Values</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="name">type</td><td class="derive">text | number | currency | status</td><td>number and currency get tabular figures, right alignment and <code>Intl</code> formatting</td></tr>
+            <tr><td class="name">frozen</td><td class="derive">boolean</td><td>Sticky with a computed cumulative offset, so freezing several works and survives resizing</td></tr>
+            <tr><td class="name">width / minWidth</td><td class="derive">px</td><td>minWidth is the resize floor</td></tr>
+            <tr><td class="name">sortable / filterable</td><td class="derive">boolean</td><td>Default true</td></tr>
+            <tr><td class="name">format</td><td class="derive">fn(value)</td><td>Overrides type formatting entirely</td></tr>
+            <tr><td class="name">align</td><td class="derive">start | end | center</td><td>Defaults by type</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ MISSING ============ -->
+    <section class="doc-section" id="missing">
+      <h2>What it still does not do</h2>
+      <p class="sub">This closes the blocker for read-heavy applications. It is not AG Grid, and the honest list matters more than the feature list.</p>
+
+      <div class="grid-2">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+          <h3>Not implemented</h3>
+          <ul class="bullets">
+            <li><b>Cell editing.</b> No inline edit, no validation, no dirty state, no commit or revert. The largest missing piece by far.</li>
+            <li><b>Row grouping and aggregation.</b> No group headers, subtotals or expand/collapse.</li>
+            <li><b>Column reorder by drag.</b> The chooser hides and shows; it does not reorder.</li>
+            <li><b>Multi-column sort.</b> One sort key at a time.</li>
+            <li><b>Column virtualisation.</b> Rows are windowed; columns are not. Beyond roughly forty columns this will slow down.</li>
+            <li><b>Server-side data.</b> Everything is in memory. Real fintech volumes need paged or streamed fetching with a loading placeholder per row.</li>
+            <li><b>Export.</b> No CSV or Excel.</li>
+            <li><b>Filter types.</b> Text contains only — no numeric ranges, date ranges, or set filters.</li>
+            <li><b>Row detail expansion, pinned rows, footer totals.</b></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What this changes in the assessment</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The gap analysis rated the data grid a <b>blocker</b> at three to four months to build properly. What exists now is a <b>read-heavy grid</b>: enough for reporting, reconciliation, admin consoles, search results and monitoring — which is a large share of enterprise screens — and not enough for anything where users edit in the grid.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Component count moves from <b>13 to 14 of ~58</b>. The advice in <a href="readiness.html#cost">the cheaper path</a> stands: for editing, grouping and server-side data, adopt a headless grid and dress it in these tokens rather than continuing to build this one.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/grid.js"></script>
+<script>
+(function () {
+  "use strict";
+  var BOOKS = ["Rates EMEA", "Credit APAC", "FX Desk", "Equity Delta", "Commodities", "Repo", "Structured", "Treasury"];
+  var CCY = ["USD", "EUR", "GBP", "JPY", "INR", "SGD", "CHF"];
+  var STATUS = [["Settled", "ok"], ["Pending", "info"], ["Breaking", "warn"], ["Failed", "bad"]];
+  var COUNTERPARTIES = ["Meridian Capital", "Northgate Bank", "Sundaram Securities", "Halcyon Partners",
+    "Braewood Asset Mgmt", "Kestrel Global", "Ardent Clearing", "Vantage Trust", "Orissa Holdings", "Pemberton LLP"];
+
+  var seed = 1729;
+  function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+  function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+
+  var next = 1;
+  function make(n) {
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      var st = pick(STATUS);
+      var id = next++;
+      out.push({
+        id: id,
+        ref: "TR-" + String(100000 + id),
+        book: pick(BOOKS),
+        counterparty: pick(COUNTERPARTIES),
+        ccy: pick(CCY),
+        notional: Math.round((rnd() * 4800000 + 12000) * 100) / 100,
+        pnl: Math.round((rnd() * 180000 - 60000) * 100) / 100,
+        trades: Math.floor(rnd() * 480) + 1,
+        status: st[0],
+        statusTone: st[1],
+        booked: new Date(Date.UTC(2026, Math.floor(rnd() * 8), Math.floor(rnd() * 28) + 1))
+          .toISOString().slice(0, 10)
+      });
+    }
+    return out;
+  }
+
+  var t0 = performance.now();
+  var rows = make(10000);
+
+  var grid = new PulliGrid("#grid", {
+    columns: [
+      { key: "ref",          label: "Reference",    width: 118, frozen: true },
+      { key: "book",         label: "Book",         width: 148, frozen: true },
+      { key: "counterparty", label: "Counterparty", width: 190 },
+      { key: "ccy",          label: "CCY",          width: 84 },
+      { key: "notional",     label: "Notional",     width: 156, type: "currency" },
+      { key: "pnl",          label: "P&L",          width: 140, type: "currency" },
+      { key: "trades",       label: "Trades",       width: 104, type: "number" },
+      { key: "booked",       label: "Booked",       width: 128 },
+      { key: "status",       label: "Status",       width: 134, type: "status", filterable: true }
+    ],
+    rows: rows,
+    selectable: true,
+    sort: { key: "notional", dir: "desc" },
+    onActivate: function (row) { grid._announce("Activated " + row.ref); }
+  });
+
+  document.getElementById("perf").textContent =
+    rows.length.toLocaleString() + " rows built and rendered in " + Math.round(performance.now() - t0) + "ms";
+
+  document.getElementById("add").addEventListener("click", function () {
+    var t = performance.now();
+    grid.rows = grid.rows.concat(make(10000));
+    grid.refresh();
+    document.getElementById("perf").textContent =
+      grid.rows.length.toLocaleString() + " rows · re-sorted and repainted in " + Math.round(performance.now() - t) + "ms";
+  });
+  document.getElementById("clearSel").addEventListener("click", function () { grid.clearSelection(); });
+
+  // row height follows density, so a pitch change must re-run the maths
+  var pitch = document.getElementById("pitchInput");
+  if (pitch) pitch.addEventListener("input", function () { setTimeout(function () { grid._paint(true); }, 0); });
+})();
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

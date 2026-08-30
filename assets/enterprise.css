@@ -1,0 +1,305 @@
+/* ============================================================================
+   PULLI · ENTERPRISE SUBSET
+   ----------------------------------------------------------------------------
+   Load AFTER tokens.css and system.css. It removes the expressive layer and
+   adds what regulated procurement asks for and the base system does not have.
+
+   THREE PROFILES
+   --------------
+     full         everything. Consumer and brand surfaces with genuine cultural
+                  fit. Do not use this file.
+
+     enterprise   <html data-profile="enterprise">
+                  Pattern layer removed. One typeface. Generator becomes a
+                  build-time brand tool, never a runtime dependency. The
+                  dot-and-loop state language is KEPT — it is clear, it is
+                  greyscale-safe, and removing it would leave nothing derived.
+
+     regulated    <html data-profile="regulated">
+                  Everything enterprise does, plus fully conventional form
+                  controls. In clinical and financial software a novel
+                  affordance is a safety and compliance question, not a brand
+                  one: a misread checkbox on a medication screen is a harm
+                  event, and IEC 62366 usability engineering will ask you to
+                  justify the deviation. Do not spend that argument on a mark.
+
+   ALSO ADDED HERE, FOR BOTH
+   -------------------------
+     · high-contrast theme        <html data-contrast="high">   AAA, measured
+     · forced-colors support      Windows High Contrast Mode — a hard
+                                  requirement in most government and health
+                                  procurement, and unsupported by the base
+                                  system
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1 · STRIP THE EXPRESSIVE LAYER
+   ========================================================================== */
+[data-profile="enterprise"],
+[data-profile="regulated"]{
+  /* one typeface. Enterprise apps are read for eight hours at a time and a
+     display serif earns nothing at 13px. */
+  --face-display: var(--face-ui);
+}
+
+/* corner pulli, loop boundaries, threshold bands */
+[data-profile="enterprise"] .panel,
+[data-profile="enterprise"] .card,
+[data-profile="enterprise"] .modal-demo,
+[data-profile="enterprise"] .kolam-corners,
+[data-profile="regulated"] .panel,
+[data-profile="regulated"] .card,
+[data-profile="regulated"] .modal-demo,
+[data-profile="regulated"] .kolam-corners{ background-image:none; }
+
+[data-profile="enterprise"] .kolam-frame-host,
+[data-profile="enterprise"] .kolam-band-host,
+[data-profile="regulated"] .kolam-frame-host,
+[data-profile="regulated"] .kolam-band-host{ display:none; }
+
+[data-profile="enterprise"] .kolam-bound,
+[data-profile="regulated"] .kolam-bound{
+  border-color:var(--color-border) !important;
+  border-radius:var(--radius-panel);
+}
+[data-profile="enterprise"] .kolam-threshold,
+[data-profile="regulated"] .kolam-threshold{ padding-top:var(--space-inset-lg) !important; }
+
+/* Decorative patterns are already aria-hidden, which is exactly the set that
+   should not render here. Content kolams — a product whose subject IS the
+   pattern — are untouched. */
+[data-profile="enterprise"] [data-kolam][aria-hidden="true"],
+[data-profile="regulated"] [data-kolam][aria-hidden="true"]{ display:none; }
+
+/* no draw-on: the loader is a plain determinate or a text status */
+[data-profile="enterprise"] .kolam-line,
+[data-profile="regulated"] .kolam-line{ transition:none !important; }
+
+
+/* ==========================================================================
+   2 · REGULATED — conventional form controls
+   Reverts the two marks that are novel. Everything else stays derived.
+   ========================================================================== */
+
+/* checkbox: tick, not crossing */
+[data-profile="regulated"] .choice input[type="checkbox"]:checked{
+  background:var(--color-accent); border-color:var(--color-accent);
+}
+[data-profile="regulated"] .choice input[type="checkbox"]:checked::before{
+  width:calc(var(--p) * .75); height:calc(var(--p) * 1.5);
+  border:solid var(--color-on-accent);
+  border-width:0 var(--kambi-2) var(--kambi-2) 0;
+  background:none; border-radius:0;
+  transform:translateY(calc(var(--p) * -.125)) rotate(45deg);
+}
+[data-profile="regulated"] .choice input[type="checkbox"]:checked::after{ display:none; }
+[data-profile="regulated"] .choice input[type="checkbox"]:indeterminate{
+  background:var(--color-accent); border-color:var(--color-accent);
+}
+[data-profile="regulated"] .choice input[type="checkbox"]:indeterminate::before{
+  width:calc(var(--p) * 1.25); height:var(--kambi-2);
+  background:var(--color-on-accent); border:0; border-radius:0; transform:none;
+}
+
+/* radio: solid ring both states, filled centre when selected */
+[data-profile="regulated"] .choice input[type="radio"]::after{
+  border:var(--kambi-2) solid var(--color-border-strong);
+}
+[data-profile="regulated"] .choice input[type="radio"]:checked::after{
+  border-color:var(--color-accent);
+}
+[data-profile="regulated"] .choice input[type="radio"]:checked::before{
+  width:calc(var(--p) * 1.25); height:calc(var(--p) * 1.25);
+}
+
+/* tabs and segmented: underline indicator, not a loop */
+[data-profile="regulated"] .tabs button::before,
+[data-profile="regulated"] .tabs button::after,
+[data-profile="regulated"] .seg button::before,
+[data-profile="regulated"] .seg button::after,
+[data-profile="regulated"] .rail > button::before,
+[data-profile="regulated"] .rail > button::after{ display:none; }
+[data-profile="regulated"] .tabs button,
+[data-profile="regulated"] .seg button,
+[data-profile="regulated"] .rail > button{
+  border-bottom:var(--border-edge) solid transparent;
+  margin-bottom:calc(var(--kambi-1) * -1);
+  padding-bottom:var(--space-inset-sm);
+}
+[data-profile="regulated"] .tabs button[aria-selected="true"],
+[data-profile="regulated"] .seg button[aria-pressed="true"],
+[data-profile="regulated"] .rail > button[aria-selected="true"],
+[data-profile="regulated"] .rail > button[aria-pressed="true"]{
+  border-bottom-color:var(--color-accent);
+}
+
+/* progress: plain track and fill */
+[data-profile="regulated"] .progress{
+  height:var(--valai-2); background:var(--color-surface-sunken);
+  background-image:none; border-radius:var(--radius-pill); overflow:hidden;
+}
+[data-profile="regulated"] .progress::before{
+  height:100%; top:0; transform:none; border-radius:var(--radius-pill);
+}
+[data-profile="regulated"] .progress::after{ display:none; }
+
+/* table: sorted column marked by the arrow alone */
+[data-profile="regulated"] .data-table th[aria-sort]::before,
+[data-profile="regulated"] .data-table th[aria-sort]::after{ display:none; }
+[data-profile="regulated"] .data-table th{ padding-bottom:var(--idai-1); }
+[data-profile="regulated"] .data-table tbody tr[aria-selected="true"] td:first-child{ padding-left:var(--space-inset-sm); }
+[data-profile="regulated"] .data-table tbody tr[aria-selected="true"] td:first-child::before,
+[data-profile="regulated"] .data-table tbody tr[aria-selected="true"] td:first-child::after{ display:none; }
+[data-profile="regulated"] .data-table tbody tr[aria-selected="true"]{
+  box-shadow:inset var(--kambi-3) 0 0 var(--color-accent);
+}
+
+/* switch: the travelling loop is retained — it is the clearest control in the
+   system and position carries the state. Documented as a deliberate keep. */
+
+
+/* ==========================================================================
+   3 · HIGH-CONTRAST THEME — measured, AAA
+   <html data-contrast="high"> — combine with data-theme as usual.
+   Every pair below is ≥ 8:1 against its ground.
+   ========================================================================== */
+:root[data-contrast="high"]{
+  --color-bg:             #FFFFFF;
+  --color-surface:        #FFFFFF;
+  --color-surface-sunken: #F2F2F2;
+  --color-text:           #000000;   /* 21.00 */
+  --color-text-secondary: #1F1A16;   /* 17.25 */
+  --color-text-tertiary:  #3A3129;   /* 12.72 */
+  --color-border:         #3A3129;
+  --color-border-strong:  #000000;
+  --color-accent:         #8A2F0E;   /*  8.42 */
+  --color-accent-hover:   #6E250B;
+  --color-accent-subtle:  #F7E9E3;
+  --color-on-accent:      #FFFFFF;   /*  8.42 on accent */
+  --color-success:        #1F5A2E;   /*  8.20 */
+  --color-warning:        #5C4200;   /*  9.40 */
+  --color-info:           #1B3A7A;   /* 10.86 */
+  --color-danger:         #8A1616;   /*  9.52 */
+  --color-focus:          #000000;
+  --border-hairline:      2px;       /* hairlines disappear at this contrast level */
+}
+:root[data-contrast="high"][data-theme="dark"],
+:root[data-contrast="high"]:not([data-theme="light"]) [data-prefers-dark]{
+  --color-bg:             #000000;
+  --color-surface:        #000000;
+  --color-surface-sunken: #141414;
+  --color-text:           #FFFFFF;   /* 21.00 */
+  --color-text-secondary: #E8E2D6;   /* 16.28 */
+  --color-text-tertiary:  #C4BAA8;   /* 10.94 */
+  --color-border:         #C4BAA8;
+  --color-border-strong:  #FFFFFF;
+  --color-accent:         #FFB48C;   /* 12.16 */
+  --color-accent-hover:   #FFC9AB;
+  --color-accent-subtle:  #241813;
+  --color-on-accent:      #000000;   /* 12.16 on accent */
+  --color-success:        #8FE0A2;   /* 13.35 */
+  --color-warning:        #FFD070;   /* 14.51 */
+  --color-info:           #A8C4FF;   /* 12.00 */
+  --color-danger:         #FF9E9E;   /* 10.64 */
+  --color-focus:          #FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  :root[data-contrast="high"]:not([data-theme="light"]){
+    --color-bg:             #000000;
+    --color-surface:        #000000;
+    --color-surface-sunken: #141414;
+    --color-text:           #FFFFFF;
+    --color-text-secondary: #E8E2D6;
+    --color-text-tertiary:  #C4BAA8;
+    --color-border:         #C4BAA8;
+    --color-border-strong:  #FFFFFF;
+    --color-accent:         #FFB48C;
+    --color-accent-hover:   #FFC9AB;
+    --color-accent-subtle:  #241813;
+    --color-on-accent:      #000000;
+    --color-success:        #8FE0A2;
+    --color-warning:        #FFD070;
+    --color-info:           #A8C4FF;
+    --color-danger:         #FF9E9E;
+    --color-focus:          #FFFFFF;
+  }
+}
+/* the expressive layer is off at high contrast regardless of profile */
+:root[data-contrast="high"] .kolam-frame-host,
+:root[data-contrast="high"] .kolam-band-host{ display:none; }
+:root[data-contrast="high"] [data-kolam][aria-hidden="true"]{ display:none; }
+:root[data-contrast="high"] .panel,
+:root[data-contrast="high"] .card{ background-image:none; }
+
+
+/* ==========================================================================
+   4 · FORCED COLORS — Windows High Contrast Mode
+   The user's palette replaces ours entirely. Backgrounds are dropped, so any
+   state carried by a fill disappears. Everything below re-expresses state as
+   BORDER and SYSTEM COLOUR, which survive.
+
+   Unsupported by the base system, and a hard requirement in most government
+   and healthcare procurement.
+   ========================================================================== */
+@media (forced-colors: active){
+  .btn{ border:1px solid ButtonBorder; }
+  .btn-primary,
+  .btn-danger{ background:ButtonFace; color:ButtonText; forced-color-adjust:none; }
+  .btn[disabled], .btn[aria-disabled="true"]{ color:GrayText; border-color:GrayText; opacity:1; }
+
+  a{ color:LinkText; }
+  *:focus-visible{ outline:3px solid Highlight; outline-offset:2px; }
+
+  .input, .field input, .field select, .field textarea{ border:1px solid ButtonBorder; }
+  .field.invalid input{ border-width:2px; }
+
+  /* the loop language: keep the ring, force its colour */
+  .track, .track::after,
+  .rail > button::before, .tabs button::before, .seg button::before,
+  .stepper li::before,
+  .choice input[type="radio"]::after,
+  .choice input[type="checkbox"],
+  .progress::after{ border-color:CanvasText; }
+
+  .rail > button[aria-selected="true"]::before,
+  .rail > button[aria-pressed="true"]::before,
+  .tabs button[aria-selected="true"]::before,
+  .seg button[aria-pressed="true"]::before,
+  .stepper li[aria-current="step"]::before,
+  .choice input:checked + .track::after,
+  .choice input[type="radio"]:checked::after,
+  .choice input[type="checkbox"]:checked,
+  .data-table th[aria-sort="ascending"]::before,
+  .data-table th[aria-sort="descending"]::before{ border-color:Highlight; border-width:2px; }
+
+  /* dots and fills become system text colour */
+  .track::before, .rail > button::after, .tabs button::after, .seg button::after,
+  .stepper li::after, .choice input[type="radio"]::before,
+  .choice input[type="checkbox"]::before, .choice input[type="checkbox"]::after,
+  .progress::before, .badge::before{ background:CanvasText; forced-color-adjust:none; }
+
+  /* selected table row: fill is gone, so add a border */
+  .data-table tbody tr[aria-selected="true"]{
+    outline:2px solid Highlight; outline-offset:-2px;
+  }
+  .data-table th, .data-table td{ border-bottom:1px solid CanvasText; }
+
+  /* status colour is gone entirely — the text label is now the only carrier,
+     which is why the system required one all along */
+  .badge, .alert{ border:1px solid CanvasText; }
+
+  /* decorative line work has no meaning here */
+  .kolam-frame-host, .kolam-band-host{ display:none; }
+  [data-kolam][aria-hidden="true"]{ display:none; }
+  .panel, .card{ background-image:none; }
+}
+
+
+/* ==========================================================================
+   5 · DENSITY FLOOR FOR REGULATED CONTEXTS
+   Compact density is legitimate in an ops console and questionable in a
+   clinical one — gloves, styluses, shared workstations, and users who are
+   moving. Regulated profile refuses to go below the default tier.
+   ========================================================================== */
+[data-profile="regulated"][data-density="compact"]{ --p: 8px; }

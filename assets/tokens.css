@@ -1,0 +1,282 @@
+/* ============================================================================
+   PULLI · TOKEN LAYER
+   ----------------------------------------------------------------------------
+   Three layers, in strict order. Each may only reference the layer above it.
+
+     1. PALETTE     raw, theme-independent values. Never referenced by product
+                    code. Named for the material they come from.
+     2. PRIMITIVE   derived geometry and motion. Everything here is a function
+                    of --p (pulli pitch) and --r (loop radius = p/2).
+     3. SEMANTIC    role-based aliases. This is the ONLY layer a product or a
+                    component is permitted to consume.
+
+   The rule that makes the geometry work:
+     dots sit on a square lattice at pitch P. The line never touches a dot; it
+     curves around it at radius r. For loops around adjacent dots to meet
+     without a gap or an overlap, they must meet at the midpoint of the lattice
+     edge — which requires exactly r = P/2. Fix that, and the spacing scale and
+     the radius scale are locked to each other permanently.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   LAYER 1 · PALETTE
+   Kolam is rice flour (maa) laid on a swept, water-darkened floor (mann),
+   bordered in red ochre (kavi), and dressed on festival days with coloured
+   powders. Those five materials are the entire palette.
+   ========================================================================== */
+:root{
+  /* maa · rice flour */
+  --maa-0:   #FFFFFF;
+  --maa-50:  #FDFBF7;
+  --maa-100: #F5EFE4;
+  --maa-200: #E6DCC9;
+  --maa-350: #BFB299;
+
+  /* mann · swept earth */
+  --mann-300: #998A75;
+  --mann-350: #94836F;
+  --mann-400: #7C6B5C;
+  --mann-500: #786249;
+  --mann-550: #5C4E42;
+  --mann-700: #3A2E23;
+  --mann-800: #2E241B;
+  --mann-850: #211A14;
+  --mann-900: #17120E;
+
+  /* kavi · red ochre border */
+  --kavi-100: #F6E4DA;
+  --kavi-300: #F3AE8B;
+  --kavi-400: #E7936A;
+  --kavi-600: #A34524;
+  --kavi-700: #7E331A;
+  --kavi-900: #33221A;
+
+  /* festival powders */
+  --ilai-400:     #74B682;   --ilai-600:     #3D7049;   /* leaf */
+  --manjal-400:   #F0BE5C;   --manjal-600:   #8A6410;   /* turmeric */
+  --neelam-400:   #8CA8E0;   --neelam-600:   #33509B;   /* indigo */
+  --kumkumam-400: #E58484;   --kumkumam-600: #A32626;   /* kumkum */
+}
+
+
+/* ==========================================================================
+   LAYER 2 · PRIMITIVES
+   Two seeds in, an entire geometry out.
+   ========================================================================== */
+:root{
+  --p: 8px;                      /* pulli pitch — the one number that moves */
+  --r: calc(var(--p) / 2);       /* loop radius — locked to P by the meeting condition */
+
+  /* idai · spacing. Orthogonal lattice steps only. A half-step would land the
+     line on a dot, which a kolam line may never do. */
+  --idai-1:  var(--p);
+  --idai-2:  calc(var(--p) * 2);
+  --idai-3:  calc(var(--p) * 3);
+  --idai-4:  calc(var(--p) * 4);
+  --idai-5:  calc(var(--p) * 5);
+  --idai-6:  calc(var(--p) * 6);
+  --idai-8:  calc(var(--p) * 8);
+  --idai-10: calc(var(--p) * 10);
+  --idai-12: calc(var(--p) * 12);
+  --idai-16: calc(var(--p) * 16);
+
+  /* valai · radius. Multiples of the loop radius, so every rounded corner in
+     the system is literally a kolam boundary loop. */
+  --valai-1:    calc(var(--r) / 2);
+  --valai-2:    var(--r);
+  --valai-3:    calc(var(--r) * 2);
+  --valai-4:    calc(var(--r) * 4);
+  --valai-5:    calc(var(--r) * 6);
+  --valai-full: 999px;
+
+  /* kambi · stroke. Rice flour falls at one thickness; three weights is the
+     most a drawn system can justify. */
+  --kambi-1: 1px;                /* hairline — dividers, table rules */
+  --kambi-2: 2px;                /* edge — focus rings, selected states */
+  --kambi-3: var(--r);           /* the drawn line itself — accent bars */
+
+  /* alavu · control heights. Derived, then floored at 44px for target size. */
+  --alavu-xs: calc(var(--p) * 3);
+  --alavu-sm: calc(var(--p) * 4);
+  --alavu-md: max(calc(var(--p) * 5.5), 44px);
+  --alavu-lg: max(calc(var(--p) * 7),   48px);
+
+  /* ezhuthu · type. The lattice diagonal is P√2; that ratio (1.414) sets the
+     scale. Type does NOT scale with pitch — the lattice governs space and
+     geometry, the diagonal governs proportion. */
+  --ezhuthu-caption: 0.6875rem;  /* 11 — 16 ÷ √2² */
+  --ezhuthu-small:   0.8125rem;  /* 13 — half-step */
+  --ezhuthu-body:    1rem;       /* 16 — base */
+  --ezhuthu-lead:    1.4375rem;  /* 23 — 16 × √2 */
+  --ezhuthu-h3:      1.4375rem;
+  --ezhuthu-h2:      2rem;       /* 32 — 16 × √2² */
+  --ezhuthu-h1:      2.8125rem;  /* 45 — 16 × √2³ */
+  --ezhuthu-display: 4rem;       /* 64 — 16 × √2⁴ */
+
+  --leading-tight: 1.15;
+  --leading-snug:  1.35;
+  --leading-body:  1.6;
+
+  --face-display: "Spectral", Georgia, "Times New Roman", serif;
+  --face-ui:      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --face-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* nagarthal · motion. Duration is distance: 30ms per dot the line passes. */
+  --nagarthal-dot: 30ms;  /*  1 dot — the quantum, and the stagger interval */
+  --nagarthal-1: 120ms;   /*  4 dots — state change  */
+  --nagarthal-2: 240ms;   /*  8 dots — reveal        */
+  --nagarthal-3: 360ms;   /* 12 dots — page          */
+  --nagarthal-4: 600ms;   /* 20 dots — the ceiling. Nothing a user waits on may
+                             exceed this, the kolam draw-on included: its
+                             per-segment stagger is computed to fit inside it
+                             rather than fixed, so segment count cannot push
+                             the total past the cap. */
+
+  --neli:   cubic-bezier(0.65, 0, 0.35, 1);   /* the turn — symmetric, in and out */
+  --chuzhi: cubic-bezier(0.33, 0, 0.15, 1);   /* the spiral in — enter and settle */
+  --vidu:   cubic-bezier(0.5,  0, 0.9, 0.4);  /* the release — exit               */
+
+  /* nilai · elevation. Kolam is flour lying flat on a floor; it casts no
+     shadow. Depth is expressed by lifting the ground, not by casting light.
+     Three levels, and the third is reserved for overlay only. */
+  --nilai-1: 0 1px 2px rgba(23,18,14,.05);
+  --nilai-2: 0 1px 2px rgba(23,18,14,.06), 0 var(--kambi-2) calc(var(--p)*1.5) rgba(23,18,14,.07);
+  --nilai-3: 0 var(--kambi-2) calc(var(--p)*2) rgba(23,18,14,.10), 0 calc(var(--p)*2) calc(var(--p)*5) rgba(23,18,14,.12);
+}
+
+
+/* ==========================================================================
+   LAYER 3 · SEMANTICS
+   Role names. This is the contract. Products consume these and nothing else,
+   which is what lets the palette and the pitch change underneath them.
+   ========================================================================== */
+:root{
+  /* --- space roles --- */
+  --space-inset-xs:      var(--idai-1);
+  --space-inset-sm:      var(--idai-2);
+  --space-inset-md:      var(--idai-3);
+  --space-inset-lg:      var(--idai-4);
+  --space-inset-xl:      var(--idai-6);
+  --space-stack-tight:   var(--idai-1);
+  --space-stack:         var(--idai-2);
+  --space-section:       var(--idai-12);
+  --space-inline:        var(--idai-2);
+  --space-gutter:        var(--idai-3);
+  --space-page-margin:   var(--idai-4);
+
+  /* --- radius roles --- */
+  --radius-control: var(--valai-3);
+  --radius-surface: var(--valai-3);
+  --radius-panel:   var(--valai-4);
+  --radius-pill:    var(--valai-full);
+
+  /* --- border roles --- */
+  --border-hairline: var(--kambi-1);
+  --border-edge:     var(--kambi-2);
+
+  /* --- motion roles --- */
+  --motion-state:   var(--nagarthal-1) var(--neli);
+  --motion-reveal:  var(--nagarthal-2) var(--chuzhi);
+  --motion-exit:    var(--nagarthal-1) var(--vidu);
+  --motion-page:    var(--nagarthal-3) var(--chuzhi);
+  --motion-stagger: var(--nagarthal-dot);   /* one dot between siblings */
+  --motion-cap:     var(--nagarthal-4);   /* read by kolam.js — the end-to-end ceiling */
+  --motion-segment: var(--nagarthal-3);   /* read by kolam.js — one segment's own stroke */     /* total, for any sequence */
+
+  /* --- colour roles · LIGHT (flour ground, earth ink) --- */
+  --color-bg:              var(--maa-50);
+  --color-surface:         var(--maa-0);
+  --color-surface-sunken:  var(--maa-100);
+  --color-text:            var(--mann-900);
+  --color-text-secondary:  var(--mann-550);
+  --color-text-tertiary:   var(--mann-500);   /* mann-400 was 4.46 on surface-sunken */
+  --color-border:          var(--maa-200);
+  --color-border-strong:   var(--mann-350);   /* mann-300 was 2.94 on surface-sunken */
+  --color-on-danger:       var(--maa-50);      /* text on a danger fill */
+  --color-scrim:           var(--mann-900);   /* the wash behind a modal */
+  --color-accent:          var(--kavi-600);
+  --color-accent-hover:    var(--kavi-700);
+  --color-accent-subtle:   var(--kavi-100);
+  --color-on-accent:       var(--maa-50);
+  --color-success:         var(--ilai-600);
+  --color-warning:         var(--manjal-600);
+  --color-info:            var(--neelam-600);
+  --color-danger:          var(--kumkumam-600);
+  --color-focus:           var(--kavi-600);
+  --color-kolam-line:      var(--kavi-600);
+  --color-kolam-dot:       var(--mann-400);
+
+  --elevation-raised:  var(--nilai-1);
+  --elevation-panel:   var(--nilai-2);
+  --elevation-overlay: var(--nilai-3);
+}
+
+/* Kolam is a light-on-dark tradition — flour on a darkened floor — so the dark
+   theme is the native one and light is the inversion. Both are complete. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --color-bg:             var(--mann-900);
+    --color-surface:        var(--mann-850);
+    --color-surface-sunken: var(--mann-800);
+    --color-text:           var(--maa-100);
+    --color-text-secondary: var(--maa-350);
+    --color-text-tertiary:  var(--mann-300);   /* mann-350 was 4.14 on surface-sunken */
+    --color-border:         var(--mann-700);
+    --color-border-strong:  var(--mann-350);   /* mann-500 was 2.63 on surface-sunken */
+  --color-on-danger:      var(--maa-50);
+  --color-scrim:          var(--mann-900);
+    --color-on-danger:      var(--maa-50);
+    --color-scrim:          var(--mann-900);
+    --color-accent:         var(--kavi-400);
+    --color-accent-hover:   var(--kavi-300);
+    --color-accent-subtle:  var(--kavi-900);
+    --color-on-accent:      var(--mann-900);
+    --color-success:        var(--ilai-400);
+    --color-warning:        var(--manjal-400);
+    --color-info:           var(--neelam-400);
+    --color-danger:         var(--kumkumam-400);
+    --color-focus:          var(--kavi-400);
+    --color-kolam-line:     var(--kavi-400);
+    --color-kolam-dot:      var(--mann-350);
+    --nilai-1: 0 1px 2px rgba(0,0,0,.35);
+    --nilai-2: 0 1px 2px rgba(0,0,0,.40), 0 var(--kambi-2) calc(var(--p)*1.5) rgba(0,0,0,.30);
+    --nilai-3: 0 var(--kambi-2) calc(var(--p)*2) rgba(0,0,0,.45), 0 calc(var(--p)*2) calc(var(--p)*5) rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --color-bg:             var(--mann-900);
+  --color-surface:        var(--mann-850);
+  --color-surface-sunken: var(--mann-800);
+  --color-text:           var(--maa-100);
+  --color-text-secondary: var(--maa-350);
+  --color-text-tertiary:  var(--mann-300);   /* mann-350 was 4.14 on surface-sunken */
+  --color-border:         var(--mann-700);
+  --color-border-strong:  var(--mann-350);   /* mann-500 was 2.63 on surface-sunken */
+  --color-on-danger:      var(--maa-50);
+  --color-scrim:          var(--mann-900);
+  --color-accent:         var(--kavi-400);
+  --color-accent-hover:   var(--kavi-300);
+  --color-accent-subtle:  var(--kavi-900);
+  --color-on-accent:      var(--mann-900);
+  --color-success:        var(--ilai-400);
+  --color-warning:        var(--manjal-400);
+  --color-info:           var(--neelam-400);
+  --color-danger:         var(--kumkumam-400);
+  --color-focus:          var(--kavi-400);
+  --color-kolam-line:     var(--kavi-400);
+  --color-kolam-dot:      var(--mann-350);
+  --nilai-1: 0 1px 2px rgba(0,0,0,.35);
+  --nilai-2: 0 1px 2px rgba(0,0,0,.40), 0 var(--kambi-2) calc(var(--p)*1.5) rgba(0,0,0,.30);
+  --nilai-3: 0 var(--kambi-2) calc(var(--p)*2) rgba(0,0,0,.45), 0 calc(var(--p)*2) calc(var(--p)*5) rgba(0,0,0,.45);
+}
+
+
+/* ==========================================================================
+   DENSITY TIERS
+   Kolams are drawn on 3, 5, 7, 9 … dot grids. The same recursion gives the
+   density tiers: change one attribute, re-derive the whole interface.
+   ========================================================================== */
+:root[data-density="compact"]     { --p: 6px; }
+:root[data-density="default"]     { --p: 8px; }
+:root[data-density="comfortable"] { --p: 10px; }

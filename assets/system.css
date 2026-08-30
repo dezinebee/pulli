@@ -1,0 +1,849 @@
+/* ============================================================================
+   PULLI · SYSTEM STYLES
+   Shell, documentation chrome, and the component library.
+   Nothing in this file may use a raw pixel value except where explicitly
+   annotated as an accessibility floor. Every other number is a token.
+   ========================================================================== */
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:calc(var(--p)*14); }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  margin:0;
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:var(--face-ui);
+  font-size:var(--ezhuthu-body);
+  line-height:var(--leading-body);
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4,h5{ font-family:var(--face-display); font-weight:500; line-height:var(--leading-tight); margin:0; letter-spacing:-0.011em; }
+p{ margin:0; }
+ul,ol{ margin:0; }
+a{ color:var(--color-accent); text-underline-offset:0.18em; }
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:var(--border-edge) solid var(--color-focus);
+  outline-offset:var(--border-edge);
+  border-radius:var(--valai-1);
+}
+code{ font-family:var(--face-mono); font-size:0.875em; }
+hr{ border:0; border-top:var(--border-hairline) solid var(--color-border); margin:var(--idai-6) 0; }
+::selection{ background:var(--color-accent-subtle); color:var(--color-text); }
+
+.skip{
+  position:absolute; left:var(--idai-2); top:calc(var(--p) * -12); z-index:200;
+  background:var(--color-accent); color:var(--color-on-accent);
+  padding:var(--idai-1) var(--idai-3); border-radius:var(--radius-control);
+  transition:top var(--motion-state);
+}
+.skip:focus{ top:var(--idai-2); }
+
+
+/* ==========================================================================
+   SHELL
+   ========================================================================== */
+.topbar{
+  position:sticky; top:0; z-index:60;
+  background:var(--color-bg);
+  background:color-mix(in srgb, var(--color-bg) 90%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:var(--border-hairline) solid var(--color-border);
+}
+.topbar-in{
+  display:flex; align-items:center; gap:var(--idai-3);
+  padding:var(--idai-2) var(--space-page-margin);
+  max-width:calc(var(--p) * 176); margin:0 auto;
+}
+.brand{ display:flex; align-items:center; gap:var(--idai-1); text-decoration:none; color:var(--color-text); }
+.brand-mark{ color:var(--color-accent); display:block; }
+.brand-name{ font-family:var(--face-display); font-size:var(--ezhuthu-lead); line-height:1; }
+.brand-ver{
+  font-size:var(--ezhuthu-caption); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--color-text-tertiary); align-self:flex-end; padding-bottom:.15em;
+}
+.topbar-tools{ margin-left:auto; display:flex; align-items:center; gap:var(--idai-2); }
+
+.pitchbox{ display:flex; align-items:center; gap:var(--idai-1); font-size:var(--ezhuthu-caption); color:var(--color-text-secondary); }
+.pitchbox label{ white-space:nowrap; font-family:var(--face-mono); }
+.pitchbox input{ width:calc(var(--p) * 12); accent-color:var(--color-accent); }
+.pitchbox output{ font-family:var(--face-mono); color:var(--color-accent); min-width:calc(var(--p)*5); }
+@media (max-width: 900px){ .pitchbox{ display:none; } }
+
+.chip{
+  background:transparent; border:var(--border-hairline) solid var(--color-border-strong);
+  color:var(--color-text-secondary); border-radius:var(--radius-pill);
+  padding:calc(var(--p)*.75) var(--idai-2); font-family:var(--face-ui);
+  font-size:var(--ezhuthu-caption); cursor:pointer; white-space:nowrap;
+  transition:color var(--motion-state), border-color var(--motion-state);
+}
+.chip:hover{ color:var(--color-accent); border-color:var(--color-accent); }
+
+.menu-btn{ display:none; }
+@media (max-width: 1000px){
+  .menu-btn{ display:inline-flex; }
+}
+
+.layout{
+  display:grid; grid-template-columns:calc(var(--p) * 30) 1fr;
+  gap:var(--idai-8); max-width:calc(var(--p) * 176); margin:0 auto;
+  padding:0 var(--space-page-margin);
+}
+@media (max-width: 1000px){ .layout{ grid-template-columns:1fr; gap:0; } }
+
+.sidebar{
+  position:sticky; top:calc(var(--p) * 9); align-self:start;
+  max-height:calc(100vh - var(--p) * 11); overflow-y:auto;
+  padding:var(--idai-6) 0 var(--idai-8);
+}
+@media (max-width: 1000px){
+  .sidebar{ position:static; max-height:none; padding:var(--idai-3) 0; border-bottom:var(--border-hairline) solid var(--color-border); }
+  .sidebar[hidden]{ display:none; }
+}
+.nav-group{ margin-bottom:var(--idai-4); }
+.nav-title{
+  font-size:var(--ezhuthu-caption); text-transform:uppercase; letter-spacing:.14em;
+  color:var(--color-text-tertiary); font-weight:600; margin-bottom:var(--idai-1);
+}
+.nav-list{ list-style:none; padding:0; margin:0; }
+.nav-list a{
+  display:block; text-decoration:none; color:var(--color-text-secondary);
+  font-size:var(--ezhuthu-small); padding:calc(var(--p)*.75) var(--idai-2);
+  border-left:var(--border-edge) solid transparent; border-radius:0 var(--valai-2) var(--valai-2) 0;
+  transition:color var(--motion-state), background var(--motion-state), border-color var(--motion-state);
+}
+.nav-list a:hover{ color:var(--color-text); background:var(--color-surface-sunken); }
+.nav-list a[aria-current="page"]{ color:var(--color-accent); border-left-color:var(--color-accent); background:var(--color-accent-subtle); font-weight:500; }
+.nav-sub{ list-style:none; padding:0 0 0 var(--idai-3); margin:0; }
+.nav-sub a{ font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); padding:calc(var(--p)*.5) var(--idai-2); border-left:none; }
+
+.main{ padding:var(--idai-8) 0 var(--idai-16); min-width:0; }
+
+
+/* ==========================================================================
+   DOC CHROME
+   ========================================================================== */
+.page-head{ margin-bottom:var(--idai-10); max-width:70ch; }
+.eyebrow{
+  font-size:var(--ezhuthu-caption); letter-spacing:.16em; text-transform:uppercase;
+  color:var(--color-accent); font-weight:600; margin-bottom:var(--idai-2);
+}
+.page-head h1{ font-size:var(--ezhuthu-h1); margin-bottom:var(--idai-3); }
+.page-head .lede{
+  font-family:var(--face-display); font-weight:300; font-size:var(--ezhuthu-lead);
+  line-height:var(--leading-snug); color:var(--color-text-secondary);
+}
+
+.doc-section{ padding-top:var(--idai-10); margin-top:var(--idai-10); border-top:var(--border-hairline) solid var(--color-border); }
+.doc-section:first-of-type{ border-top:0; margin-top:0; padding-top:0; }
+.doc-section > h2{ font-size:var(--ezhuthu-h2); margin-bottom:var(--idai-2); scroll-margin-top:calc(var(--p)*14); }
+.doc-section > .sub{ color:var(--color-text-secondary); max-width:72ch; margin-bottom:var(--idai-6); }
+.doc-sub{ margin-top:var(--idai-8); }
+.doc-sub > h3{ font-size:var(--ezhuthu-h3); margin-bottom:var(--idai-2); scroll-margin-top:calc(var(--p)*14); }
+.doc-sub > p{ color:var(--color-text-secondary); max-width:72ch; margin-bottom:var(--idai-3); }
+.prose p + p{ margin-top:var(--idai-2); }
+.prose{ max-width:72ch; color:var(--color-text-secondary); }
+.prose strong,.prose b{ color:var(--color-text); font-weight:600; }
+
+.callout{
+  border-left:var(--kambi-3) solid var(--color-accent);
+  background:var(--color-accent-subtle);
+  padding:var(--idai-3) var(--idai-4);
+  border-radius:0 var(--radius-surface) var(--radius-surface) 0;
+  font-size:var(--ezhuthu-small); color:var(--color-text);
+  margin:var(--idai-4) 0;
+}
+.callout b{ font-weight:600; }
+.callout.warn{ border-left-color:var(--color-warning); background:color-mix(in srgb, var(--color-warning) 10%, transparent); }
+.callout.danger{ border-left-color:var(--color-danger); background:color-mix(in srgb, var(--color-danger) 10%, transparent); }
+
+pre{
+  background:var(--color-surface-sunken); border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-surface); padding:var(--idai-3);
+  overflow-x:auto; font-family:var(--face-mono); font-size:var(--ezhuthu-caption);
+  line-height:1.7; color:var(--color-text); margin:var(--idai-3) 0;
+}
+pre .c{ color:var(--color-text-tertiary); }
+pre .k{ color:var(--color-accent); }
+
+table{ width:100%; border-collapse:collapse; font-size:var(--ezhuthu-small); }
+.table-scroll{ overflow-x:auto; margin:var(--idai-3) 0; }
+th{
+  text-align:left; font-weight:600; color:var(--color-text-tertiary);
+  font-size:var(--ezhuthu-caption); text-transform:uppercase; letter-spacing:.1em;
+  padding:0 var(--idai-2) var(--idai-1) 0; border-bottom:var(--border-hairline) solid var(--color-border); white-space:nowrap;
+}
+td{ padding:var(--idai-1) var(--idai-2) var(--idai-1) 0; border-bottom:var(--border-hairline) solid var(--color-border); vertical-align:middle; }
+td:last-child,th:last-child{ padding-right:0; }
+td.mono,.mono{ font-family:var(--face-mono); }
+td.name{ font-family:var(--face-mono); color:var(--color-accent); white-space:nowrap; }
+td.derive{ font-family:var(--face-mono); color:var(--color-text-tertiary); font-size:var(--ezhuthu-caption); }
+tr.pass td.res{ color:var(--color-success); font-weight:600; }
+tr.fail td.res{ color:var(--color-danger); font-weight:600; }
+
+.bar{ height:var(--valai-2); background:var(--color-accent); border-radius:var(--valai-1); display:block; }
+.swatch{ width:calc(var(--p)*5); height:calc(var(--p)*3); border-radius:var(--valai-2); border:var(--border-hairline) solid var(--color-border); display:block; }
+.radbox{ width:calc(var(--p)*5); height:calc(var(--p)*3); background:var(--color-accent-subtle); border:var(--border-edge) solid var(--color-accent); display:block; }
+
+.grid-2{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--idai-6); }
+.grid-3{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--idai-3); }
+.grid-auto{ display:grid; grid-template-columns:repeat(auto-fit,minmax(calc(var(--p)*40),1fr)); gap:var(--idai-3); }
+@media (max-width: 820px){ .grid-2,.grid-3{ grid-template-columns:1fr; } }
+
+.panel{
+  background:var(--color-surface); border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel); padding:var(--space-inset-lg);
+}
+.panel h3{ font-size:var(--ezhuthu-h3); margin-bottom:var(--idai-2); }
+.panel h4{
+  font-family:var(--face-ui); font-size:var(--ezhuthu-caption); text-transform:uppercase;
+  letter-spacing:.12em; color:var(--color-text-tertiary); font-weight:600; margin-bottom:var(--idai-3);
+}
+
+.speclist{ list-style:none; padding:0; margin:0; font-size:var(--ezhuthu-small); }
+.speclist li{ display:flex; justify-content:space-between; gap:var(--idai-3); padding:calc(var(--p)*.75) 0; border-bottom:var(--border-hairline) solid var(--color-border); }
+.speclist li:last-child{ border-bottom:0; }
+.speclist span{ color:var(--color-text-secondary); }
+.speclist b{ font-family:var(--face-mono); font-weight:500; color:var(--color-accent); text-align:right; }
+
+.bullets{ padding-left:var(--idai-3); color:var(--color-text-secondary); font-size:var(--ezhuthu-small); }
+.bullets li{ margin-bottom:var(--idai-1); }
+.bullets li b{ color:var(--color-text); font-weight:600; }
+.bullets li::marker{ color:var(--color-accent); }
+
+/* do / don't */
+.dd{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--idai-3); margin-top:var(--idai-3); }
+@media (max-width: 700px){ .dd{ grid-template-columns:1fr; } }
+.dd > div{ border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-surface); padding:var(--space-inset-md); background:var(--color-surface); }
+.dd .tag{ font-size:var(--ezhuthu-caption); font-weight:600; letter-spacing:.1em; text-transform:uppercase; display:block; margin-bottom:var(--idai-1); }
+.dd .do  { border-top:var(--kambi-3) solid var(--color-success); }
+.dd .dont{ border-top:var(--kambi-3) solid var(--color-danger); }
+.dd .do .tag  { color:var(--color-success); }
+.dd .dont .tag{ color:var(--color-danger); }
+.dd p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+
+/* component demo frame */
+.demo{ border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); overflow:hidden; margin:var(--idai-3) 0; background:var(--color-surface); }
+.demo-stage{ padding:var(--idai-5); display:flex; flex-wrap:wrap; gap:var(--idai-2); align-items:center; background:var(--color-bg); }
+.demo-stage.stack{ flex-direction:column; align-items:stretch; }
+.demo-spec{ padding:var(--idai-2) var(--idai-3); border-top:var(--border-hairline) solid var(--color-border); font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); }
+
+.canvas{
+  background:var(--color-surface); border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel); padding:var(--idai-4);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.canvas svg{ width:100%; height:auto; display:block; }
+.kolam-line{ fill:none; stroke:var(--color-kolam-line); stroke-linecap:round; stroke-linejoin:round; }
+.kolam-dot{ fill:var(--color-kolam-dot); }
+
+.ctrl{ margin-bottom:var(--idai-3); }
+.ctrl:last-child{ margin-bottom:0; }
+.ctrl > label{ display:flex; justify-content:space-between; gap:var(--idai-2); font-size:var(--ezhuthu-small); font-weight:500; margin-bottom:var(--idai-1); }
+.ctrl > label var{ font-family:var(--face-mono); font-style:normal; color:var(--color-accent); }
+.ctrl input[type=range]{ width:100%; accent-color:var(--color-accent); }
+/* segmented control — the dot rail, with the options sharing the width */
+.seg{
+  display:flex; gap:0;
+  border-bottom:var(--border-hairline) solid var(--color-border);
+}
+.seg button{
+  flex:1; position:relative; border:0; background:transparent; cursor:pointer;
+  color:var(--color-text-tertiary); font-family:var(--face-ui);
+  font-size:var(--ezhuthu-small); font-weight:500;
+  padding:calc(var(--p) * .75) var(--idai-1) var(--space-inset-md);
+  min-height:var(--alavu-md);
+  transition:color var(--motion-state);
+}
+.seg button:hover{ color:var(--color-text); }
+.seg button::before{
+  content:""; position:absolute; left:50%; bottom:0; z-index:0;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  background:transparent;
+  transform:translate(-50%, 50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+.seg button::after{
+  content:""; position:absolute; left:50%; bottom:0; z-index:1;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translate(-50%, 50%);
+  transition:background var(--motion-state);
+}
+.seg button[aria-pressed="true"]{ color:var(--color-accent); }
+.seg button[aria-pressed="true"]::before{ transform:translate(-50%, 50%) scale(1); }
+.seg button[aria-pressed="true"]::after{ background:var(--color-accent); }
+.readout{ margin-top:var(--idai-3); padding-top:var(--idai-2); border-top:var(--border-hairline) solid var(--color-border); font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-text-secondary); line-height:1.9; }
+.readout div{ display:flex; justify-content:space-between; gap:var(--idai-2); }
+.readout b{ color:var(--color-text); font-weight:500; }
+
+
+/* ==========================================================================
+   ENCLOSURE
+   --------------------------------------------------------------------------
+   A kolam does not enclose space with a box. It encloses by LOOPING the dots
+   along the perimeter. Two treatments, at two levels of expressive cost:
+
+   1. corner pulli   the default. The corner radius is already one loop
+                     radius, so the only thing missing was the dot at its
+                     centre. Drawing it turns a rounded corner from a
+                     decorative softening into a visible loop around a
+                     visible dot. Pure CSS, no JS, works at any size.
+
+   2. loop boundary  opt-in. The full scalloped kolam boundary, generated at
+                     the element's measured size by Kolam.frame(). Expressive
+                     layer only — it is line work, and the density ceiling
+                     applies.
+   ========================================================================== */
+
+/* 1 · corner pulli */
+.kolam-corners,
+.panel, .card, .modal-demo{
+  background-image:
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%);
+  background-size:calc(var(--p) * .375) calc(var(--p) * .375);
+  background-repeat:no-repeat;
+  background-position:
+    calc(var(--radius-panel) - var(--p) * .1875) calc(var(--radius-panel) - var(--p) * .1875),
+    calc(100% - var(--radius-panel) + var(--p) * .1875) calc(var(--radius-panel) - var(--p) * .1875),
+    calc(var(--radius-panel) - var(--p) * .1875) calc(100% - var(--radius-panel) + var(--p) * .1875),
+    calc(100% - var(--radius-panel) + var(--p) * .1875) calc(100% - var(--radius-panel) + var(--p) * .1875);
+}
+.no-corners{ background-image:none; }
+
+/* 2 · curl boundary — the edges stay straight and the line curls at each
+      corner, three-quarters of a turn around the corner dot. The curl radius
+      is FIXED at --radius-panel rather than proportional, so a small card and
+      a wide banner get the same gesture at the same size. */
+.kolam-bound{ position:relative; border-color:transparent !important; background-image:none; }
+.kolam-frame-host{ position:absolute; inset:0; pointer-events:none; z-index:0; }
+.kolam-frame-host > svg{ display:block; }
+.kolam-bound > *:not(.kolam-frame-host):not(.kolam-band-host){ position:relative; z-index:1; }
+.kolam-frame-line{ stroke:var(--color-border-strong); }
+.kolam-frame-dot{ fill:var(--color-border-strong); }
+.kolam-bound.accent .kolam-frame-line{ stroke:var(--color-accent); }
+.kolam-bound.accent .kolam-frame-dot{ fill:var(--color-accent); }
+
+/* 3 · threshold band — one motif repeated at the head of a surface, because a
+      kolam marks the point of entry rather than framing the whole room. */
+.kolam-threshold{ position:relative; overflow:hidden; }
+.kolam-band-host{
+  position:absolute; top:0; left:0; right:0; pointer-events:none; z-index:0;
+  line-height:0; overflow:hidden; opacity:.9;
+}
+.kolam-band-host > svg{ display:block; }
+.kolam-band .kolam-line{ stroke:var(--color-accent); fill:none; stroke-linecap:round; }
+.kolam-band .kolam-dot{ fill:var(--color-kolam-dot); }
+.kolam-threshold > *:not(.kolam-band-host){ position:relative; z-index:1; }
+/* content clears the band */
+.kolam-threshold{ padding-top:calc(var(--p) * 10) !important; }
+/* both treatments on one surface: inset the band so it does not collide with
+   the corner curls. Found by rendering the two together. */
+.kolam-bound.kolam-threshold .kolam-band-host{
+  left:var(--radius-panel); right:var(--radius-panel);
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .kolam-bound .kolam-frame-line{ transition:stroke var(--motion-state); }
+}
+
+/* ==========================================================================
+   COMPONENTS
+   ========================================================================== */
+
+/* --- button --- */
+.btn{
+  font-family:var(--face-ui); font-size:var(--ezhuthu-small); font-weight:500;
+  padding:0 var(--space-inset-md); min-height:var(--alavu-md);
+  border-radius:var(--radius-control); border:var(--border-hairline) solid transparent; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--idai-1);
+  text-decoration:none; white-space:nowrap;
+  transition:background var(--motion-state), border-color var(--motion-state), color var(--motion-state), transform var(--motion-exit);
+}
+.btn:active{ transform:translateY(var(--border-hairline)); }
+.btn[disabled],.btn[aria-disabled="true"]{ opacity:.45; pointer-events:none; }
+.btn-primary{ background:var(--color-accent); color:var(--color-on-accent); }
+.btn-primary:hover{ background:var(--color-accent-hover); }
+.btn-secondary{ background:transparent; color:var(--color-text); border-color:var(--color-border-strong); }
+.btn-secondary:hover{ background:var(--color-surface-sunken); }
+.btn-ghost{ background:transparent; color:var(--color-accent); }
+.btn-ghost:hover{ background:var(--color-accent-subtle); }
+.btn-danger{ background:var(--color-danger); color:var(--color-on-danger); }
+.btn-sm{
+  min-height:var(--alavu-sm); padding:0 var(--space-inset-sm);
+  font-size:var(--ezhuthu-caption);
+}
+/* TARGET SIZE — the claim, made true.
+   --alavu-sm resolves to 24px at P=6, 32px at P=8, 40px at P=10. That clears
+   WCAG 2.5.8 (AA, 24px) at every density but not 2.5.5 (AAA, 44px), which the
+   documentation previously claimed for everything. Two things follow.
+
+   1. Small buttons get their pointer target expanded to the AAA floor without
+      changing a pixel of the visual box. The expander is a ::before, and it is
+      opted OUT wherever a component already uses ::before to carry a kolam
+      mark — an element has one of each pseudo, and the mark wins.
+   2. The claim on 09 · Accessibility now distinguishes the two levels instead
+      of asserting 44px everywhere. */
+.btn-sm:not(.has-mark){ position:relative; }
+.btn-sm:not(.has-mark)::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:100%; height:100%;
+  min-width:var(--alavu-md); min-height:var(--alavu-md);
+  transform:translate(-50%, -50%);
+  pointer-events:auto; z-index:0;
+}
+.btn-sm > *{ position:relative; z-index:1; }
+.btn-lg{ min-height:var(--alavu-lg); padding:0 var(--space-inset-lg); font-size:var(--ezhuthu-body); }
+.btn-block{ display:flex; width:100%; }
+
+/* --- field --- */
+.field{ display:block; margin-bottom:var(--idai-3); }
+.field:last-child{ margin-bottom:0; }
+.field > label{ display:block; font-size:var(--ezhuthu-small); font-weight:500; margin-bottom:var(--idai-1); }
+.field .req{ color:var(--color-danger); }
+.input,.field input[type=text],.field input[type=email],.field select,.field textarea{
+  width:100%; font-family:var(--face-ui); font-size:var(--ezhuthu-small); color:var(--color-text);
+  background:var(--color-bg); border:var(--border-hairline) solid var(--color-border-strong);
+  border-radius:var(--radius-control); padding:var(--idai-1) var(--space-inset-sm);
+  min-height:var(--alavu-md);
+  transition:border-color var(--motion-state), box-shadow var(--motion-state);
+}
+.field textarea{ min-height:calc(var(--p)*14); padding-top:var(--idai-1); resize:vertical; }
+.field select{ appearance:none; background-image:none; }
+.input:focus,.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none; border-color:var(--color-accent); box-shadow:0 0 0 var(--border-edge) var(--color-accent-subtle);
+}
+.field .help{ font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); margin-top:var(--idai-1); }
+.field.invalid input,.field.invalid select,.field.invalid textarea{ border-color:var(--color-danger); }
+.field .err{ font-size:var(--ezhuthu-caption); color:var(--color-danger); margin-top:var(--idai-1); font-weight:500; }
+
+/* --- choice ---------------------------------------------------------------
+   Radio and checkbox both use the wrap-or-pass primitive, and they stay
+   distinguishable because they use DIFFERENT MOVES of the line:
+
+     radio     the loop CLOSES around the dot.  Unclosed = dashed ring,
+               closed = solid ring. Continuity itself carries the state, so
+               it reads in greyscale without relying on fill.
+
+     checkbox  the line CROSSES at the dot — tile C, the third tile, which is
+               an X relative to the dot lattice because the kolam line runs
+               diagonally between dots. The square enclosure is kept so the
+               exclusive/independent distinction survives.
+
+   The learned shape distinction (round vs square) is preserved. What changed
+   is that the marks inside are now the system's own vocabulary rather than a
+   borrowed dot and tick.
+   -------------------------------------------------------------------------- */
+.choice{ display:flex; align-items:flex-start; gap:var(--idai-2); font-size:var(--ezhuthu-small); cursor:pointer; min-height:var(--alavu-md); padding:calc(var(--p)*.5) 0; }
+.choice input{
+  appearance:none; -webkit-appearance:none; margin:0; flex:none;
+  position:relative; cursor:pointer; background:none;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  margin-top:calc(var(--p) * .25);
+}
+.choice input:focus-visible{ outline:var(--border-edge) solid var(--color-focus); outline-offset:var(--border-edge); }
+
+/* radio — the pulli, and the loop that closes around it */
+.choice input[type="radio"]{ border:0; border-radius:var(--radius-pill); }
+.choice input[type="radio"]::before{           /* the pulli */
+  content:""; position:absolute; inset:0; margin:auto;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transition:background var(--motion-state);
+}
+.choice input[type="radio"]::after{            /* the loop — dashed until closed */
+  content:""; position:absolute; inset:0;
+  border:var(--kambi-1) dashed var(--color-border-strong);
+  border-radius:var(--radius-pill);
+  transition:border-color var(--motion-state), border-width var(--motion-state);
+}
+.choice input[type="radio"]:checked::before{ background:var(--color-accent); }
+.choice input[type="radio"]:checked::after{
+  border:var(--kambi-2) solid var(--color-accent);
+}
+.choice input[type="radio"]:hover::after{ border-color:var(--color-text-secondary); }
+.choice input[type="radio"]:checked:hover::after{ border-color:var(--color-accent-hover); }
+
+/* checkbox — the square enclosure, with the crossing inside it */
+.choice input[type="checkbox"]{
+  border:var(--kambi-2) solid var(--color-border-strong);
+  border-radius:var(--radius-control);
+  transition:border-color var(--motion-state), background var(--motion-state);
+}
+.choice input[type="checkbox"]::before,
+.choice input[type="checkbox"]::after{
+  content:""; position:absolute; inset:0; margin:auto;
+  transition:transform var(--motion-reveal), background var(--motion-state);
+}
+.choice input[type="checkbox"]::before{        /* the pulli, then one arm of the crossing */
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+}
+.choice input[type="checkbox"]::after{ transform:scale(0); }
+.choice input[type="checkbox"]:checked{ border-color:var(--color-accent); }
+.choice input[type="checkbox"]:checked::before{
+  width:calc(var(--p) * 1.5); height:var(--kambi-2); border-radius:0;
+  background:var(--color-accent); transform:rotate(45deg);
+}
+.choice input[type="checkbox"]:checked::after{
+  width:calc(var(--p) * 1.5); height:var(--kambi-2); border-radius:0;
+  background:var(--color-accent); transform:rotate(-45deg) scale(1);
+}
+/* indeterminate — the line passes through without crossing */
+.choice input[type="checkbox"]:indeterminate{ border-color:var(--color-accent); }
+.choice input[type="checkbox"]:indeterminate::before{
+  width:calc(var(--p) * 1.5); height:var(--kambi-2); border-radius:0;
+  background:var(--color-accent); transform:none;
+}
+.choice input[type="checkbox"]:indeterminate::after{ transform:scale(0); }
+.choice input[type="checkbox"]:hover{ border-color:var(--color-text-secondary); }
+.choice input[type="checkbox"]:checked:hover,
+.choice input[type="checkbox"]:indeterminate:hover{ border-color:var(--color-accent-hover); }
+/* --- switch · the kolam toggle ---------------------------------------------
+   The control is a two-dot lattice at a LOCAL pitch of 3P. Its loop radius is
+   1.5P — exactly half the local pitch — so the meeting condition r = P/2 holds
+   inside the component as well as across the system.
+
+     ·——————·        two pulli, joined by a kambi
+    (·)—————·        the line loops the left dot   = off
+     ·—————(·)       the loop travels and re-wraps = on
+
+   The travel is a neli: the turn a kolam line makes around a dot. State is
+   carried by loop POSITION first and colour second, so it survives greyscale.
+   -------------------------------------------------------------------------- */
+.switch{ display:inline-flex; align-items:center; gap:var(--idai-2); cursor:pointer; font-size:var(--ezhuthu-small); min-height:var(--alavu-md); }
+.switch input{ position:absolute; opacity:0; width:0; height:0; }
+
+.track{
+  position:relative; flex:none;
+  width:calc(var(--p) * 6); height:calc(var(--p) * 3);
+  color:var(--color-border-strong);
+  /* the kambi — spans dot to dot, exactly 3P */
+  background-image:linear-gradient(currentColor, currentColor);
+  background-size:calc(var(--p) * 3) var(--kambi-2);
+  background-position:center; background-repeat:no-repeat;
+  transition:color var(--motion-reveal);
+}
+/* the two pulli — one element, the second cast by box-shadow at 3P */
+.track::before{
+  content:""; position:absolute;
+  top:calc(var(--p) * 1.25); left:calc(var(--p) * 1.25);
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:currentColor;
+  box-shadow:calc(var(--p) * 3) 0 0 currentColor;
+}
+/* the loop — hollow, so the dot it wraps stays visible inside it */
+.track::after{
+  content:""; position:absolute; top:0; left:0;
+  width:calc(var(--p) * 3); height:calc(var(--p) * 3);
+  border:var(--kambi-2) solid currentColor;
+  border-radius:var(--radius-pill); background:transparent;
+  transition:transform var(--motion-reveal);
+}
+.switch input:checked + .track{ color:var(--color-accent); }
+.switch input:checked + .track::after{ transform:translateX(calc(var(--p) * 3)); }
+.switch input:focus-visible + .track{ outline:var(--border-edge) solid var(--color-focus); outline-offset:var(--border-edge); border-radius:var(--radius-pill); }
+.switch input:disabled + .track{ opacity:.45; cursor:not-allowed; }
+
+/* --- badge --- */
+.badge{
+  display:inline-flex; align-items:center; gap:calc(var(--p)*.75);
+  font-size:var(--ezhuthu-caption); font-weight:600; letter-spacing:.02em;
+  padding:calc(var(--p)*.5) var(--space-inset-sm); border-radius:var(--radius-pill);
+  background:var(--color-surface-sunken); color:var(--color-text-secondary);
+}
+.badge::before{ content:""; width:var(--valai-2); height:var(--valai-2); border-radius:var(--radius-pill); background:currentColor; flex:none; }
+.badge.ok  { color:var(--color-success); }
+.badge.warn{ color:var(--color-warning); }
+.badge.info{ color:var(--color-info); }
+.badge.bad { color:var(--color-danger); }
+.badge.plain::before{ display:none; }
+
+/* --- alert --- */
+.alert{
+  display:flex; gap:var(--idai-2); padding:var(--space-inset-md);
+  border:var(--border-hairline) solid var(--color-border);
+  border-left:var(--kambi-3) solid var(--color-info);
+  border-radius:0 var(--radius-surface) var(--radius-surface) 0;
+  background:var(--color-surface); font-size:var(--ezhuthu-small);
+}
+.alert h5{ font-family:var(--face-ui); font-size:var(--ezhuthu-small); font-weight:600; margin-bottom:calc(var(--p)*.5); }
+.alert p{ color:var(--color-text-secondary); }
+.alert.ok  { border-left-color:var(--color-success); }
+.alert.warn{ border-left-color:var(--color-warning); }
+.alert.bad { border-left-color:var(--color-danger); }
+
+/* --- card --- */
+.card{ background:var(--color-surface); border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); overflow:hidden; display:flex; flex-direction:column; }
+.card-media{ height:calc(var(--p)*12); background:var(--color-accent-subtle); position:relative; overflow:hidden; }
+.card-media > div{ position:absolute; inset:calc(var(--p) * -2); }
+.card-body{ padding:var(--space-inset-md); display:flex; flex-direction:column; gap:var(--idai-1); }
+.card-body h5{ font-family:var(--face-display); font-size:var(--ezhuthu-body); font-weight:600; }
+.card-body p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+.card-foot{ margin-top:auto; padding:var(--space-inset-sm) var(--space-inset-md) var(--space-inset-md); display:flex; gap:var(--idai-1); }
+
+/* ==========================================================================
+   THE DOT RAIL
+   --------------------------------------------------------------------------
+   The state language, generalised from the toggle. Wherever a set of options
+   sits along a line, the options are PULLI on a KAMBI and the chosen one is
+   WRAPPED BY A LOOP. A kolam line can do exactly two things at a dot — loop
+   it or pass it — and that is a two-state primitive, which is what selection
+   is. Indeterminate is the third tile: the line crosses.
+
+   Shared by tabs, segmented controls and steppers, because they are the same
+   control. State is carried by the presence of the loop — shape, not colour —
+   so it survives greyscale and colour-blindness unaided.
+   ========================================================================== */
+.rail{ display:flex; gap:var(--idai-3); border-bottom:var(--border-hairline) solid var(--color-border); overflow-x:auto; }
+.rail > button{
+  position:relative; background:none; border:0; cursor:pointer; white-space:nowrap;
+  padding:var(--idai-1) 0 var(--space-inset-md);
+  font-family:var(--face-ui); font-size:var(--ezhuthu-small); font-weight:500;
+  color:var(--color-text-tertiary); min-height:var(--alavu-md);
+  transition:color var(--motion-state);
+}
+.rail > button:hover{ color:var(--color-text); }
+/* the loop — painted first, so the dot it wraps stays visible inside it */
+.rail > button::before{
+  content:""; position:absolute; left:50%; bottom:0; z-index:0;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  background:transparent;
+  transform:translate(-50%, 50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+/* the pulli */
+.rail > button::after{
+  content:""; position:absolute; left:50%; bottom:0; z-index:1;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translate(-50%, 50%);
+  transition:background var(--motion-state);
+}
+.rail > button[aria-selected="true"], .rail > button[aria-pressed="true"]{ color:var(--color-accent); }
+.rail > button[aria-selected="true"]::before,
+.rail > button[aria-pressed="true"]::before{ transform:translate(-50%, 50%) scale(1); }
+.rail > button[aria-selected="true"]::after,
+.rail > button[aria-pressed="true"]::after{ background:var(--color-accent); }
+/* indeterminate / partial — the line crosses the dot instead of looping it */
+.rail > button[data-state="partial"]::before{
+  transform:translate(-50%, 50%) scale(1);
+  border-color:transparent;
+  background:linear-gradient(var(--color-accent), var(--color-accent)) center/100% var(--kambi-2) no-repeat;
+}
+
+/* --- tabs --- */
+.tabs{ display:flex; gap:var(--idai-3); border-bottom:var(--border-hairline) solid var(--color-border); overflow-x:auto; }
+.tabs button{
+  position:relative; background:none; border:0; cursor:pointer; white-space:nowrap;
+  padding:var(--idai-1) 0 var(--space-inset-md);
+  font-family:var(--face-ui); font-size:var(--ezhuthu-small); font-weight:500;
+  color:var(--color-text-tertiary); min-height:var(--alavu-md);
+  transition:color var(--motion-state);
+}
+.tabs button:hover{ color:var(--color-text); }
+.tabs button::before{
+  content:""; position:absolute; left:50%; bottom:0; z-index:0;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  background:transparent;
+  transform:translate(-50%, 50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+.tabs button::after{
+  content:""; position:absolute; left:50%; bottom:0; z-index:1;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translate(-50%, 50%);
+  transition:background var(--motion-state);
+}
+.tabs button[aria-selected="true"]{ color:var(--color-accent); }
+.tabs button[aria-selected="true"]::before{ transform:translate(-50%, 50%) scale(1); }
+.tabs button[aria-selected="true"]::after{ background:var(--color-accent); }
+
+/* --- stepper — the same rail, laid out as progress along the line --- */
+.stepper{
+  display:flex; align-items:flex-start; list-style:none; padding:0; margin:0;
+  background-image:linear-gradient(var(--color-border-strong), var(--color-border-strong));
+  background-size:calc(100% - 100% / var(--steps, 3)) var(--kambi-2);
+  background-position:calc(50% / var(--steps, 3) * 1) calc(var(--p) * 1.5);
+  background-repeat:no-repeat;
+}
+.stepper li{ flex:1; text-align:center; position:relative; padding-top:var(--idai-4); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); }
+.stepper li::before{
+  content:""; position:absolute; left:50%; top:calc(var(--p) * 1.5);
+  width:calc(var(--p) * 3); height:calc(var(--p) * 3);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%, -50%) scale(0); transition:transform var(--motion-reveal);
+}
+.stepper li::after{
+  content:""; position:absolute; left:50%; top:calc(var(--p) * 1.5);
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5); border-radius:var(--radius-pill);
+  background:var(--color-border-strong); transform:translate(-50%, -50%);
+}
+.stepper li[aria-current="step"], .stepper li[data-done]{ color:var(--color-accent); font-weight:600; }
+.stepper li[aria-current="step"]::before, .stepper li[data-done]::before{ transform:translate(-50%, -50%) scale(1); }
+.stepper li[aria-current="step"]::after, .stepper li[data-done]::after{ background:var(--color-accent); }
+.stepper li[data-done]::before{ border-color:var(--color-text-tertiary); }
+.stepper li[data-done]::after{ background:var(--color-text-tertiary); }
+.stepper li[data-done]{ color:var(--color-text-secondary); font-weight:400; }
+.tabpanel{ padding-top:var(--idai-3); font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+.tabpanel[hidden]{ display:none; }
+
+/* --- progress -------------------------------------------------------------
+   Progress is how far the line has travelled. So: a kambi with pulli along
+   it, the traversed portion drawn in accent at full weight, and a loop at the
+   head — the turn the line is making right now. Set --value (0–100).
+
+   This is the stepper generalised to a continuous scale. Determinate only;
+   for unknown duration use the kolam draw-on loader instead.
+   -------------------------------------------------------------------------- */
+.progress{
+  position:relative; height:calc(var(--p) * 3); --value:0;
+  /* the kambi, and the pulli it passes */
+  background-image:
+    linear-gradient(var(--color-border-strong), var(--color-border-strong)),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%);
+  background-size:100% var(--kambi-1), calc(var(--p) * .5) calc(var(--p) * .5);
+  background-position:center, calc(var(--p) * .25) center;
+  background-repeat:no-repeat, space;
+}
+/* the drawn line — how far it has got */
+.progress::before{
+  content:""; position:absolute; left:0; top:50%; height:var(--kambi-2);
+  width:calc(var(--value) * 1%);
+  transform:translateY(-50%);
+  background:var(--color-accent); border-radius:var(--radius-pill);
+  transition:width var(--motion-reveal);
+}
+/* the head — the loop the line is making now */
+.progress::after{
+  content:""; position:absolute; top:50%; left:calc(var(--value) * 1%);
+  width:calc(var(--p) * 2); height:calc(var(--p) * 2);
+  transform:translate(-50%, -50%);
+  border:var(--kambi-2) solid var(--color-accent);
+  border-radius:var(--radius-pill); background:var(--color-bg);
+  transition:left var(--motion-reveal);
+}
+.progress[aria-valuenow="0"]::after,
+.progress[aria-valuenow="100"]::after{ background:var(--color-accent); }
+/* legacy inner fill — kept working for markup that still uses it */
+.progress > i{ display:none; }
+
+/* --- table ----------------------------------------------------------------
+   A table is already a lattice: rows crossing columns. Two things follow.
+
+   1. The header rule is a KAMBI and each sortable column is a PULLI on it.
+      The sorted column's dot is wrapped — the same primitive as tabs, which
+      is correct, because choosing a sort column IS choosing among options
+      along a line.
+
+   2. A selected row is marked by the line wrapping the dot in its leading
+      cell, not by a colour fill. One loop per selection is not line work at
+      frequency, so the density objection does not apply — a loop on EVERY
+      row would be, which is why hover stays a tint.
+   -------------------------------------------------------------------------- */
+.data-table{ width:100%; border-collapse:collapse; font-size:var(--ezhuthu-small); }
+.data-table th{
+  position:relative;
+  background:var(--color-surface-sunken);
+  padding:var(--idai-1) var(--space-inset-sm) var(--space-inset-sm);
+  border-bottom:var(--border-hairline) solid var(--color-border-strong);
+}
+.data-table td{ padding:var(--idai-1) var(--space-inset-sm); border-bottom:var(--border-hairline) solid var(--color-border); }
+.data-table tbody tr:hover{ background:var(--color-surface-sunken); }
+
+/* sortable column — a pulli on the header kambi */
+.data-table th[aria-sort]{ cursor:pointer; }
+.data-table th[aria-sort]::before{          /* the loop */
+  content:""; position:absolute; left:var(--space-inset-sm); bottom:0; z-index:0;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-25%, 50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+.data-table th[aria-sort]::after{           /* the pulli */
+  content:""; position:absolute; left:var(--space-inset-sm); bottom:0; z-index:1;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translate(-25%, 50%);
+  transition:background var(--motion-state);
+}
+.data-table th[aria-sort="ascending"], .data-table th[aria-sort="descending"]{ color:var(--color-accent); }
+.data-table th[aria-sort="ascending"]::before,
+.data-table th[aria-sort="descending"]::before{ transform:translate(-25%, 50%) scale(1); }
+.data-table th[aria-sort="ascending"]::after,
+.data-table th[aria-sort="descending"]::after{ background:var(--color-accent); }
+/* direction is text, not a glyph the loop has to carry */
+.data-table th[aria-sort="ascending"] .dir::after{ content:" ↑"; }
+.data-table th[aria-sort="descending"] .dir::after{ content:" ↓"; }
+
+/* selected row — the line wraps the dot in the leading cell */
+.data-table tbody tr[aria-selected="true"]{ background:var(--color-accent-subtle); }
+.data-table tbody tr[aria-selected="true"] td:first-child{ position:relative; padding-left:calc(var(--p) * 5); }
+.data-table tbody tr[aria-selected="true"] td:first-child::before{
+  content:""; position:absolute; left:var(--space-inset-sm); top:50%;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translateY(-50%);
+}
+.data-table tbody tr[aria-selected="true"] td:first-child::after{
+  content:""; position:absolute; left:calc(var(--space-inset-sm) + var(--p));
+  top:50%; width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-accent);
+  transform:translateY(-50%);
+}
+
+/* --- empty state --- */
+.empty{ text-align:center; padding:var(--idai-8) var(--idai-4); display:flex; flex-direction:column; align-items:center; gap:var(--idai-2); }
+.empty .art{ width:calc(var(--p)*16); opacity:.9; }
+.empty h5{ font-family:var(--face-display); font-size:var(--ezhuthu-lead); }
+.empty p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); max-width:40ch; }
+
+/* --- toast --- */
+.toast{
+  display:flex; align-items:center; gap:var(--idai-2);
+  background:var(--color-text); color:var(--color-bg);
+  padding:var(--space-inset-sm) var(--space-inset-md); border-radius:var(--radius-control);
+  font-size:var(--ezhuthu-small); box-shadow:var(--elevation-overlay); max-width:calc(var(--p)*48);
+}
+.toast .btn-ghost{ color:var(--color-bg); text-decoration:underline; }
+
+/* --- modal (static demo) --- */
+.modal-demo{ background:var(--color-surface); border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); box-shadow:var(--elevation-overlay); max-width:calc(var(--p)*52); width:100%; }
+.modal-head{ padding:var(--space-inset-lg) var(--space-inset-lg) var(--space-inset-sm); }
+.modal-head h5{ font-family:var(--face-display); font-size:var(--ezhuthu-lead); }
+.modal-body{ padding:0 var(--space-inset-lg); font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+.modal-foot{ padding:var(--space-inset-lg); display:flex; gap:var(--idai-2); justify-content:flex-end; }
+
+/* --- home cards --- */
+.tile{
+  display:flex; flex-direction:column; gap:var(--idai-1);
+  background:var(--color-surface); border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel); padding:var(--space-inset-lg); text-decoration:none; color:inherit;
+  transition:border-color var(--motion-state), transform var(--motion-state);
+}
+.tile:hover{ border-color:var(--color-accent); transform:translateY(calc(var(--p) * -0.25)); }
+.tile .n{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-accent); letter-spacing:.1em; }
+.tile h3{ font-size:var(--ezhuthu-lead); }
+.tile p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+
+/* --- footer --- */
+.site-foot{
+  border-top:var(--border-hairline) solid var(--color-border);
+  padding:var(--idai-6) var(--space-page-margin) var(--idai-12);
+  color:var(--color-text-tertiary); font-size:var(--ezhuthu-small);
+}
+.site-foot-in{ max-width:calc(var(--p)*176); margin:0 auto; display:flex; flex-wrap:wrap; gap:var(--idai-4); justify-content:space-between; }
+.site-foot p{ max-width:60ch; }
+.site-foot .mono{ font-size:var(--ezhuthu-caption); }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}

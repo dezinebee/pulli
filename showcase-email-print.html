@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email &amp; print showcase — Pulli</title>
+<meta name="description" content="The surface without variables: a table-based email and a print stylesheet, where the token model must be resolved at build time rather than referenced at runtime.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/showcase.css">
+<!-- the print stylesheet is live on this page: try Cmd/Ctrl+P -->
+<link rel="stylesheet" href="assets/print.css" media="print">
+<style>
+  .mailframe{ width:100%; max-width:calc(var(--p)*84); height:calc(var(--p)*112); border:0; display:block; background:#F5EFE4; border-radius:var(--radius-panel); }
+
+  /* A4 preview, authored at real physical size and scaled for the column. */
+  .sheet-scale{ width:100%; overflow:hidden; height:calc(297mm * 0.6); }
+  .sheet{
+    width:210mm; height:297mm; transform:scale(0.6); transform-origin:top left;
+    background:#FFFFFF; color:#17120E; padding:18mm 16mm 20mm;
+    box-shadow:var(--elevation-panel); border:1px solid #998A75;
+    font-family:var(--face-ui); font-size:10pt; line-height:1.45;
+    display:flex; flex-direction:column;
+  }
+  .sheet h1{ font-family:var(--face-display); font-size:28pt; line-height:1.15; margin:0 0 4mm; color:#17120E; }
+  .sheet h2{ font-family:var(--face-display); font-size:14pt; line-height:1.15; margin:0 0 2mm; color:#17120E; }
+  .sheet .rule{ border-top:1pt solid #A34524; margin:0 0 6mm; }
+  .sheet .eyebrow{ font-size:7pt; letter-spacing:1.5pt; text-transform:uppercase; color:#5C4E42; margin-bottom:2mm; }
+  .sheet p{ font-size:10pt; color:#5C4E42; max-width:110mm; margin:0 0 4mm; }
+  .sheet table{ width:100%; border-collapse:collapse; font-size:8pt; }
+  .sheet th{ text-align:left; font-size:7pt; letter-spacing:1pt; text-transform:uppercase; color:#5C4E42; border-bottom:0.5pt solid #7C6B5C; padding:0 0 1mm; }
+  .sheet td{ padding:1.5mm 0; border-bottom:0.5pt solid #998A75; color:#17120E; }
+  .sheet .foot{ margin-top:auto; border-top:0.5pt solid #998A75; padding-top:3mm; font-size:7pt; color:#5C4E42; display:flex; justify-content:space-between; }
+  .sheet .art{ width:56mm; margin:0 0 6mm; }
+  .sheet .art .kolam-line{ stroke:#A34524; }
+  .sheet .art .kolam-dot{ fill:#5C4E42; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html" aria-current="page">— Email &amp; print</a>
+          <ul class="nav-sub">
+            <li><a href="#problem">The problem</a></li>
+            <li><a href="#email">Email</a></li>
+            <li><a href="#print">Print</a></li>
+            <li><a href="#resolution">Token resolution</a></li>
+            <li><a href="#breaks">What breaks</a></li>
+            <li><a href="#build">The build step</a></li>
+          </ul>
+        </li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">11.05 — Showcase · Email &amp; print</div>
+      <h1>The surface without variables.</h1>
+      <p class="lede">Outlook renders email with Word. Paper renders nothing at all. No custom properties, no flexbox, no <code>max()</code>, no media queries you can trust, no JavaScript, and in print no viewport, no dark mode and no hover. This is the surface that decides whether a token model is a real abstraction or just a CSS convention.</p>
+    </div>
+
+    <!-- ============ PROBLEM ============ -->
+    <section class="doc-section" id="problem">
+      <h2>The problem</h2>
+      <p class="sub">Every other surface consumes tokens at runtime. These two cannot.</p>
+
+      <div class="grid-2">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+          <h3>Gone in email</h3>
+          <ul class="bullets">
+            <li><b>Custom properties.</b> Word's engine ignores <code>var()</code> entirely — the declaration is dropped, not fallen back.</li>
+            <li><b>Flexbox and grid.</b> Layout is tables, as it was in 2003.</li>
+            <li><b><code>max()</code> and <code>calc()</code>.</b> The 44px floor cannot be expressed as a function.</li>
+            <li><b>External stylesheets.</b> Everything is inline, or it is nothing.</li>
+            <li><b>SVG.</b> The generator's native output does not render at all.</li>
+            <li><b>JavaScript.</b> Obviously.</li>
+          </ul>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-warning)">
+          <h3>Gone in print</h3>
+          <ul class="bullets">
+            <li><b>The viewport.</b> Breakpoints are meaningless; the page is a fixed physical object.</li>
+            <li><b>Dark mode.</b> There is one ground and it is paper.</li>
+            <li><b>Elevation.</b> Nothing floats. Shadow is ink spent on a lie.</li>
+            <li><b>Target size.</b> Nothing is touched, so the 44px floor has no referent.</li>
+            <li><b>Motion.</b> Naturally.</li>
+            <li><b>Cheap colour.</b> Ink has a cost and light backgrounds have a coverage limit.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout"><b>The answer is resolution, not reference.</b> The semantic layer stops being a runtime lookup and becomes a build-time one. <code>tokens.json</code> — which existed as documentation until now — turns out to be the load-bearing artefact: it is the only representation of the system a build script can read. That is the argument for shipping a machine-readable token export even when nothing appears to consume it.</div>
+    </section>
+
+    <!-- ============ EMAIL ============ -->
+    <section class="doc-section" id="email">
+      <h2>Email</h2>
+
+      <div class="surface-meta">
+        <div><dt>Lattice</dt><dd>resolved at P = 8</dd></div>
+        <div><dt>Width</dt><dd>600px · 75 P</dd></div>
+        <div><dt>Theme</dt><dd>light only, declared</dd></div>
+        <div><dt>Pattern</dt><dd>PNG from seed 1229</dd></div>
+      </div>
+
+      <iframe class="mailframe" src="assets/email-template.html" title="Margazhi email template preview" loading="lazy"></iframe>
+      <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">
+        This is the actual shipped file rendered in a frame, not a copy — <a href="assets/email-template.html">open <code>assets/email-template.html</code> directly</a> if your browser blocks local frames. Note that it stays light-on-white while this page is in dark mode: that is correct behaviour, not a bug, and the reason is below.
+      </p>
+
+      <div class="doc-sub">
+        <h3>Three things worth looking at</h3>
+        <div class="grid-3">
+          <div class="panel">
+            <h3>The bulletproof button</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">44px of target without <code>max()</code>: <code>13px</code> vertical padding plus <code>18px</code> line-height resolves to exactly 44. Outlook gets a VML <code>roundrect</code> at a literal <code>height:44px</code>. The floor is honoured on both paths — it was just computed by a human once instead of by CSS every time.</p>
+          </div>
+          <div class="panel">
+            <h3>The PNG</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Generated from <b>seed 1229</b> — the same seed as the SVG in the website hero. Because the generator is deterministic, the raster and the vector are provably the same pattern rather than two assets someone hopes match.</p>
+          </div>
+          <div class="panel">
+            <h3>The declared theme</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)"><code>meta color-scheme: light</code> and <code>supported-color-schemes: light</code>. Email dark mode is client-side colour inversion, not a theme swap. Declaring light-only is more honest than shipping a dark variant that four clients will re-invert into something nobody designed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRINT ============ -->
+    <section class="doc-section" id="print">
+      <h2>Print</h2>
+
+      <div class="surface-meta">
+        <div><dt>Lattice</dt><dd>re-seeded · P = 2mm</dd></div>
+        <div><dt>Type base</dt><dd>10pt, ratio √2</dd></div>
+        <div><dt>Page</dt><dd>A4 · 18/16/20mm</dd></div>
+        <div><dt>Elevation</dt><dd>removed entirely</dd></div>
+      </div>
+
+      <div class="sheet-scale">
+        <div class="sheet">
+          <div class="eyebrow">Margazhi Studio · Pattern record</div>
+          <h2>Margazhi 12</h2>
+          <div class="rule"></div>
+          <div class="art" data-kolam='{"dots":7,"seed":4471,"crossing":0.15,"stroke":3,"showDots":true}' aria-hidden="true"></div>
+          <h2>Construction</h2>
+          <p>Generated on a seven by seven pulli lattice under D4 symmetry. The line is continuous by construction: every path endpoint is shared by exactly two paths, and the boundary closes into twelve loops around the outer dots.</p>
+          <table>
+            <thead><tr><th>Property</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td>Grid</td><td>7 × 7 pulli</td></tr>
+              <tr><td>Seed</td><td>4471</td></tr>
+              <tr><td>Symmetry</td><td>D4 — both mirrors and transpose</td></tr>
+              <tr><td>Path segments</td><td>84</td></tr>
+              <tr><td>Boundary loops</td><td>12</td></tr>
+              <tr><td>Open endpoints</td><td>0</td></tr>
+            </tbody>
+          </table>
+          <div class="foot"><span>Pulli v0.1 · derived from kolam practice</span><span>1 / 1</span></div>
+        </div>
+      </div>
+      <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">
+        A4 at 60% — the sheet is authored at real physical size in millimetres and points, then scaled for this column. <b>This page also links <code>print.css</code> live:</b> press Cmd/Ctrl+P to see the documentation itself re-render onto paper with the chrome removed, the lattice re-seeded and every link's URL made visible.
+      </p>
+    </section>
+
+    <!-- ============ RESOLUTION ============ -->
+    <section class="doc-section" id="resolution">
+      <h2>Token resolution</h2>
+      <p class="sub">The same semantic role, resolved three ways. Note that print does not scale the screen values — it re-seeds the lattice in its own unit.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Semantic role</th><th>Screen · P = 8</th><th>Email · literal</th><th>Print · P = 2mm</th></tr></thead>
+          <tbody>
+            <tr><td class="name">--space-inset-sm</td><td class="derive">var(--idai-2)</td><td class="mono">16px</td><td class="mono">4mm</td></tr>
+            <tr><td class="name">--space-inset-md</td><td class="derive">var(--idai-3)</td><td class="mono">24px</td><td class="mono">6mm</td></tr>
+            <tr><td class="name">--space-inset-lg</td><td class="derive">var(--idai-4)</td><td class="mono">32px</td><td class="mono">8mm</td></tr>
+            <tr><td class="name">--space-section</td><td class="derive">var(--idai-12)</td><td class="mono">96px</td><td class="mono">24mm</td></tr>
+            <tr><td class="name">--radius-control</td><td class="derive">var(--valai-3)</td><td class="mono">8px</td><td class="mono">2mm</td></tr>
+            <tr><td class="name">--radius-panel</td><td class="derive">var(--valai-4)</td><td class="mono">16px</td><td class="mono">4mm</td></tr>
+            <tr><td class="name">--border-hairline</td><td class="derive">1px</td><td class="mono">1px</td><td class="mono">0.5pt <span style="color:var(--color-warning)">↑</span></td></tr>
+            <tr><td class="name">--border-edge</td><td class="derive">2px</td><td class="mono">2px</td><td class="mono">1pt</td></tr>
+            <tr><td class="name">--alavu-md</td><td class="derive">max(5.5P, 44px)</td><td class="mono">44px <span style="color:var(--color-warning)">fixed</span></td><td class="mono">n/a</td></tr>
+            <tr><td class="name">--ezhuthu-body</td><td class="derive">16px</td><td class="mono">16px</td><td class="mono">10pt <span style="color:var(--color-warning)">re-seeded</span></td></tr>
+            <tr><td class="name">--ezhuthu-h1</td><td class="derive">45px</td><td class="mono">32px <span style="color:var(--color-warning)">↓</span></td><td class="mono">28pt</td></tr>
+            <tr><td class="name">--color-border</td><td class="derive">#E6DCC9</td><td class="mono">#E6DCC9</td><td class="mono">#998A75 <span style="color:var(--color-warning)">↑↑</span></td></tr>
+            <tr><td class="name">--color-text-tertiary</td><td class="derive">#7C6B5C</td><td class="mono">#7C6B5C</td><td class="mono">#5C4E42 <span style="color:var(--color-warning)">merged</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>The ratio is structural; the base is surface-dependent.</b> Print does not use 16px type scaled to millimetres — it re-seeds at 10pt, because 16px is a screen reading size and 10pt is a paper one. What travels between surfaces is <code>√2</code> and <code>r = P/2</code>, not the numbers they produce. A system that could only scale its existing values would have failed here.</div>
+    </section>
+
+    <!-- ============ BREAKS ============ -->
+    <section class="doc-section" id="breaks">
+      <h2>What breaks</h2>
+      <p class="sub">Five, this time. More than the other four surfaces combined — which is the point of building it.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Where</th><th>Broke</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="derive">email</td>
+              <td><b>The 44px floor could not be expressed.</b> <code>max()</code> is the mechanism that makes the target guarantee automatic, and it does not exist here.</td>
+              <td>Resolved by hand into padding plus line-height that sums to exactly 44, and a VML <code>roundrect</code> at literal <code>height:44px</code> for Outlook. <b>The guarantee moved from the token to the build step</b> — which means it now needs a test, because nothing enforces it at runtime.</td>
+            </tr>
+            <tr>
+              <td class="derive">email</td>
+              <td><b>SVG does not render.</b> The generator's entire output format is unavailable.</td>
+              <td>Rasterise from the same seed. Because generation is deterministic, the PNG is not an approximation of the SVG — it is the same pattern in another format, and a test can assert they came from identical parameters.</td>
+            </tr>
+            <tr>
+              <td class="derive">email</td>
+              <td><b>Dark mode is not a theme.</b> Several clients invert colours algorithmically, ignoring any dark palette you supply, and produce results nobody designed.</td>
+              <td>Declare light-only via <code>color-scheme</code> and <code>supported-color-schemes</code>, and choose values that survive inversion legibly. <b>This is the one surface where the dual-theme model simply does not apply</b>, and saying so beats shipping a variant that gets overridden.</td>
+            </tr>
+            <tr>
+              <td class="derive">print</td>
+              <td><b><code>--color-border</code> disappeared — twice.</b> <code>#E6DCC9</code> measures 1.36:1 on paper white and vanishes at 0.5pt. The first fix, <code>#C9B99E</code>, only reached 1.92:1 and was still too faint to read as a table rule.</td>
+              <td>Lifted again to <code>#998A75</code> — 3.36:1. The deeper point is a <b>role reclassification</b>: on screen this token is documented as decorative and exempt from the 3:1 floor, but on paper a table rule carries structure, so it inherits the boundary requirement. Print collapses <code>--color-border</code> and <code>--color-border-strong</code> into one value rather than inventing a third. <b>A role's classification can be surface-dependent</b>, which the two-theme model did not anticipate.</td>
+            </tr>
+            <tr>
+              <td class="derive">print</td>
+              <td><b>Tertiary text was unreadable.</b> Three text weights are useful on a backlit screen and merely muddy in ink at 7–8pt.</td>
+              <td>Tertiary merges into secondary. <b>A role can collapse on a surface without the role model being wrong</b> — what matters is that the merge happens in the print token block where it can be audited, not scattered through the components.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn"><b>The honest conclusion.</b> Four of these five are cases where a runtime guarantee became a build-time responsibility. That is a real loss of safety, and the correct response is not to claim the system covers email and print seamlessly — it is to move the corresponding checks into CI, where the resolved output can be asserted against <code>tokens.json</code> rather than trusted.</div>
+    </section>
+
+    <!-- ============ BUILD ============ -->
+    <section class="doc-section" id="build">
+      <h2>The build step</h2>
+      <p class="sub">Roughly forty lines. The point is not the script — it is that the script is <em>possible</em>, because the token model has a machine-readable form.</p>
+
+      <pre><span class="c">// resolve.js — semantic roles to literals, for surfaces without var()</span>
+const tokens = require('./assets/tokens.json');
+
+const TARGETS = {
+  email: { p: 8,  unit: <span class="k">'px'</span>, theme: <span class="k">'light'</span> },
+  print: { p: 2,  unit: <span class="k">'mm'</span>, theme: <span class="k">'light'</span>, typeBase: <span class="k">'10pt'</span> }
+};
+
+<span class="c">// {seed.p} * 3  ->  24  (px)  or  6 (mm)</span>
+function resolve(expr, p) {
+  if (typeof expr === <span class="k">'number'</span>) return expr;
+  const m = String(expr).match(/\{seed\.([pr])\}\s*\*\s*([\d.]+)/);
+  if (!m) return expr;
+  const seed = m[1] === <span class="k">'p'</span> ? p : p / 2;
+  return seed * parseFloat(m[2]);
+}
+
+function build(target) {
+  const t = TARGETS[target], out = {};
+  for (const [role, ref] of Object.entries(tokens.semantic.space)) {
+    const prim = deref(ref.$value);              <span class="c">// {primitive.idai.3}</span>
+    out[role] = resolve(prim.$value, t.p) + t.unit;
+  }
+  for (const [role, modes] of Object.entries(tokens.semantic.color)) {
+    out[role] = modes[t.theme];
+    <span class="c">// print overrides: contrast floors differ on paper</span>
+    if (target === <span class="k">'print'</span> &amp;&amp; PRINT_OVERRIDES[role]) out[role] = PRINT_OVERRIDES[role];
+  }
+  return out;
+}</pre>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>What CI must assert</h3>
+          <ul class="bullets">
+            <li><b>Resolved values match the source.</b> Re-resolve from <code>tokens.json</code> and diff against the literals in the shipped email; fail on drift.</li>
+            <li><b>The 44px floor survived.</b> Parse the email's button padding and line-height and assert the sum. This is the check that replaces <code>max()</code>.</li>
+            <li><b>The PNG matches its seed.</b> Regenerate from the recorded parameters and compare hashes.</li>
+            <li><b>Print contrast at the print palette.</b> Every pair recomputed against paper white, not screen ground — including the roles that are exempt on screen but load-bearing on paper.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What this proves about the model</h3>
+          <ul class="bullets">
+            <li><b>The three-layer split earned its keep.</b> Only the semantic layer had to be resolved. Palette and primitives came through unchanged because nothing consumed them directly.</li>
+            <li><b>The seed relationship travelled.</b> <code>r = P/2</code> and <code>√2</code> are meaningful in millimetres and points, which is what makes re-seeding possible rather than merely rescaling.</li>
+            <li><b><code>tokens.json</code> stopped being documentation.</b> It is the only reason a build script can exist at all — and it was written before there was anything to consume it.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

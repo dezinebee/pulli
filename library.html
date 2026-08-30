@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component library — Pulli</title>
+<meta name="description" content="The full 58-item reference inventory with every component marked shipped, partial or absent — so the coverage figure can be audited rather than trusted. 46 of 58 shipped.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/components.css">
+<style>
+  .ship{ color:var(--color-success); font-weight:600; }
+  .part{ color:var(--color-warning); font-weight:600; }
+  .none{ color:var(--color-danger); font-weight:600; }
+  .inv{ column-count:2; column-gap:var(--idai-6); }
+  @media (max-width:820px){ .inv{ column-count:1; } }
+  .inv ol{ list-style:none; padding:0; margin:0 0 var(--idai-4); break-inside:avoid; }
+  .inv h4{ margin-bottom:var(--space-stack); }
+  .inv li{
+    display:flex; justify-content:space-between; gap:var(--space-inline);
+    font-size:var(--ezhuthu-small); padding:calc(var(--p)*.5) 0;
+    border-bottom:var(--border-hairline) solid var(--color-border);
+  }
+  .demo-grid2{ display:grid; grid-template-columns:repeat(auto-fit,minmax(calc(var(--p)*40),1fr)); gap:var(--idai-3); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html" aria-current="page">15 · Library</a>
+          <ul class="nav-sub">
+            <li><a href="#count">What 46 of 58 means</a></li>
+            <li><a href="#derivation">The derivation audit</a></li>
+            <li><a href="#inventory">The inventory</a></li>
+            <li><a href="#actions">Actions</a></li>
+            <li><a href="#forms">Forms</a></li>
+            <li><a href="#nav">Navigation</a></li>
+            <li><a href="#data">Data display</a></li>
+            <li><a href="#feedback">Feedback</a></li>
+            <li><a href="#overlays">Overlays</a></li>
+            <li><a href="#layout">Layout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">15 — Library</div>
+      <h1>46 of 58, and what that does not mean.</h1>
+      <p class="lede">Thirty-two more components, taking coverage from 24% to 79%. The inventory below is published in full so the figure can be audited rather than trusted — and the first section says plainly why a component count is a weak measure of readiness.</p>
+    </div>
+
+    <!-- ============ COUNT ============ -->
+    <section class="doc-section" id="count">
+      <h2>What 46 of 58 means</h2>
+
+      <div class="grid-2">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-success)">
+          <h3>What genuinely improved</h3>
+          <ul class="bullets">
+            <li><b>A team can now build most enterprise screens</b> without leaving the system. That was not true at 14.</li>
+            <li><b>The dot-rail primitive extended</b> to pagination, the nav rail and the timeline — each is options along a line, so none of them needed a new indicator invented for it. <a href="#derivation">It extended to five of thirty-two on the first pass</a>, which was not enough.</li>
+            <li><b>Every new component consumes semantic tokens only</b>, works in both themes and all three densities, and has a forced-colors path.</li>
+            <li><b>The enterprise and regulated profiles cover the new components too</b> — the loop indicators fall back where the conservative profile requires it.</li>
+          </ul>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+          <h3>What did not move at all</h3>
+          <ul class="bullets">
+            <li><b>No npm package, no TypeScript, no React binding.</b> Still not installable.</li>
+            <li><b>No Figma library.</b> Designers still cannot use any of this.</li>
+            <li><b>No RTL.</b> Logical properties were used throughout this batch, which helps — the earlier components still need converting.</li>
+            <li><b>No VPAT, no screen-reader test matrix.</b> Every accessibility claim here is still unverified by testing.</li>
+            <li><b>Still unfunded.</b> The question an enterprise asks first is whether this exists in three years.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warn"><b>Component count is a weak proxy for readiness, and worth saying out loud while raising it.</b> Coverage went from 24% to 79%; the honest readiness assessment barely moved, because four of the six remaining blockers are engineering and organisational rather than design. A library of forty-six components that cannot be installed is not more adoptable than a library of fourteen that cannot be installed. <a href="readiness.html#gaps">The gap analysis</a> is updated to reflect exactly this.</div>
+    </section>
+
+    <!-- ============ DERIVATION AUDIT ============ -->
+    <section class="doc-section" id="derivation">
+      <h2>The derivation audit</h2>
+      <p class="sub">Which components are actually kolam, and which are ordinary components wearing Tamil-named tokens. The deletion test, run on each of the forty-seven individually.</p>
+
+      <div class="callout warn"><b>The first pass of this batch failed the test.</b> Of the thirty-two components added, five carried the line and twenty-seven were conventional components consuming semantic tokens. That is the same failure as <a href="line.html">the original token layer</a> — a kolam-shaped vocabulary wrapped around a system that would have looked identical without it — repeated one level down, in the components rather than the tokens. It was found by grepping the stylesheet for the primitive's four CSS signatures, not by reading the code, because reading your own code is how you miss this.</div>
+
+      <h3>Three categories, not two</h3>
+      <p>The binary "kolam or not" hid the interesting case. A component can carry a kolam mark that does no work — which is decoration, and worth admitting rather than counting.</p>
+
+      <div class="grid-3">
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-success)">
+          <h3>Derived — 21</h3>
+          <p class="small">State or structure is carried by the line. Delete the kolam and the component loses information, not character. These are the ones that justify the source.</p>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-warning)">
+          <h3>Ornamented — 3</h3>
+          <p class="small">Carries a kolam mark that carries nothing. Delete it and the component still works; only the flavour goes. Honest decoration, labelled as decoration.</p>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-border-strong)">
+          <h3>Conventional — 23</h3>
+          <p class="small">A standard component consuming semantic tokens. There is no kolam in a scrim or a skeleton and inventing one would be worse than leaving it alone.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <caption class="sr-only">Per-component derivation audit</caption>
+          <thead>
+            <tr><th scope="col">Component</th><th scope="col">Category</th><th scope="col">What the line does</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Checkbox</td><td><span class="status ok">Derived</span></td><td>A pulli the line crosses — tile C, drawn at the moment of checking.</td></tr>
+            <tr><td>Radio</td><td><span class="status ok">Derived</span></td><td>An open loop that closes. Dashed while unchosen, solid once wrapped.</td></tr>
+            <tr><td>Switch</td><td><span class="status ok">Derived</span></td><td>A two-dot lattice at local pitch 3P; the loop travels from one dot to the other.</td></tr>
+            <tr><td>Tabs</td><td><span class="status ok">Derived</span></td><td>The dot rail. Options are pulli; the current one is wrapped.</td></tr>
+            <tr><td>Segmented control</td><td><span class="status ok">Derived</span></td><td>The dot rail, bounded.</td></tr>
+            <tr><td>Stepper</td><td><span class="status ok">Derived</span></td><td>The dot rail with completion — dots behind the head are joined by kambi.</td></tr>
+            <tr><td>Table</td><td><span class="status ok">Derived</span></td><td>Column headers are pulli; the sorted one is wrapped, and the loop is the <code>aria-sort</code> state made visible.</td></tr>
+            <tr><td>Progress</td><td><span class="status ok">Derived</span></td><td>Kambi and pulli with a loop at the head — a line being drawn, which is what a kolam is.</td></tr>
+            <tr><td>Data grid</td><td><span class="status ok">Derived</span></td><td>The table's language at scale, surviving virtualisation.</td></tr>
+            <tr><td>Pagination</td><td><span class="status ok">Derived</span></td><td>Pages are pulli on a kambi; the current page is wrapped.</td></tr>
+            <tr><td>Nav rail</td><td><span class="status ok">Derived</span></td><td>The dot rail turned vertical.</td></tr>
+            <tr><td>Timeline</td><td><span class="status ok">Derived</span></td><td>The dot rail with time as the axis; the current event is wrapped.</td></tr>
+            <tr><td>Accordion</td><td><span class="status ok">Derived</span></td><td>The crossing losing an arm. Closed is tile C, open is the line passing.</td></tr>
+            <tr><td>Status dot</td><td><span class="status ok">Derived</span></td><td>A bare pulli. Escalation closes a loop around it, so severity is shape before it is colour.</td></tr>
+            <tr class="row-new"><td>Slider</td><td><span class="status ok">Derived</span></td><td>The switch generalised past two stops. Same kambi, same pulli, same hollow loop with a dot inside.</td></tr>
+            <tr class="row-new"><td>Breadcrumb</td><td><span class="status ok">Derived</span></td><td>Separators become the dots the line has already passed; the last crumb is where it turned, so that dot is wrapped.</td></tr>
+            <tr class="row-new"><td>Meter</td><td><span class="status ok">Derived</span></td><td>Kambi and pulli with <em>no</em> head loop. That absence is now what separates a static reading from progress, instead of a colour.</td></tr>
+            <tr class="row-new"><td>Number stepper</td><td><span class="status ok">Derived</span></td><td>Minus is the line passing the dot; plus is the crossing. The two marks are the only two things a kolam line does.</td></tr>
+            <tr class="row-new"><td>File upload</td><td><span class="status ok">Derived</span></td><td>Dashed boundary while empty, solid once it holds a file — the radio's open-and-closed language at panel scale.</td></tr>
+            <tr class="row-new"><td>Menu</td><td><span class="status ok">Derived</span></td><td>A vertical list is options along a line, so a checked item gets a wrapped pulli rather than a tick.</td></tr>
+            <tr class="row-new"><td>Tag</td><td><span class="status ok">Derived</span></td><td>A selected filter is a wrapped dot, so selection survives greyscale.</td></tr>
+
+            <tr><td>Card / panel</td><td><span class="status warn">Ornamented</span></td><td>Four corner pulli. They mark the corners of a lattice that is not there. Pure decoration.</td></tr>
+            <tr><td>Divider with label</td><td><span class="status warn">Ornamented</span></td><td>A pulli where the rule meets the label. It marks a junction that carries no state.</td></tr>
+            <tr><td>Search field</td><td><span class="status warn">Ornamented</span></td><td>A loop with a line passing it — which is genuinely the primitive, and also just a magnifying glass. Coincidence dressed as derivation, so it is listed here rather than above.</td></tr>
+
+            <tr><td colspan="3" class="grp">Conventional — tokens only, and correctly so</td></tr>
+            <tr><td colspan="3" class="small">Button · Text input · Select · Badge / chip · Callout · Button group · Split button · Icon button · Link · Toolbar · Form layout · Description list · Avatar · Code block · Stat · Banner · Spinner · Skeleton · Scrim · Drawer · Dialog · Tooltip · Popover</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small" style="margin-top:var(--space-stack)"><span class="row-key"></span> The seven rows marked in the margin were changed by this audit. Before it, the figure was 14 of 47 — 30%. After, 21 of 47 — 45%.</p>
+
+      <h3>Why the number should not be higher</h3>
+      <p>Forty-five percent is not an embarrassment to be fixed. A scrim is a translucent rectangle; a skeleton is a shimmering block; a tooltip is a small box near a thing. There is no kolam reading of these that is not a costume. The test each derived component passed is narrow and worth stating:</p>
+      <ul class="bullets">
+        <li><b>Is it options along a path?</b> Tabs, pagination, breadcrumb, nav rail, timeline, menu, slider, stepper. The kolam line visits dots in order; so do these.</li>
+        <li><b>Is it a thing that opens and closes?</b> Radio, checkbox, accordion, file upload, tag, status. The line either wraps a dot or passes it, and there is no third option.</li>
+        <li><b>Is it a line in motion, or a line at rest?</b> Progress and meter. Once that distinction is carried by the presence of a head loop, the two components stop needing different colours to be told apart.</li>
+      </ul>
+      <p>Everything that failed all three was left alone. Forcing the language onto a dialog would have produced exactly the thing you objected to two rounds ago: kolam as a skin.</p>
+
+      <div class="callout"><b>The deletion test, applied to this page.</b> Remove the kolam from the twenty-three conventional components and nothing is lost. Remove it from the twenty-one derived ones and the system loses its greyscale-safe state language, its distinction between progress and meter, its sort indicator, and every selected state that currently survives <a href="enterprise.html#adds">Windows High Contrast Mode</a> without a colour. That asymmetry is the whole argument, and it is why the ratio is published rather than the headline.</div>
+    </section>
+
+    <!-- ============ INVENTORY ============ -->
+    <section class="doc-section" id="inventory">
+      <h2>The inventory</h2>
+      <p class="sub">The reference list the coverage figure is measured against. <span class="ship">Shipped</span> · <span class="part">Partial</span> · <span class="none">Absent</span>. Published so an evaluator can disagree with the denominator.</p>
+
+      <div class="inv">
+        <div>
+          <h3>Actions — 6</h3>
+          <ol>
+            <li><span>Button</span><span class="ship">shipped</span></li>
+            <li><span>Button group</span><span class="ship">shipped</span></li>
+            <li><span>Split button</span><span class="ship">shipped</span></li>
+            <li><span>Icon button</span><span class="ship">shipped</span></li>
+            <li><span>Link</span><span class="ship">shipped</span></li>
+            <li><span>Toolbar</span><span class="ship">shipped</span></li>
+          </ol>
+        </div>
+        <div>
+          <h3>Forms — 14</h3>
+          <ol>
+            <li><span>Text field</span><span class="ship">shipped</span></li>
+            <li><span>Textarea</span><span class="ship">shipped</span></li>
+            <li><span>Select</span><span class="ship">shipped</span></li>
+            <li><span>Checkbox</span><span class="ship">shipped</span></li>
+            <li><span>Radio</span><span class="ship">shipped</span></li>
+            <li><span>Switch</span><span class="ship">shipped</span></li>
+            <li><span>Number input</span><span class="ship">shipped</span></li>
+            <li><span>Search field</span><span class="ship">shipped</span></li>
+            <li><span>Slider</span><span class="ship">shipped</span></li>
+            <li><span>File upload</span><span class="ship">shipped</span></li>
+            <li><span>Form layout</span><span class="ship">shipped</span></li>
+            <li><span>Combobox</span><span class="none">absent</span></li>
+            <li><span>Multiselect</span><span class="none">absent</span></li>
+            <li><span>Date picker</span><span class="none">absent</span></li>
+          </ol>
+        </div>
+        <div>
+          <h3>Navigation — 8</h3>
+          <ol>
+            <li><span>Tabs</span><span class="ship">shipped</span></li>
+            <li><span>Stepper</span><span class="ship">shipped</span></li>
+            <li><span>Breadcrumb</span><span class="ship">shipped</span></li>
+            <li><span>Pagination</span><span class="ship">shipped</span></li>
+            <li><span>Menu</span><span class="part">partial</span></li>
+            <li><span>Nav rail</span><span class="ship">shipped</span></li>
+            <li><span>Tree view</span><span class="none">absent</span></li>
+            <li><span>Command palette</span><span class="none">absent</span></li>
+          </ol>
+        </div>
+        <div>
+          <h3>Data display — 12</h3>
+          <ol>
+            <li><span>Table</span><span class="ship">shipped</span></li>
+            <li><span>Data grid</span><span class="part">read-heavy</span></li>
+            <li><span>Description list</span><span class="ship">shipped</span></li>
+            <li><span>Avatar</span><span class="ship">shipped</span></li>
+            <li><span>Tag / chip</span><span class="ship">shipped</span></li>
+            <li><span>Badge</span><span class="ship">shipped</span></li>
+            <li><span>Status dot</span><span class="ship">shipped</span></li>
+            <li><span>Meter</span><span class="ship">shipped</span></li>
+            <li><span>Code block</span><span class="ship">shipped</span></li>
+            <li><span>Timeline</span><span class="ship">shipped</span></li>
+            <li><span>Stat / KPI</span><span class="ship">shipped</span></li>
+            <li><span>Charts</span><span class="none">absent</span></li>
+          </ol>
+        </div>
+        <div>
+          <h3>Feedback — 9</h3>
+          <ol>
+            <li><span>Alert</span><span class="ship">shipped</span></li>
+            <li><span>Toast</span><span class="ship">shipped</span></li>
+            <li><span>Banner</span><span class="ship">shipped</span></li>
+            <li><span>Progress</span><span class="ship">shipped</span></li>
+            <li><span>Spinner</span><span class="ship">shipped</span></li>
+            <li><span>Skeleton</span><span class="ship">shipped</span></li>
+            <li><span>Empty state</span><span class="ship">shipped</span></li>
+            <li><span>Inline validation</span><span class="ship">shipped</span></li>
+            <li><span>Notification centre</span><span class="none">absent</span></li>
+          </ol>
+        </div>
+        <div>
+          <h3>Overlays — 6</h3>
+          <ol>
+            <li><span>Modal</span><span class="ship">shipped</span></li>
+            <li><span>Confirm dialog</span><span class="ship">shipped</span></li>
+            <li><span>Drawer</span><span class="ship">shipped</span></li>
+            <li><span>Popover</span><span class="part">partial</span></li>
+            <li><span>Tooltip</span><span class="part">partial</span></li>
+            <li><span>Sheet — mobile</span><span class="none">absent</span></li>
+          </ol>
+        </div>
+        <div>
+          <h3>Layout — 3</h3>
+          <ol>
+            <li><span>Card</span><span class="ship">shipped</span></li>
+            <li><span>Divider</span><span class="ship">shipped</span></li>
+            <li><span>Accordion</span><span class="ship">shipped</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="callout"><b>Counting rule.</b> <span class="part">Partial</span> does <em>not</em> count toward the headline figure — the conservative reading is the honest one. <b>46 shipped + 4 partial + 8 absent = 58.</b> The headline is therefore <b>46 of 58 = 79% fully shipped</b>, or 86% if you allow the partials, which this page does not.
+      <br><br>The four partials each name their limit: the <a href="grid.html#missing">data grid</a> has no cell editing, grouping or server-side data; the menu, popover and tooltip use naive viewport-flip placement rather than Floating UI, so they will misplace inside scrolling containers or transformed ancestors. The eight absent are combobox, multiselect, date picker, tree view, command palette, charts, notification centre and the mobile sheet.
+      <br><br><em>This callout originally claimed "46 shipped + 4 partial = 46", which is wrong by four. The audit script that checks the table against the headline caught it — which is the argument for publishing the inventory in a machine-checkable form rather than asserting a percentage.</em></div>
+    </section>
+
+    <!-- ============ ACTIONS ============ -->
+    <section class="doc-section" id="actions">
+      <h2>Actions</h2>
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="row" style="display:flex;gap:var(--space-inline);flex-wrap:wrap;align-items:center">
+            <div class="btn-group" role="group" aria-label="Alignment">
+              <button class="btn btn-secondary" type="button" aria-pressed="true">Day</button>
+              <button class="btn btn-secondary" type="button" aria-pressed="false">Week</button>
+              <button class="btn btn-secondary" type="button" aria-pressed="false">Month</button>
+            </div>
+            <div class="split menu-wrap">
+              <button class="btn btn-primary" type="button">Export</button>
+              <button class="btn btn-primary" type="button" data-menu="exportMenu" aria-label="Export options">▾</button>
+              <div class="menu align-end" id="exportMenu" role="menu" hidden>
+                <button role="menuitem" type="button">Export as CSV</button>
+                <button role="menuitem" type="button">Export as XLSX</button>
+                <div class="menu-sep"></div>
+                <button role="menuitem" type="button" aria-disabled="true">Schedule export</button>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-icon" type="button" aria-label="Settings" data-tip="Settings">⚙</button>
+            <a class="link" href="#actions">A link</a>
+            <a class="link link-external" href="#actions">External</a>
+          </div>
+          <div class="toolbar" role="toolbar" aria-label="Formatting">
+            <button class="btn btn-ghost btn-sm" type="button">Bold</button>
+            <button class="btn btn-ghost btn-sm" type="button">Italic</button>
+            <span class="divider-v"></span>
+            <button class="btn btn-ghost btn-sm" type="button">Align</button>
+            <button class="btn btn-ghost btn-sm" type="button">List</button>
+          </div>
+        </div>
+        <div class="demo-spec">group joins on one hairline · split shares a boundary · icon button floors at 44px · toolbar is one tab stop, arrows inside</div>
+      </div>
+    </section>
+
+    <!-- ============ FORMS ============ -->
+    <section class="doc-section" id="forms">
+      <h2>Forms</h2>
+      <div class="demo">
+        <div class="demo-stage stack">
+          <form class="form" onsubmit="return false">
+            <fieldset>
+              <legend>Position</legend>
+              <div class="form-row">
+                <div class="field">
+                  <label for="lq">Search</label>
+                  <div class="search">
+                    <span class="search-icon" aria-hidden="true"></span>
+                    <input id="lq" type="search" placeholder="Counterparty or reference">
+                    <button class="btn btn-ghost btn-icon btn-sm search-clear" type="button" aria-label="Clear search">×</button>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="lqty">Quantity</label>
+                  <div class="number">
+                    <button class="btn btn-secondary" type="button" data-step="-100" aria-label="Decrease by 100">−</button>
+                    <input id="lqty" class="input" type="text" inputmode="numeric" value="1200">
+                    <button class="btn btn-secondary" type="button" data-step="100" aria-label="Increase by 100">+</button>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="ltol">Tolerance</label>
+                <div class="slider" data-unit="%">
+                  <input id="ltol" type="range" min="0" max="20" value="6">
+                  <output for="ltol">6%</output>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Supporting documents</legend>
+              <div class="dropzone">
+                <p>Drop files here, or</p>
+                <label class="btn btn-secondary btn-sm" for="lfile">Choose files</label>
+                <input id="lfile" type="file" multiple>
+              </div>
+              <ul class="filelist"></ul>
+            </fieldset>
+            <div class="form-actions">
+              <button class="btn btn-secondary" type="button">Cancel</button>
+              <button class="btn btn-primary" type="submit">Save position</button>
+            </div>
+          </form>
+        </div>
+        <div class="demo-spec">fieldset + legend · form-row auto-fits at 26P · number steppers are 44px targets · dropzone accepts drag and click</div>
+      </div>
+    </section>
+
+    <!-- ============ NAV ============ -->
+    <section class="doc-section" id="nav">
+      <h2>Navigation</h2>
+      <p class="sub">Three of these are options along a line, so they inherit the dot rail rather than inventing an indicator.</p>
+      <div class="demo-grid2">
+        <div class="demo">
+          <div class="demo-stage stack">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+              <ol>
+                <li><a href="#nav">Fleet</a></li>
+                <li><a href="#nav">Capacity</a></li>
+                <li><span aria-current="page">POOL-07</span></li>
+              </ol>
+            </nav>
+            <nav class="pagination" aria-label="Pagination">
+              <button class="btn btn-secondary btn-sm" type="button">Previous</button>
+              <ol>
+                <li><a href="#nav">1</a></li>
+                <li><a href="#nav" aria-current="true">2</a></li>
+                <li><a href="#nav">3</a></li>
+                <li><span class="gap">…</span></li>
+                <li><a href="#nav">42</a></li>
+              </ol>
+              <button class="btn btn-secondary btn-sm" type="button">Next</button>
+            </nav>
+          </div>
+          <div class="demo-spec">pagination: pages are pulli on a kambi, current one wrapped</div>
+        </div>
+        <div class="demo">
+          <div class="demo-stage">
+            <nav class="navrail" aria-label="Sections" style="width:100%">
+              <a href="#nav" aria-current="true">Capacity</a>
+              <a href="#nav">Performance</a>
+              <a href="#nav">Replication</a>
+              <a href="#nav">Events</a>
+            </nav>
+          </div>
+          <div class="demo-spec">nav rail: the dot rail, vertical</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DATA ============ -->
+    <section class="doc-section" id="data">
+      <h2>Data display</h2>
+      <div class="demo-grid2">
+        <div class="demo">
+          <div class="demo-stage stack">
+            <div class="stat">
+              <span class="stat-label">Provisioned</span>
+              <span class="stat-value">4.82<small> PB</small></span>
+              <span class="stat-delta up">▲ 3.1% vs last month</span>
+            </div>
+            <div class="meter" style="--value:71">
+              <div class="meter-label"><span>Pool utilisation</span><b>71%</b></div>
+              <div class="meter-track" role="meter" aria-valuenow="71" aria-valuemin="0" aria-valuemax="100" aria-label="Pool utilisation"></div>
+            </div>
+            <div class="meter warn" style="--value:94">
+              <div class="meter-label"><span>POOL-07</span><b>94%</b></div>
+              <div class="meter-track" role="meter" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100" aria-label="POOL-07 utilisation"></div>
+            </div>
+          </div>
+          <div class="demo-spec">meter is a measurement, progress is a task — kept distinct on purpose</div>
+        </div>
+        <div class="demo">
+          <div class="demo-stage stack">
+            <div style="display:flex;gap:var(--space-inline);align-items:center;flex-wrap:wrap">
+              <div class="avatar-group">
+                <span class="avatar">SK</span><span class="avatar">RN</span><span class="avatar">MP</span>
+                <span class="avatar" aria-label="3 more">+3</span>
+              </div>
+              <span class="status ok">Operational</span>
+              <span class="status bad alert">Breaching</span>
+            </div>
+            <div style="display:flex;gap:var(--space-inline);flex-wrap:wrap">
+              <span class="tag on">Flash<button class="tag-x" type="button" aria-label="Remove Flash filter">×</button></span>
+              <span class="tag">Archive<button class="tag-x" type="button" aria-label="Remove Archive filter">×</button></span>
+              <span class="tag">EMEA<button class="tag-x" type="button" aria-label="Remove EMEA filter">×</button></span>
+            </div>
+            <dl class="dl">
+              <dt>Tier</dt><dd>Flash</dd>
+              <dt>Capacity</dt><dd class="mono">412 TB</dd>
+              <dt>Replication</dt><dd>Synchronous</dd>
+            </dl>
+          </div>
+          <div class="demo-spec">status dot: colour reinforces, the label carries it · off-scale gets a ring so it reads without colour</div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-stage">
+          <ol class="timeline" style="width:100%">
+            <li><div class="when">09:12</div><div class="what">Threshold crossed — POOL-07 at 90%</div></li>
+            <li><div class="when">09:14</div><div class="what">Alert raised to storage on-call</div></li>
+            <li data-now><div class="when">09:31</div><div class="what">Reclaim job queued — 41 TB identified</div></li>
+            <li><div class="when">—</div><div class="what">Awaiting approval</div></li>
+          </ol>
+        </div>
+        <div class="demo-spec">timeline: the dot rail with time as the axis · the current event is wrapped</div>
+      </div>
+    </section>
+
+    <!-- ============ FEEDBACK ============ -->
+    <section class="doc-section" id="feedback">
+      <h2>Feedback</h2>
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="banner warn" role="status">
+            <div class="banner-body"><b>Scheduled maintenance</b> — replication pauses at 02:00 UTC on Sunday for approximately forty minutes.</div>
+            <button class="btn btn-ghost btn-sm" type="button">Dismiss</button>
+          </div>
+          <div style="display:flex;gap:var(--space-inset-lg);align-items:center;flex-wrap:wrap">
+            <span class="spinner" role="status" aria-label="Loading"></span>
+            <span style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Loading positions…</span>
+          </div>
+          <div style="width:100%">
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text"></div>
+          </div>
+        </div>
+        <div class="demo-spec">spinner is plain, not a kolam — enterprise needs a loader that is not an expressive asset · skeleton has no shimmer, because a looping animation is what the motion rules forbid</div>
+      </div>
+    </section>
+
+    <!-- ============ OVERLAYS ============ -->
+    <section class="doc-section" id="overlays">
+      <h2>Overlays</h2>
+      <div class="demo">
+        <div class="demo-stage">
+          <button class="btn btn-secondary" type="button" data-open="libDrawer">Open drawer</button>
+          <button class="btn btn-secondary" type="button" data-open="libConfirm">Confirm dialog</button>
+          <button class="btn btn-secondary" type="button" data-popover="libPop" aria-expanded="false">Popover</button>
+          <button class="btn btn-secondary" type="button" data-tip="Tooltips appear on hover after 400ms, and immediately on focus.">Hover or focus me</button>
+        </div>
+        <div class="demo-spec">focus moves in, is trapped, and is restored to the trigger · Escape always closes</div>
+      </div>
+
+      <div class="popover" id="libPop" hidden>
+        <h3>Column density</h3>
+        <p style="color:var(--color-text-secondary)">Popovers take focus and trap it, unlike tooltips which never do. If it contains something focusable, it is a popover.</p>
+      </div>
+
+      <div class="drawer" id="libDrawer" role="dialog" aria-modal="true" aria-labelledby="libDrawerT" hidden tabindex="-1">
+        <div class="drawer-head">
+          <h3 id="libDrawerT">Filters</h3>
+          <button class="btn btn-ghost btn-icon" type="button" data-close aria-label="Close">×</button>
+        </div>
+        <div class="drawer-body">
+          <div class="form">
+            <label class="choice"><input type="checkbox" checked> Flash tier</label>
+            <label class="choice"><input type="checkbox"> Hybrid tier</label>
+            <label class="choice"><input type="checkbox"> Archive tier</label>
+          </div>
+        </div>
+        <div class="drawer-foot">
+          <button class="btn btn-secondary" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="button" data-close>Apply</button>
+        </div>
+      </div>
+
+      <div class="dialog" id="libConfirm" role="dialog" aria-modal="true" aria-labelledby="libConfirmT" hidden tabindex="-1">
+        <div class="dialog-head"><h3 id="libConfirmT">Reclaim 41 TB?</h3></div>
+        <div class="dialog-body"><p>Reclaiming frees space on POOL-07 immediately. The operation is logged and can be reversed within 24 hours.</p></div>
+        <div class="dialog-foot">
+          <button class="btn btn-secondary" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="button" data-close>Reclaim</button>
+        </div>
+      </div>
+
+      <div class="callout warn"><b>Placement is the naive version.</b> Menus, popovers and tooltips flip against the viewport edge and clamp horizontally. They do <em>not</em> handle scrolling containers, transformed ancestors, or shift-with-scroll. That is why they are marked <span class="part">partial</span> — a production system should use Floating UI here, and swapping it in is a contained change because placement is one function.</div>
+    </section>
+
+    <!-- ============ LAYOUT ============ -->
+    <section class="doc-section" id="layout">
+      <h2>Layout</h2>
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div class="divider-label">Advanced</div>
+          <div class="accordion" data-single>
+            <div class="acc-item">
+              <button class="acc-trigger" type="button" aria-expanded="true" aria-controls="acc1">
+                <span class="acc-mark" aria-hidden="true"></span>Replication policy
+              </button>
+              <div class="acc-panel" id="acc1">Synchronous within region, asynchronous cross-region with a 15-minute recovery point objective.</div>
+            </div>
+            <div class="acc-item">
+              <button class="acc-trigger" type="button" aria-expanded="false" aria-controls="acc2">
+                <span class="acc-mark" aria-hidden="true"></span>Retention
+              </button>
+              <div class="acc-panel" id="acc2" hidden>Snapshots retained for 35 days. Archive tier retained for seven years under the records policy.</div>
+            </div>
+            <div class="acc-item">
+              <button class="acc-trigger" type="button" aria-expanded="false" aria-controls="acc3">
+                <span class="acc-mark" aria-hidden="true"></span>Encryption
+              </button>
+              <div class="acc-panel" id="acc3" hidden>AES-256 at rest with customer-managed keys. Keys rotate every 90 days.</div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-spec">the disclosure mark is the crossing tile losing an arm — closed is a crossing, open is the line passing straight through</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<div class="scrim" hidden></div>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/behaviours.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

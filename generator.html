@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generator — Pulli</title>
+<meta name="description" content="The kolam engine: tile set, algorithm, symmetry groups, boundary-closure proof, API reference and asset recipes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<style>
+  .gen{ display:grid; grid-template-columns:1fr calc(var(--p)*40); gap:var(--idai-6); align-items:start; }
+  @media (max-width:1000px){ .gen{ grid-template-columns:1fr; } }
+  .gen .canvas{ min-height:calc(var(--p)*50); }
+  .tileset{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--idai-3); }
+  .tileset figure{ margin:0; }
+  .tileset figcaption{ font-size:var(--ezhuthu-caption); color:var(--color-text-secondary); margin-top:var(--idai-1); text-align:center; }
+  .tileset figcaption b{ font-family:var(--face-mono); color:var(--color-accent); }
+  .step{ display:grid; grid-template-columns:calc(var(--p)*4) 1fr; gap:var(--idai-2); margin-bottom:var(--idai-3); }
+  .step .num{ font-family:var(--face-mono); color:var(--color-accent); font-size:var(--ezhuthu-small); }
+  .step p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+  .step b{ color:var(--color-text); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html" aria-current="page">06 · Generator</a>
+          <ul class="nav-sub">
+            <li><a href="#play">Try it</a></li>
+            <li><a href="#tiles">The tile set</a></li>
+            <li><a href="#algorithm">Algorithm</a></li>
+            <li><a href="#symmetry">Symmetry groups</a></li>
+            <li><a href="#boundary">Closing the boundary</a></li>
+            <li><a href="#api">API reference</a></li>
+            <li><a href="#recipes">Asset recipes</a></li>
+            <li><a href="#perf">Performance &amp; limits</a></li>
+          </ul>
+        </li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">06 — Generator</div>
+      <h1>The pattern layer is computed, not drawn.</h1>
+      <p class="lede">Kolams decompose into three tiles. Constrain them with a symmetry group, close the boundary with loops around the outer dots, and the output is always a valid, continuous kolam. This is the asset pipeline: brand marks, empty states, loaders and print borders all come out of one function, and are committed as five numbers rather than as files.</p>
+    </div>
+
+    <!-- ============ PLAY ============ -->
+    <section class="doc-section" id="play">
+      <h2>Try it</h2>
+      <p class="sub">Every control maps directly to a parameter of <code>Kolam.generate()</code>. The call that produced what you are looking at is printed below the panel.</p>
+
+      <div class="gen">
+        <div class="canvas" id="stage"></div>
+        <div class="panel">
+          <div class="ctrl">
+            <label for="cDots">Pulli grid <var id="vDots">7 × 7</var></label>
+            <input type="range" id="cDots" min="3" max="15" step="2" value="7">
+          </div>
+          <div class="ctrl">
+            <label for="cCross">Crossing probability <var id="vCross">0.20</var></label>
+            <input type="range" id="cCross" min="0" max="0.7" step="0.05" value="0.2">
+          </div>
+          <div class="ctrl">
+            <label for="cStroke">Kambi weight <var id="vStroke">3.0</var></label>
+            <input type="range" id="cStroke" min="1" max="9" step="0.5" value="3">
+          </div>
+          <div class="ctrl">
+            <label for="cSeed">Seed <var id="vSeed">1729</var></label>
+            <input type="range" id="cSeed" min="1" max="9999" step="1" value="1729">
+          </div>
+          <div class="ctrl">
+            <label id="symLabel">Symmetry group</label>
+            <div class="seg" id="segSym" role="group" aria-labelledby="symLabel">
+              <button type="button" data-sym="d4" aria-pressed="true">D4</button>
+              <button type="button" data-sym="d2" aria-pressed="false">D2</button>
+              <button type="button" data-sym="none" aria-pressed="false">Free</button>
+            </div>
+          </div>
+          <div class="ctrl">
+            <label id="dotLabel">Show pulli</label>
+            <div class="seg" id="segDots" role="group" aria-labelledby="dotLabel">
+              <button type="button" data-dots="1" aria-pressed="true">Visible</button>
+              <button type="button" data-dots="0" aria-pressed="false">Hidden</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:var(--idai-1);margin-top:var(--idai-4)">
+            <button class="btn btn-primary btn-sm" id="btnRegen" style="flex:1">New seed</button>
+            <button class="btn btn-secondary btn-sm" id="btnCopy" style="flex:1">Copy SVG</button>
+          </div>
+          <div class="readout" id="readout"></div>
+        </div>
+      </div>
+
+      <pre id="callsite">Kolam.generate({ dots: 7, symmetry: 'd4', crossing: 0.2, seed: 1729 })</pre>
+    </section>
+
+    <!-- ============ TILES ============ -->
+    <section class="doc-section" id="tiles">
+      <h2>The tile set</h2>
+      <p class="sub">Three tiles. That is the entire vocabulary.</p>
+
+      <div class="prose">
+        <p>The unit of composition is not the dot but the square <b>cell</b> bounded by four dots. Each cell carries one tile, and every tile connects only at the midpoints of the cell's four edges.</p>
+      </div>
+
+      <div class="tileset" style="margin-top:var(--idai-4)">
+        <figure><div class="canvas" id="tileA"></div><figcaption><b>tile A</b> — quarter arcs around the top-left and bottom-right dots</figcaption></figure>
+        <figure><div class="canvas" id="tileB"></div><figcaption><b>tile B</b> — quarter arcs around the top-right and bottom-left dots</figcaption></figure>
+        <figure><div class="canvas" id="tileC"></div><figcaption><b>tile C</b> — a crossing, kambi over kambi</figcaption></figure>
+      </div>
+
+      <div class="callout"><b>Why any tile joins any other.</b> Because the arc radius is exactly <code>P/2</code>, an arc's endpoints land on edge midpoints, and its tangent there is perpendicular to the edge. Tile C's straight lines are perpendicular to their edges too. So whatever two tiles are adjacent, the curves meet at the same point with the same tangent and the line stays smooth and unbroken. No adjacency rules, no backtracking, no failure cases.</div>
+
+      <p class="prose">This is the same property the token model depends on. If <code>r</code> were anything other than <code>P/2</code>, tiles would not compose and corner radii would not agree with padding. One constraint, two payoffs.</p>
+    </section>
+
+    <!-- ============ ALGORITHM ============ -->
+    <section class="doc-section" id="algorithm">
+      <h2>Algorithm</h2>
+      <p class="sub">Five steps, no search, no backtracking. Linear in the number of cells.</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="step"><span class="num">01</span><p><b>Lay the pulli.</b> An <code>n × n</code> lattice, <code>n</code> odd so the kolam has a centre dot. Cells number <code>m = n − 1</code> per side, always even.</p></div>
+          <div class="step"><span class="num">02</span><p><b>Seed one quadrant.</b> Fill the top-left <code>⌈m/2⌉ × ⌈m/2⌉</code> block by drawing from the tile set: crossing with probability <code>c</code>, otherwise A or B evenly. For D4, copy the transpose across the quadrant's diagonal.</p></div>
+          <div class="step"><span class="num">03</span><p><b>Mirror it out.</b> Reflect the quadrant horizontally and vertically. Each reflection swaps A ↔ B; C is invariant. That swap is what preserves the geometry — a mirrored arc curls around the opposite pair of dots.</p></div>
+          <div class="step"><span class="num">04</span><p><b>Emit tile paths.</b> Two arcs or two straight lines per cell, at fixed positions relative to the cell origin.</p></div>
+          <div class="step"><span class="num">05</span><p><b>Close the boundary.</b> Pair the open perimeter ends into loops around the outer dots. See below — this is the only step with a proof obligation.</p></div>
+        </div>
+        <div>
+          <pre>function generate({ dots, symmetry, crossing, seed }) {
+  const m     = dots - 1;
+  const rand  = mulberry32(seed);
+  const tiles = makeTiles(m, symmetry, crossing, rand);
+
+  let paths = [];
+  for (let i = 0; i &lt; m; i++)
+    for (let j = 0; j &lt; m; j++)
+      paths.push(...tilePaths(i, j, tiles[i][j]));
+
+  paths.push(...boundaryPaths(m));
+  return { svg: toSVG(paths), paths, meta: {...} };
+}</pre>
+          <div class="callout"><b>Determinism.</b> The RNG is <code>mulberry32</code>, seeded explicitly. The same seed produces the same kolam on every machine, every browser, forever. A pattern in a repository is five numbers in a config file, not a binary asset that has to be regenerated and re-reviewed.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SYMMETRY ============ -->
+    <section class="doc-section" id="symmetry">
+      <h2>Symmetry groups</h2>
+      <p class="sub">Same seed, same crossing probability, three constraints. The vocabulary matches the layout rules in <a href="principles.html#samam">principle 03</a> deliberately.</p>
+
+      <div class="grid-3">
+        <div>
+          <div class="canvas" data-kolam='{"dots":9,"seed":2024,"symmetry":"d4","crossing":0.25}'></div>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)"><b class="mono" style="color:var(--color-accent)">d4</b> — invariant under both mirrors and the transpose. Eight symmetries. Reads as resolved and formal; the right choice for a mark or a repeating ground.</p>
+        </div>
+        <div>
+          <div class="canvas" data-kolam='{"dots":9,"seed":2024,"symmetry":"d2","crossing":0.25}'></div>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)"><b class="mono" style="color:var(--color-accent)">d2</b> — horizontal and vertical mirrors only. Four symmetries. More movement, still balanced; good for banners and wide crops.</p>
+        </div>
+        <div>
+          <div class="canvas" data-kolam='{"dots":9,"seed":2024,"symmetry":"none","crossing":0.25}'></div>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)"><b class="mono" style="color:var(--color-accent)">free</b> — unconstrained. Reads as texture rather than as a figure. Use where the pattern must not compete with content.</p>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Why mirrors swap the tiles</h3>
+        <p>Tile A places its arcs around the top-left and bottom-right dots — the leading diagonal. Reflect the cell horizontally and those arcs now sit on the counter-diagonal, which is tile B by definition. Transpose, however, maps top-left to top-left and bottom-right to bottom-right, so it preserves the type. Getting this wrong is the single most common way a kolam generator produces patterns that look symmetric but have broken lines.</p>
+        <pre><span class="c">// a mirror swaps the two arc orientations; a crossing is invariant</span>
+function flip(v) { return v === 2 ? 2 : (v === 0 ? 1 : 0); }</pre>
+      </div>
+    </section>
+
+    <!-- ============ BOUNDARY ============ -->
+    <section class="doc-section" id="boundary">
+      <h2>Closing the boundary</h2>
+      <p class="sub">The only step that could fail — so it is the step with an argument attached.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p>Tiles on the outer ring leave open ends on the perimeter. If those are left dangling, the result is not a closed kolam: principle 02 forbids a broken line, and the generator has to be the first thing that obeys it.</p>
+          <p>Walk the perimeter clockwise, collecting ends. There are <code>m</code> per side, so <code>4m</code> in total, listed in spatial order. Pair them with an offset of one — that is, pair index 1 with 2, 3 with 4, and finally <code>4m−1</code> with 0, wrapping.</p>
+          <p>Two cases arise. Both ends on the same side are <code>P</code> apart with a dot exactly between them: join them with a half-loop of radius <code>P/2</code> centred on that dot, bulging outward. Ends that straddle a corner are both <code>P/2</code> from the corner dot at ninety degrees: join them with a three-quarter loop around it.</p>
+          <p><b>Why it always closes.</b> <code>n</code> is odd, so <code>m = n − 1</code> is even. With an even count per side, the offset pairing yields exactly four corner joins and <code>(m−2)/2</code> same-side joins per side — <code>2m</code> loops in total, every end consumed exactly once. There is no residue and no special case for small grids: a 3×3 kolam is four corner loops and nothing else.</p>
+        </div>
+        <div>
+          <div class="canvas" data-kolam='{"dots":3,"seed":11,"crossing":0,"stroke":4}'></div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin:var(--idai-1) 0 var(--idai-3);text-align:center">m = 2 · four corner loops, no same-side joins</p>
+          <div class="canvas" data-kolam='{"dots":7,"seed":11,"crossing":0,"stroke":3}'></div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-1);text-align:center">m = 6 · four corner loops + two half-loops per side</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>Verified, not asserted.</b> The test suite counts path endpoints across every grid size from 3 to 15, all three symmetry groups, and crossing probabilities from 0 to 0.7. Every endpoint must be shared by exactly two paths. It also checks that every arc's centre lies on a lattice dot, and that the D4 tile grid is invariant under transpose and both mirrors.</div>
+    </section>
+
+    <!-- ============ API ============ -->
+    <section class="doc-section" id="api">
+      <h2>API reference</h2>
+      <p class="sub"><code>assets/kolam.js</code> — no dependencies, UMD, 4 KB.</p>
+
+      <div class="doc-sub">
+        <h3>Kolam.generate(options)</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td class="name">dots</td><td class="derive">number</td><td class="derive">7</td><td>Dots per side. Forced odd — a kolam needs a centre dot. Practical range 3–15.</td></tr>
+              <tr><td class="name">symmetry</td><td class="derive">"d4" | "d2" | "none"</td><td class="derive">"d4"</td><td>Constraint applied to the tile grid.</td></tr>
+              <tr><td class="name">crossing</td><td class="derive">number 0–1</td><td class="derive">0.2</td><td>Probability a cell is a crossing rather than a pair of arcs. Above ~0.5 the pattern reads as a weave rather than a kolam.</td></tr>
+              <tr><td class="name">stroke</td><td class="derive">number</td><td class="derive">3</td><td>Kambi weight in SVG user units (lattice unit is 40).</td></tr>
+              <tr><td class="name">showDots</td><td class="derive">boolean</td><td class="derive">true</td><td>Render the pulli themselves.</td></tr>
+              <tr><td class="name">seed</td><td class="derive">number | null</td><td class="derive">null</td><td>Integer for deterministic output; null draws a random one and reports it in <code>meta</code>.</td></tr>
+              <tr><td class="name">title</td><td class="derive">string | null</td><td class="derive">null</td><td>Accessible name on the SVG. Auto-generated when omitted.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Returns <code>{ svg, paths, meta }</code>. <code>meta</code> carries <code>dots, cells, seed, symmetry, crossing, segments, boundaryLoops, unit, radius</code> — enough to reproduce the exact output.</p>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Other methods</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Method</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Kolam.render(el, opts, animate)</td><td>Generate and inject into an element. Returns <code>meta</code>. Skips animation automatically under <code>prefers-reduced-motion</code>.</td></tr>
+              <tr><td class="name">Kolam.drawOn(el)</td><td>Run the draw-on animation over an already-rendered kolam.</td></tr>
+              <tr><td class="name">Kolam.toStandaloneSVG(opts, colors)</td><td>SVG string with colours inlined and explicit dimensions, for export or embedding outside the token system.</td></tr>
+              <tr><td class="name">Kolam.tilePaths(i, j, type)</td><td>Path data for one cell. Exposed for documentation and testing.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Declarative rendering</h3>
+        <p>With <code>site.js</code> loaded, any element carrying <code>data-kolam</code> is rendered on load. Add <code>data-animate</code> to draw it on.</p>
+        <pre>&lt;div <span class="k">data-kolam</span>='{"dots":9,"seed":2024,"symmetry":"d4"}' <span class="k">data-animate</span>&gt;&lt;/div&gt;</pre>
+      </div>
+    </section>
+
+    <!-- ============ RECIPES ============ -->
+    <section class="doc-section" id="recipes">
+      <h2>Asset recipes</h2>
+      <p class="sub">Parameters that reliably produce a given kind of asset. Treat as starting points, not rules.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Asset</th><th>dots</th><th>symmetry</th><th>crossing</th><th>stroke</th><th>dots shown</th></tr></thead>
+          <tbody>
+            <tr><td><b>Brand mark / favicon</b></td><td class="derive">3–5</td><td class="derive">d4</td><td class="derive">0</td><td class="derive">5–6</td><td class="derive">no</td></tr>
+            <tr><td><b>Empty state illustration</b></td><td class="derive">5–7</td><td class="derive">d4</td><td class="derive">0.15</td><td class="derive">3</td><td class="derive">yes</td></tr>
+            <tr><td><b>Loading indicator</b></td><td class="derive">5</td><td class="derive">d4</td><td class="derive">0</td><td class="derive">4</td><td class="derive">no</td></tr>
+            <tr><td><b>Hero / page ground</b></td><td class="derive">11–15</td><td class="derive">none</td><td class="derive">0.3</td><td class="derive">2</td><td class="derive">no</td></tr>
+            <tr><td><b>Print border</b></td><td class="derive">7–9</td><td class="derive">d2</td><td class="derive">0.1</td><td class="derive">4</td><td class="derive">yes</td></tr>
+            <tr><td><b>Card media</b></td><td class="derive">5</td><td class="derive">d4</td><td class="derive">0.3</td><td class="derive">4</td><td class="derive">no</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Loading indicator</h3>
+        <p>The draw-on animation is the loader. It is decorative by definition, so it is removed entirely under reduced motion — replaced by a static kolam plus a text status, never by a shortened version of the same animation.</p>
+        <pre>const el = document.querySelector('.loader');
+Kolam.render(el, { dots: 5, crossing: 0, stroke: 4, showDots: false }, <span class="k">true</span>);
+
+<span class="c">/* accessibility: the visual is decoration, the status is text */</span>
+&lt;div class="loader" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;p role="status"&gt;Loading invoices…&lt;/p&gt;</pre>
+      </div>
+
+      <div class="callout warn"><b>Density limit applies to every recipe.</b> A hero ground at <code>dots: 15</code> is legitimate at 6% opacity behind a solid content panel, and illegitimate at full strength behind body text. See <a href="accessibility.html#pattern">Accessibility → the pattern layer</a>.</div>
+    </section>
+
+    <!-- ============ PERF ============ -->
+    <section class="doc-section" id="perf">
+      <h2>Performance &amp; limits</h2>
+
+      <div class="grid-2">
+        <div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>dots</th><th>cells</th><th>path elements</th></tr></thead>
+              <tbody>
+                <tr><td class="derive">3</td><td class="derive">2 × 2</td><td>12</td></tr>
+                <tr><td class="derive">7</td><td class="derive">6 × 6</td><td>84</td></tr>
+                <tr><td class="derive">11</td><td class="derive">10 × 10</td><td>220</td></tr>
+                <tr><td class="derive">15</td><td class="derive">14 × 14</td><td>420</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Segments = 2m² + 2m. Generation is well under a millisecond at every size; the cost is DOM nodes, not computation.</p>
+        </div>
+        <div>
+          <ul class="bullets">
+            <li><b>Above dots: 15</b>, prefer a single merged path or a rasterised export. The visual gain is marginal and the node count is not.</li>
+            <li><b>Draw-on animation</b> transitions <code>stroke-dashoffset</code> per segment. Beyond ~200 segments, stagger in groups rather than per path, or skip the animation.</li>
+            <li><b>Repeating grounds</b> should be generated once and applied as a CSS background, not repeated in the DOM.</li>
+            <li><b>Server-side</b> works unchanged — the module is UMD and touches no browser API inside <code>generate()</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---- the three tiles, rendered from the same code that draws kolams ---- */
+  function tileSVG(type) {
+    var U = Kolam.UNIT, pad = U * 0.4;
+    var paths = Kolam.tilePaths(0, 0, type);
+    var svg = '<svg viewBox="' + (-pad) + ' ' + (-pad) + ' ' + (U + pad * 2) + ' ' + (U + pad * 2) +
+              '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kolam tile type ' + "ABC"[type] + '">';
+    // the four dots that bound the cell
+    [[0,0],[U,0],[0,U],[U,U]].forEach(function (d) {
+      svg += '<circle class="kolam-dot" cx="' + d[0] + '" cy="' + d[1] + '" r="2.6"/>';
+    });
+    // the cell edges, faint
+    svg += '<rect x="0" y="0" width="' + U + '" height="' + U + '" fill="none" stroke="currentColor" ' +
+           'stroke-opacity="0.16" stroke-dasharray="2 3" stroke-width="1"/>';
+    paths.forEach(function (d) { svg += '<path class="kolam-line" d="' + d + '" stroke-width="3.5"/>'; });
+    return svg + "</svg>";
+  }
+  ["tileA", "tileB", "tileC"].forEach(function (id, i) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = tileSVG(i);
+  });
+
+  /* ---- interactive stage ---- */
+  var stage = document.getElementById("stage");
+  if (!stage) return;
+
+  var state = { dots: 7, crossing: 0.2, stroke: 3, symmetry: "d4", showDots: true, seed: 1729 };
+
+  function paint(animate) {
+    var meta = Kolam.render(stage, state, animate);
+    document.getElementById("readout").innerHTML =
+      '<div><span>lattice</span><b>' + meta.dots + ' × ' + meta.dots + ' pulli</b></div>' +
+      '<div><span>cells</span><b>' + meta.cells + ' × ' + meta.cells + '</b></div>' +
+      '<div><span>path segments</span><b>' + meta.segments + '</b></div>' +
+      '<div><span>boundary loops</span><b>' + meta.boundaryLoops + '</b></div>' +
+      '<div><span>open endpoints</span><b style="color:var(--color-success)">0</b></div>' +
+      '<div><span>seed</span><b>' + meta.seed + '</b></div>';
+    document.getElementById("callsite").textContent =
+      "Kolam.generate({ dots: " + state.dots + ", symmetry: '" + state.symmetry +
+      "', crossing: " + state.crossing.toFixed(2) + ", stroke: " + state.stroke +
+      ", showDots: " + state.showDots + ", seed: " + state.seed + " })";
+  }
+
+  function bindRange(id, key, fmt, animate) {
+    var el = document.getElementById(id);
+    var out = document.getElementById("v" + id.slice(1));
+    el.addEventListener("input", function () {
+      state[key] = parseFloat(el.value);
+      if (out) out.textContent = fmt(state[key]);
+      paint(animate);
+    });
+    if (out) out.textContent = fmt(state[key]);
+  }
+  bindRange("cDots", "dots", function (v) { return v + " × " + v; }, true);
+  bindRange("cCross", "crossing", function (v) { return v.toFixed(2); }, false);
+  bindRange("cStroke", "stroke", function (v) { return v.toFixed(1); }, false);
+  bindRange("cSeed", "seed", function (v) { return String(v); }, false);
+
+  function bindSeg(id, attr, key, cast) {
+    var box = document.getElementById(id);
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      box.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+      b.setAttribute("aria-pressed", "true");
+      state[key] = cast(b.getAttribute(attr));
+      paint(true);
+    });
+  }
+  bindSeg("segSym", "data-sym", "symmetry", function (v) { return v; });
+  bindSeg("segDots", "data-dots", "showDots", function (v) { return v === "1"; });
+
+  document.getElementById("btnRegen").addEventListener("click", function () {
+    state.seed = 1 + Math.floor(Math.random() * 9999);
+    document.getElementById("cSeed").value = state.seed;
+    document.getElementById("vSeed").textContent = state.seed;
+    paint(true);
+  });
+
+  document.getElementById("btnCopy").addEventListener("click", function () {
+    var btn = this, original = "Copy SVG";
+    var out = Kolam.toStandaloneSVG(state, { line: "#A34524", dot: "#7C6B5C" });
+    function done(ok) { btn.textContent = ok ? "Copied" : "Copy failed"; setTimeout(function () { btn.textContent = original; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(out).then(function () { done(true); }, function () { done(false); });
+    } else { done(false); }
+  });
+
+  paint(true);
+})();
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enterprise subset — Pulli</title>
+<meta name="description" content="A conservative profile for regulated contexts: the expressive layer removed, conventional controls restored, forced-colors support and a measured high-contrast theme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/enterprise.css">
+<style>
+  .yes{ color:var(--color-success); font-weight:600; }
+  .no{ color:var(--color-danger); font-weight:600; }
+  .opt{ color:var(--color-warning); font-weight:600; }
+  .stage{ border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); padding:var(--space-inset-lg); background:var(--color-bg); }
+  .stage h4{ margin-bottom:var(--space-inset-md); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html" aria-current="page">13 · Enterprise subset</a>
+          <ul class="nav-sub">
+            <li><a href="#profiles">Three profiles</a></li>
+            <li><a href="#compare">Side by side</a></li>
+            <li><a href="#removes">What it removes</a></li>
+            <li><a href="#adds">What it adds</a></li>
+            <li><a href="#adopt">How to adopt</a></li>
+            <li><a href="#checklist">Regulated checklist</a></li>
+          </ul>
+        </li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">13 — Enterprise subset</div>
+      <h1>The same system, with the expressive layer off.</h1>
+      <p class="lede">One stylesheet and one attribute. It removes everything that is culturally specific or visually novel, keeps everything that is structurally useful, and adds the two things regulated procurement asks for that the base system does not have: forced-colors support and a measured high-contrast theme.</p>
+    </div>
+
+    <!-- ============ PROFILES ============ -->
+    <section class="doc-section" id="profiles">
+      <h2>Three profiles</h2>
+      <p class="sub">Set on the root element. Each is a strict subset of the one before it.</p>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>full</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Everything. Consumer, brand and marketing surfaces where there is a <a href="readiness.html#cultural">genuine cultural relationship</a> to the tradition.</p>
+          <pre style="margin-top:var(--idai-2)">&lt;html&gt;
+<span class="c">no enterprise.css</span></pre>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-info)">
+          <h3>enterprise</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Pattern layer removed, one typeface, generator demoted to a build-time brand tool. <b>The dot-and-loop state language is kept</b> — it is clear, greyscale-safe, and removing it would leave nothing derived.</p>
+          <pre style="margin-top:var(--idai-2)">&lt;html <span class="k">data-profile="enterprise"</span>&gt;</pre>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-danger)">
+          <h3>regulated</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Everything above, plus fully conventional form controls and a density floor. For clinical, safety-critical and heavily audited financial surfaces.</p>
+          <pre style="margin-top:var(--idai-2)">&lt;html <span class="k">data-profile="regulated"</span>&gt;</pre>
+        </div>
+      </div>
+
+      <div class="callout danger"><b>Why regulated exists.</b> In clinical software a novel affordance is a patient-safety question, not a branding one — a misread checkbox on a medication screen is a harm event. Usability engineering under IEC 62366 will ask you to justify every deviation from convention, and that argument is worth spending on something more important than the shape of a mark. The same logic applies to financial surfaces under heavy conduct scrutiny.</div>
+    </section>
+
+    <!-- ============ COMPARE ============ -->
+    <section class="doc-section" id="compare">
+      <h2>Side by side</h2>
+      <p class="sub">The same markup under each profile. Nothing below is a mockup — the profiles are applied live.</p>
+
+      <div class="grid-3">
+        <div class="stage">
+          <h3>full</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--space-inset-md)">
+            <label class="choice"><input type="checkbox" checked> Crossings</label>
+            <label class="choice"><input type="radio" name="pf" checked> D4 symmetry</label>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span>Show pulli</label>
+            <div class="seg" role="group" aria-label="Density full">
+              <button type="button" aria-pressed="true">D4</button>
+              <button type="button" aria-pressed="false">D2</button>
+            </div>
+            <div class="progress" role="progressbar" style="--value:62" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"></div>
+          </div>
+        </div>
+
+        <div class="stage" data-profile="enterprise">
+          <h3>enterprise</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--space-inset-md)">
+            <label class="choice"><input type="checkbox" checked> Crossings</label>
+            <label class="choice"><input type="radio" name="pe" checked> D4 symmetry</label>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span>Show pulli</label>
+            <div class="seg" role="group" aria-label="Density enterprise">
+              <button type="button" aria-pressed="true">D4</button>
+              <button type="button" aria-pressed="false">D2</button>
+            </div>
+            <div class="progress" role="progressbar" style="--value:62" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"></div>
+          </div>
+        </div>
+
+        <div class="stage" data-profile="regulated">
+          <h3>regulated</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--space-inset-md)">
+            <label class="choice"><input type="checkbox" checked> Crossings</label>
+            <label class="choice"><input type="radio" name="pr" checked> D4 symmetry</label>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span>Show pulli</label>
+            <div class="seg" role="group" aria-label="Density regulated">
+              <button type="button" aria-pressed="true">D4</button>
+              <button type="button" aria-pressed="false">D2</button>
+            </div>
+            <div class="progress" role="progressbar" style="--value:62" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout"><b>Notice what does not change.</b> Spacing, radii, control heights, type, motion and colour roles are identical across all three. The profiles differ only in the expressive layer and, at the regulated tier, in two control marks. That is the point of the <a href="tokens.html#layers">three-layer model</a> — the parts that carry the identity are separable from the parts that carry the structure.</div>
+    </section>
+
+    <!-- ============ REMOVES ============ -->
+    <section class="doc-section" id="removes">
+      <h2>What it removes</h2>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Feature</th><th>full</th><th>enterprise</th><th>regulated</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>Corner pulli on panels and cards</td><td class="yes">on</td><td class="no">off</td><td class="no">off</td><td>Culturally specific, no functional role</td></tr>
+            <tr><td>Curl boundary</td><td class="yes">on</td><td class="no">off</td><td class="no">off</td><td>Same</td></tr>
+            <tr><td>Threshold band</td><td class="yes">on</td><td class="no">off</td><td class="no">off</td><td>Same</td></tr>
+            <tr><td>Decorative generated patterns</td><td class="yes">on</td><td class="no">off</td><td class="no">off</td><td>Detected by <code>aria-hidden</code>, so <em>content</em> kolams survive</td></tr>
+            <tr><td>Draw-on animation</td><td class="yes">on</td><td class="no">off</td><td class="no">off</td><td>Decorative; enterprise loaders should be determinate or textual</td></tr>
+            <tr><td>Display serif</td><td class="yes">Spectral</td><td class="no">UI face</td><td class="no">UI face</td><td>A display serif earns nothing at 13px over an eight-hour shift</td></tr>
+            <tr><td>Checkbox as crossing</td><td class="yes">on</td><td class="yes">on</td><td class="no">tick</td><td>An X reads as <em>remove</em> to many software users</td></tr>
+            <tr><td>Radio as closing loop</td><td class="yes">dashed → solid</td><td class="yes">dashed → solid</td><td class="no">solid ring</td><td>Novel affordance in a safety-critical form</td></tr>
+            <tr><td>Tabs / segmented as dot rail</td><td class="yes">on</td><td class="yes">on</td><td class="no">underline</td><td>Conventional indicator under audit</td></tr>
+            <tr><td>Table sort and selection loops</td><td class="yes">on</td><td class="yes">on</td><td class="no">arrow + bar</td><td>Same</td></tr>
+            <tr><td>Progress with head loop</td><td class="yes">on</td><td class="yes">on</td><td class="no">plain fill</td><td>Same</td></tr>
+            <tr><td>Compact density</td><td class="yes">P = 6</td><td class="yes">P = 6</td><td class="no">floors at 8</td><td>Gloves, styluses, shared workstations, standing users</td></tr>
+            <tr><td><b>Toggle as travelling loop</b></td><td class="yes">on</td><td class="yes">on</td><td class="opt">kept</td><td><b>Deliberately retained.</b> Position carries the state, which makes it clearer than a conventional switch, not more novel in any way that matters</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ ADDS ============ -->
+    <section class="doc-section" id="adds">
+      <h2>What it adds</h2>
+      <p class="sub">Two capabilities the base system lacks, both of which appear on regulated procurement checklists.</p>
+
+      <div class="doc-sub">
+        <h3>Forced colors — Windows High Contrast Mode</h3>
+        <div class="grid-2">
+          <div class="prose">
+            <p>When forced colors are active the user's palette replaces ours entirely and <b>backgrounds are dropped</b>. Any state carried by a fill disappears — which, in the base system, includes the dot in every rail, the fill in the progress bar, and the selected table row.</p>
+            <p>The subset re-expresses all of it as <b>border and system colour</b>, which survive: <code>CanvasText</code> for structure, <code>Highlight</code> for selection, <code>GrayText</code> for disabled, <code>LinkText</code> for links.</p>
+            <p>This is a hard requirement in most government and healthcare procurement, and unsupported by the base system.</p>
+          </div>
+          <pre>@media (forced-colors: active){
+  .rail &gt; button::before{ border-color: <span class="k">CanvasText</span>; }
+  .rail &gt; button[aria-selected="true"]::before{
+    border-color: <span class="k">Highlight</span>; border-width: 2px;
+  }
+  .data-table tbody tr[aria-selected="true"]{
+    outline: 2px solid <span class="k">Highlight</span>;
+  }
+  <span class="c">/* status colour is gone entirely — the text label is
+     now the only carrier, which is why the system
+     required one all along */</span>
+  .badge, .alert{ border: 1px solid <span class="k">CanvasText</span>; }
+}</pre>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>High-contrast theme</h3>
+        <p>An explicit AAA palette, independent of the OS setting, for users who need it and for evaluators who ask. Every pair measured at <b>≥ 8:1</b> against its ground. Combine with <code>data-theme</code> as usual.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Role</th><th>Light</th><th>Ratio</th><th>Dark</th><th>Ratio</th></tr></thead>
+            <tbody>
+              <tr><td class="name">--color-text</td><td class="mono">#000000</td><td class="mono">21.00</td><td class="mono">#FFFFFF</td><td class="mono">21.00</td></tr>
+              <tr><td class="name">--color-text-secondary</td><td class="mono">#1F1A16</td><td class="mono">17.25</td><td class="mono">#E8E2D6</td><td class="mono">16.28</td></tr>
+              <tr><td class="name">--color-text-tertiary</td><td class="mono">#3A3129</td><td class="mono">12.72</td><td class="mono">#C4BAA8</td><td class="mono">10.94</td></tr>
+              <tr><td class="name">--color-accent</td><td class="mono">#8A2F0E</td><td class="mono">8.42</td><td class="mono">#FFB48C</td><td class="mono">12.16</td></tr>
+              <tr><td class="name">--color-success</td><td class="mono">#1F5A2E</td><td class="mono">8.20</td><td class="mono">#8FE0A2</td><td class="mono">13.35</td></tr>
+              <tr><td class="name">--color-warning</td><td class="mono">#5C4200</td><td class="mono">9.40</td><td class="mono">#FFD070</td><td class="mono">14.51</td></tr>
+              <tr><td class="name">--color-info</td><td class="mono">#1B3A7A</td><td class="mono">10.86</td><td class="mono">#A8C4FF</td><td class="mono">12.00</td></tr>
+              <tr><td class="name">--color-danger</td><td class="mono">#8A1616</td><td class="mono">9.52</td><td class="mono">#FF9E9E</td><td class="mono">10.64</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)"><code>--border-hairline</code> also rises to 2px in this theme — a one-pixel rule at AAA contrast is still a one-pixel rule, and it disappears for exactly the users the theme exists for.</p>
+      </div>
+    </section>
+
+    <!-- ============ ADOPT ============ -->
+    <section class="doc-section" id="adopt">
+      <h2>How to adopt</h2>
+      <pre>&lt;link rel="stylesheet" href="assets/tokens.css"&gt;
+&lt;link rel="stylesheet" href="assets/system.css"&gt;
+<span class="k">&lt;link rel="stylesheet" href="assets/enterprise.css"&gt;</span>   <span class="c">← after the others</span>
+
+&lt;html <span class="k">data-profile="regulated"</span> <span class="k">data-contrast="high"</span> data-theme="dark"&gt;</pre>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Composable</h3>
+          <ul class="speclist">
+            <li><span>data-profile</span><b>enterprise | regulated</b></li>
+            <li><span>data-contrast</span><b>high</b></li>
+            <li><span>data-theme</span><b>light | dark</b></li>
+            <li><span>data-density</span><b>compact | default | comfortable</b></li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">All four are independent. Scope any of them to a subtree rather than the root to mix profiles on one page — as this page does.</p>
+        </div>
+        <div class="panel">
+          <h3>What you still owe</h3>
+          <ul class="bullets">
+            <li><b>The generator becomes a build-time tool.</b> Use it to produce brand assets; do not ship <code>kolam.js</code> to the client.</li>
+            <li><b>Credit the source anyway.</b> Removing the visual layer does not remove the derivation — the lattice, the state language and the motion model are still kolam-derived.</li>
+            <li><b>Run the gaps.</b> The subset does not close the <a href="readiness.html#gaps">component, RTL, or conformance gaps</a>. It makes the system appropriate, not complete.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHECKLIST ============ -->
+    <section class="doc-section" id="checklist">
+      <h2>Regulated checklist</h2>
+      <p class="sub">Before shipping this into a clinical or heavily audited financial surface.</p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Must be true</h3>
+          <ul class="bullets">
+            <li><code>data-profile="regulated"</code> set at the root, not per component.</li>
+            <li>No decorative pattern anywhere in the product, at any opacity.</li>
+            <li>Every status has a text label; colour is reinforcement only. Verify by testing in forced-colors, where colour is gone entirely.</li>
+            <li>Density never below default on touch or shared-workstation surfaces.</li>
+            <li>Semantic colours reviewed against domain conventions — red and green carry established clinical meanings that may conflict.</li>
+            <li>A usability engineering file exists for any control that still deviates from convention. In this profile that is the toggle, and the justification is that position carries state.</li>
+          </ul>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-warning)">
+          <h3>Still not covered by this system</h3>
+          <ul class="bullets">
+            <li>PHI masking and reveal, screen-privacy states.</li>
+            <li>Alert-fatigue hierarchies and clinical escalation patterns.</li>
+            <li>Dose, unit and precision display rules.</li>
+            <li>Audit trail, session timeout and step-up authentication patterns.</li>
+            <li>Regulated disclosure typography — minimum size and prominence rules.</li>
+            <li>Number formatting: tabular figures, locale negative-value conventions, currency alignment.</li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">These are domain patterns, not styling. A design system can host them but this one has not written them, and no profile setting substitutes for doing so.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

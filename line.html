@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Line — Pulli</title>
+<meta name="description" content="The correction: the system took the dots and left the line. Wrap or pass as a state primitive, loop boundaries instead of boxes, and an honest re-run of the deletion test.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<style>
+  .verdict-same{ color:var(--color-text-tertiary); }
+  .verdict-real{ color:var(--color-success); font-weight:600; }
+  .verdict-was{ color:var(--color-danger); font-weight:600; }
+  .primitive{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--idai-3); margin:var(--idai-4) 0; }
+  @media (max-width:700px){ .primitive{ grid-template-columns:1fr; } }
+  .primitive figure{ margin:0; text-align:center; }
+  .primitive svg{ width:100%; height:auto; background:var(--color-bg); border-radius:var(--radius-surface); border:var(--border-hairline) solid var(--color-border); }
+  .primitive figcaption{ font-size:var(--ezhuthu-caption); color:var(--color-text-secondary); margin-top:var(--idai-1); }
+  .primitive figcaption b{ font-family:var(--face-mono); color:var(--color-accent); display:block; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html" aria-current="page">04 · The Line</a>
+          <ul class="nav-sub">
+            <li><a href="#failure">What went wrong</a></li>
+            <li><a href="#primitive">Wrap or pass</a></li>
+            <li><a href="#rail">The dot rail</a></li>
+            <li><a href="#enclosure">Enclosure</a></li>
+            <li><a href="#limits">Where the line stops</a></li>
+            <li><a href="#rescore">The deletion test, again</a></li>
+          </ul>
+        </li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">04 — The Line</div>
+      <h1>We took the dots and left the line.</h1>
+      <p class="lede">This section exists because the system failed its own test. The <a href="lattice.html">lattice</a> page describes the dots, and for a long time there was no page describing the line — which is the half that makes a kolam a kolam. This is the correction, and the record of why it was needed.</p>
+    </div>
+
+    <!-- ============ FAILURE ============ -->
+    <section class="doc-section" id="failure">
+      <h2>What went wrong</h2>
+      <p class="sub">The <a href="origins.html#why">origins</a> page proposes a test for whether a borrowed metaphor is doing work: remove the source and see what collapses. Run honestly against the token layer, it came back almost empty.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Layer</th><th>What the system had</th><th>What a conventional system has</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr><td>Spacing scale</td><td class="mono">8 16 24 32 48 64</td><td class="mono">8 16 24 32 48 64</td><td class="verdict-same">identical</td></tr>
+            <tr><td>Radius scale</td><td class="mono">2 4 8 16</td><td class="mono">2 4 8 16</td><td class="verdict-same">identical</td></tr>
+            <tr><td>Stroke weights</td><td class="mono">1 2 4</td><td class="mono">1 2 4</td><td class="verdict-same">identical</td></tr>
+            <tr><td>Type ratio</td><td class="mono">√2 modular</td><td class="mono">√2 — ISO paper</td><td class="verdict-same">identical</td></tr>
+            <tr><td>Durations</td><td class="mono">120 240 360 600</td><td class="mono">120 240 300 600</td><td class="verdict-same">near-identical</td></tr>
+            <tr><td>Breakpoints</td><td class="mono">320 480 768 1024 1280</td><td class="mono">320 480 768 1024 1280</td><td class="verdict-same">identical</td></tr>
+            <tr><td>Components</td><td class="mono">12, rounded rectangles</td><td class="mono">12, rounded rectangles</td><td class="verdict-same">identical</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout danger"><b>Not one token value would have changed.</b> Only the names and the comments. The tradition was supplying vocabulary and rationale, not constraint — which is precisely the failure mode the origins page warns adopters about, committed by the system itself.</div>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>The diagnosis.</b> The system derived from the kolam's <em>grid</em>, which is its least distinctive property. Every design system has a grid, so mapping onto that produced agreement with convention rather than divergence from it. It even produced a false sense of rigour: <code>r = P/2</code> is a genuine geometric constraint <em>inside the generator</em>, and applied to a token scale it is arithmetically trivial — any system with an 8px base and a 4px radius base has that relationship by accident.</p>
+          <p><b>What was missing.</b> The line. That it is continuous, that it <em>traverses</em> in an order, that it <em>crosses</em> itself, and that it encloses space by <em>looping</em> rather than by drawing a box. All of that went into an SVG file and none of it reached the interface.</p>
+          <p><b>What made the fix findable.</b> The toggle. Rebuilt as two pulli on a kambi with a travelling loop, it is unmistakably kolam and still an entirely ordinary switch. If the line can come into one component without costing anything, there was no reason it was the only one.</p>
+        </div>
+        <div class="panel">
+          <h3>The two moves this section adds</h3>
+          <ul class="bullets">
+            <li><b>Wrap or pass</b> — the two things a line can do at a dot, used as the system's selection primitive. Replaces borrowed conventions (fills, underlines, shadows) with a derived one.</li>
+            <li><b>Enclosure by looping</b> — component boundaries as actual kolam boundaries, and a default corner treatment that turns the radius from a decorative softening into a visible loop around a visible dot.</li>
+          </ul>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-3)">Neither adds a token. Both change what the system looks and behaves like at every surface.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRIMITIVE ============ -->
+    <section class="doc-section" id="primitive">
+      <h2>Wrap or pass</h2>
+      <p class="sub">At any dot, the line does exactly one of two things. That is a binary, and selection is a binary.</p>
+
+      <div class="primitive">
+        <figure>
+          <svg viewBox="0 0 120 80" role="img" aria-label="The line passes the dot: a straight stroke through an unwrapped dot">
+            <line x1="10" y1="40" x2="110" y2="40" stroke="var(--color-border-strong)" stroke-width="2"/>
+            <circle cx="60" cy="40" r="3" fill="var(--color-border-strong)"/>
+          </svg>
+          <figcaption><b>pass</b>unselected · the dot is on the line but not wrapped</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 120 80" role="img" aria-label="The line wraps the dot: a loop closed around it">
+            <line x1="10" y1="40" x2="110" y2="40" stroke="var(--color-accent)" stroke-width="2"/>
+            <circle cx="60" cy="40" r="16" fill="none" stroke="var(--color-accent)" stroke-width="2.5"/>
+            <circle cx="60" cy="40" r="3" fill="var(--color-accent)"/>
+          </svg>
+          <figcaption><b>wrap</b>selected · the loop closes around the dot</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 120 80" role="img" aria-label="The line crosses at the dot: two strokes meeting">
+            <line x1="10" y1="40" x2="110" y2="40" stroke="var(--color-accent)" stroke-width="2"/>
+            <line x1="60" y1="18" x2="60" y2="62" stroke="var(--color-accent)" stroke-width="2"/>
+            <circle cx="60" cy="40" r="3" fill="var(--color-accent)"/>
+          </svg>
+          <figcaption><b>cross</b>partial · the third tile, for indeterminate state</figcaption>
+        </figure>
+      </div>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p>These are not three states invented to fit an interface. They are the complete set of things the generator's three tiles do at a dot, which is the whole vocabulary a kolam has. Mapping selection onto them means the interface and the pattern engine are speaking the same language rather than sharing a mood.</p>
+          <p><b>It is shape, not colour.</b> A loop is present or it is not. That survives greyscale, colour-blindness, and a monochrome printout without a second indicator — which is more than can be said for an accent fill.</p>
+        </div>
+        <div class="panel">
+          <h3>The rule</h3>
+          <p style="font-size:var(--ezhuthu-lead);font-family:var(--face-display);line-height:var(--leading-snug);color:var(--color-text)">Wherever a set of options sits along a line, the options are pulli on a kambi, and the chosen one is wrapped by a loop.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Tabs, segmented controls, steppers, nav rails, list selection — and the toggle, which is simply the two-option case. One rule, six components, no new tokens.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RAIL ============ -->
+    <section class="doc-section" id="rail">
+      <h2>The dot rail</h2>
+      <p class="sub">The same construction at four different jobs. Every one of these was previously a different borrowed convention.</p>
+
+      <div class="demo">
+        <div class="demo-stage stack">
+          <div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-bottom:var(--idai-1)">Tabs — was an underline</p>
+            <div class="tabs" role="tablist" aria-label="Construction">
+              <button role="tab" id="l1" aria-controls="lp1" aria-selected="true">Lattice</button>
+              <button role="tab" id="l2" aria-controls="lp2" aria-selected="false" tabindex="-1">Loops</button>
+              <button role="tab" id="l3" aria-controls="lp3" aria-selected="false" tabindex="-1">Crossings</button>
+            </div>
+            <div class="tabpanel" id="lp1" role="tabpanel" aria-labelledby="l1">The tab rail is the kambi. Each tab has a pulli on it. The current tab's dot is wrapped.</div>
+            <div class="tabpanel" id="lp2" role="tabpanel" aria-labelledby="l2" hidden>The loop is hollow, so the dot it wraps stays visible inside it.</div>
+            <div class="tabpanel" id="lp3" role="tabpanel" aria-labelledby="l3" hidden>A crossing marks partial or indeterminate state — the third tile.</div>
+          </div>
+
+          <div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin:var(--idai-3) 0 var(--idai-1)">Segmented — was a sliding pill</p>
+            <div class="seg" id="lineSeg" role="group" aria-label="Symmetry group">
+              <button type="button" aria-pressed="true">D4</button>
+              <button type="button" aria-pressed="false">D2</button>
+              <button type="button" aria-pressed="false">Free</button>
+            </div>
+          </div>
+
+          <div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin:var(--idai-3) 0 var(--idai-1)">Stepper — was numbered circles</p>
+            <ol class="stepper" style="--steps:4">
+              <li data-done>Lay the pulli</li>
+              <li data-done>Choose symmetry</li>
+              <li aria-current="step">Draw the line</li>
+              <li>Close the boundary</li>
+            </ol>
+          </div>
+
+          <div>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin:var(--idai-3) 0 var(--idai-1)">Toggle — the two-option case</p>
+            <div style="display:flex;gap:var(--idai-4);flex-wrap:wrap">
+              <label class="switch"><input type="checkbox" checked><span class="track"></span>Show pulli</label>
+              <label class="switch"><input type="checkbox"><span class="track"></span>Crossings</label>
+            </div>
+          </div>
+        </div>
+        <div class="demo-spec">dot 0.5P · loop 2.5P · kambi hairline · loop scale 0→1 over 240ms neli</div>
+      </div>
+
+      <div class="callout"><b>What this replaced.</b> An underline indicator, a sliding pill with a shadow, numbered circles with tick marks, and a filled thumb — four conventions from four different systems, none of which had any relationship to the others or to the pattern layer. They are now one construction with one specification.</div>
+    </section>
+
+    <!-- ============ ENCLOSURE ============ -->
+    <section class="doc-section" id="enclosure">
+      <h2>Enclosure</h2>
+      <p class="sub">A kolam does not enclose space with a box. It encloses by looping the dots along the perimeter.</p>
+
+      <div class="doc-sub">
+        <h3>1 · Corner pulli — the default</h3>
+        <div class="grid-2">
+          <div class="prose">
+            <p>The cheapest correction in the system, and the one now applied to every panel and card on this site. The corner radius was <em>already</em> one loop radius — that fell out of <code>r = P/2</code>. The only thing missing was the dot at the centre of the arc.</p>
+            <p>Drawing it turns a rounded corner from a decorative softening into <b>a visible loop around a visible dot</b>. Four radial gradients, no JavaScript, correct at any element size and any pitch.</p>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary)">Look at the corners of this panel, and of every other panel on the site.</p>
+          </div>
+          <div class="panel">
+            <h3>Applied by default to</h3>
+            <ul class="speclist">
+              <li><span>.panel</span><b>yes</b></li>
+              <li><span>.card</span><b>yes</b></li>
+              <li><span>.modal-demo</span><b>yes</b></li>
+              <li><span>.kolam-corners</span><b>utility</b></li>
+              <li><span>.no-corners</span><b>opt out</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>2 · The curl boundary — opt-in</h3>
+        <p>The edges stay straight, and <b>the line curls at each corner</b> — three-quarters of a turn around the corner dot before continuing down the next edge. It is the boundary gesture without the frill, and the curl radius is <em>fixed</em> at <code>--radius-panel</code> rather than proportional, so a small card and a wide banner get the same move at the same size.</p>
+
+        <div class="grid-2">
+          <div class="panel kolam-bound">
+            <h3>A bounded panel</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">This panel's edge is generated at its measured size by <code>Kolam.frame()</code> and redrawn on resize. The dot inside each curl is the thing the line is turning around.</p>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Drag the pitch control in the header — the curl radius follows it.</p>
+          </div>
+          <div class="panel kolam-bound accent">
+            <h3>Accented</h3>
+            <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The same boundary in the accent role. Below <code>4 × radius</code> in either dimension it degrades to a plain rounded rectangle rather than producing a broken curl.</p>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)"><code>&lt;div class="panel kolam-bound accent"&gt;</code></p>
+          </div>
+        </div>
+
+        <div class="callout warn"><b>What this replaced, and why.</b> The first version wrapped <em>every</em> perimeter dot — the geometrically literal kolam boundary, outward half-loops the whole way round. It is still available as <code>style: "scallop"</code> and it is the wrong default: on a UI surface it reads as a doily, because the loops in a real kolam boundary are terminations of the interior pattern, and with an empty interior they are just frills. <b>The literal transcription was worse than the gesture.</b> That is worth stating in a system whose whole argument is fidelity to a source.</div>
+
+        <pre><span class="c">// the boundary is geometry, not an asset</span>
+const { path, dots } = Kolam.<span class="k">framePath</span>(320, 180, { style: <span class="k">'curl'</span>, radius: 16 });
+
+<span class="c">// or let it size and redraw itself</span>
+&lt;div class="card <span class="k">kolam-bound</span>"&gt;…&lt;/div&gt;</pre>
+      </div>
+
+      <div class="doc-sub">
+        <h3>3 · The threshold band</h3>
+        <p>The most faithful use of a kolam on a surface, and the last one we found. <b>A kolam is not a frame around a room — it is a mark at the threshold</b>, at the point of entry. On a card or a panel the threshold is the head, where the eye enters. So: one motif, repeated, along the top edge.</p>
+
+        <div class="grid-2">
+          <div class="card kolam-threshold" data-band-seed="41">
+            <div class="card-body">
+              <h4>Margazhi 12</h4>
+              <p>A real generated kolam at the head of the surface, not a border around it. Seed 41, repeated at an 8P cell.</p>
+            </div>
+          </div>
+          <div class="card kolam-threshold" data-band-seed="7" data-band-crossing="0.3">
+            <div class="card-body">
+              <h5>A denser motif</h5>
+              <p>Seed 7 with crossings. The band changes with the seed, so a product can carry a motif the way it carries a logo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout"><b>One motif, repeated — not a different seed per cell.</b> Varying the seed along the band produces noise; repeating one produces a border. This is the single decision that makes it read as a threshold mark rather than as a row of unrelated figures, and it took rendering both to see it.</div>
+      </div>
+    </section>
+
+    <!-- ============ LIMITS ============ -->
+    <section class="doc-section" id="limits">
+      <h2>Where the line stops</h2>
+      <p class="sub">A correction that is applied everywhere is a different kind of mistake. These are the places the line was deliberately kept out.</p>
+
+      <div class="callout"><b>Three of these were wrong.</b> The first version of this table excluded the radio, the checkbox and table rows on affordance and density grounds. All three objections were real — and all three had derivations that <em>keep</em> the affordance rather than trade it away. The corrected reasoning is below; the original verdicts are kept so the change is visible.</div>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Component</th><th>First verdict</th><th>Now</th><th>Reasoning</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Radio</b></td><td class="verdict-was">kept native</td><td class="verdict-real">derived</td>
+              <td>The objection — that a wrapped dot reads as a radio and would collide with the checkbox — was solved by giving the two controls <em>different moves</em> rather than the same one. Radio is <b>the loop closing</b>: dashed when open, solid when closed. Continuity carries the state, so it survives greyscale.</td>
+            </tr>
+            <tr>
+              <td><b>Checkbox</b></td><td class="verdict-was">kept native</td><td class="verdict-real">derived</td>
+              <td>The square enclosure stays, so the exclusive-versus-independent distinction is untouched. Only the mark inside changed, to <b>tile C — the crossing</b>. Indeterminate falls out for free as a single arm. The learned shape was never the thing that had to be borrowed; the tick was.</td>
+            </tr>
+            <tr>
+              <td><b>Table</b></td><td class="verdict-was">tinted rows</td><td class="verdict-real">derived</td>
+              <td>The density objection confused two cases. A loop on <em>every</em> row is line work at frequency and stays forbidden — hover is still a tint. A loop on <b>one selected row</b>, and one on the <b>sorted column's header dot</b>, is a mark, not a texture.</td>
+            </tr>
+            <tr>
+              <td><b>Progress</b></td><td class="verdict-was">pill and fill</td><td class="verdict-real">derived</td>
+              <td>Never argued against, just never revisited. Progress is <b>how far the line has travelled</b>: a kambi with pulli, the drawn portion at full weight, and a loop at the head.</td>
+            </tr>
+            <tr>
+              <td><b>Focus ring</b></td><td class="derive">2px outline</td><td class="derive">unchanged</td>
+              <td><b>Still excluded.</b> The most safety-critical indicator in the system. It must be instantly recognisable to keyboard users across every product that adopts this, and novelty is most expensive exactly here.</td>
+            </tr>
+            <tr>
+              <td><b>Buttons</b></td><td class="derive">filled / outlined</td><td class="derive">unchanged</td>
+              <td><b>Still excluded.</b> A button is not a choice among options along a line. Forcing the primitive here would be the metaphor overreaching — the same error as leaving it out, in the opposite direction.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="callout warn" style="margin:0"><b>The general rule still holds.</b> The line goes where a set of options sits along a path, and where a surface encloses space. It does not go everywhere a designer could justify it. A metaphor applied without limit stops being a system and becomes a theme.</div>
+        <div class="callout" style="margin:0"><b>But "it would break the affordance" is a weaker argument than it sounds.</b> In all three reversals the affordance was carried by something the derivation did not need to touch — the shape of the enclosure, the frequency of the mark. Check what specifically the user has learned before concluding the tradition cannot reach it.</div>
+      </div>
+    </section>
+
+    <!-- ============ RESCORE ============ -->
+    <section class="doc-section" id="rescore">
+      <h2>The deletion test, again</h2>
+      <p class="sub">Same test, re-run after the correction. Honest scoring: only things that would actually have to be redesigned count.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>If kolam were removed…</th><th>Before</th><th>After</th></tr></thead>
+          <tbody>
+            <tr><td>Token values</td><td class="verdict-same">unchanged</td><td class="verdict-same">unchanged</td></tr>
+            <tr><td>Pattern engine</td><td class="verdict-real">would not exist</td><td class="verdict-real">would not exist</td></tr>
+            <tr><td>Toggle</td><td class="verdict-real">would be redesigned</td><td class="verdict-real">would be redesigned</td></tr>
+            <tr><td>Tabs</td><td class="verdict-was">unchanged</td><td class="verdict-real">would be redesigned</td></tr>
+            <tr><td>Segmented control</td><td class="verdict-was">unchanged</td><td class="verdict-real">would be redesigned</td></tr>
+            <tr><td>Stepper</td><td class="verdict-was">did not exist</td><td class="verdict-real">would be redesigned</td></tr>
+            <tr><td>Panel &amp; card corners</td><td class="verdict-was">unchanged</td><td class="verdict-real">would lose the pulli</td></tr>
+            <tr><td>Surface boundaries</td><td class="verdict-was">rounded rectangles</td><td class="verdict-real">would lose the loop boundary</td></tr>
+            <tr><td>Radio &amp; checkbox</td><td class="verdict-was">native</td><td class="verdict-real">would be redesigned</td></tr><tr><td>Table sort &amp; selection</td><td class="verdict-was">arrow + tint</td><td class="verdict-real">would be redesigned</td></tr><tr><td>Progress</td><td class="verdict-was">pill and fill</td><td class="verdict-real">would be redesigned</td></tr><tr><td>Selection language</td><td class="verdict-was">four borrowed conventions</td><td class="verdict-real">one derived primitive, would be lost</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Honest score</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Before: <b>two</b> things collapsed — the generator and one component. After: the generator, <b>nine components</b>, the selection language across all of them, and every surface boundary in the system.</p>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary);margin-top:var(--idai-2)">Still not everything. The token <em>values</em> remain conventional and probably should — an 8pt grid is not wrong just because it is common, and inventing an unconventional spacing scale to prove a point would be the metaphor overreaching again.</p>
+        </div>
+        <div class="panel">
+          <h3>What would still be honest to say</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">That this is a <b>conventional measurement layer with a genuinely kolam construction layer on top of it</b> — the state language, the enclosure, and the pattern engine. Not "a design system derived entirely from kolam", which was never true and is still not.</p>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">The claim on the <a href="index.html">overview</a> has been narrowed to match.</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>Why this page stays.</b> It would be easy to fix the system quietly and delete the evidence that it was ever wrong. But the failure is the most instructive thing in the documentation: a metaphor can supply vocabulary and rationale for a long time before anyone notices it is supplying no constraint. The deletion test is cheap. Most systems have never run it.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script>
+document.getElementById("lineSeg").addEventListener("click", function (e) {
+  var b = e.target.closest("button"); if (!b) return;
+  this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+  b.setAttribute("aria-pressed", "true");
+});
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

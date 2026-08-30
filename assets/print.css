@@ -1,0 +1,136 @@
+/* ============================================================================
+   PULLI · PRINT
+   ----------------------------------------------------------------------------
+   Print has no viewport, no pixels worth trusting, no dark mode, no hover and
+   no JavaScript. It does have physical units, and it charges for ink.
+
+   The system survives by RESOLVING rather than referencing. The lattice is
+   re-seeded in millimetres and every token is emitted as a literal. Custom
+   properties are used here for authoring convenience only — nothing in this
+   file depends on them cascading from tokens.css, so the same values can be
+   flattened for a PDF pipeline or an email build without loss.
+
+     screen   P = 8px    r = 4px
+     print    P = 2mm    r = 1mm      (8px ≈ 2.12mm at 96dpi — 2mm is the
+                                       nearest value that keeps the scale
+                                       whole in millimetres)
+
+   Type re-seeds too: 10pt base on the same √2 ratio, because 16px is a screen
+   reading size and 10pt is a paper one. The RATIO is structural; the base is
+   surface-dependent. That distinction is the whole reason this works.
+   ========================================================================== */
+
+@media print {
+
+  :root{
+    /* ---- re-seeded lattice, in millimetres ---- */
+    --p: 2mm;
+    --r: 1mm;
+
+    --idai-1: 2mm;  --idai-2: 4mm;  --idai-3: 6mm;
+    --idai-4: 8mm;  --idai-6: 12mm; --idai-8: 16mm; --idai-12: 24mm;
+
+    --valai-1: 0.5mm; --valai-2: 1mm; --valai-3: 2mm; --valai-4: 4mm;
+
+    /* hairlines are re-seeded in points — 0.25pt disappears on most presses */
+    --kambi-1: 0.5pt;
+    --kambi-2: 1pt;
+    --kambi-3: 1mm;
+
+    /* ---- type: 10pt base, same √2 ratio ---- */
+    --ezhuthu-caption: 7pt;
+    --ezhuthu-small:   8pt;
+    --ezhuthu-body:    10pt;
+    --ezhuthu-lead:    14pt;
+    --ezhuthu-h3:      14pt;
+    --ezhuthu-h2:      20pt;
+    --ezhuthu-h1:      28pt;
+
+    /* ---- colour: light palette only, flattened ---- */
+    --color-bg:             #FFFFFF;
+    --color-surface:        #FFFFFF;
+    --color-surface-sunken: #F5EFE4;
+    --color-text:           #17120E;
+    --color-text-secondary: #5C4E42;
+    --color-text-tertiary:  #5C4E42;   /* tertiary is merged up — see note */
+    /* Lifted twice. Screen #E6DCC9 is 1.36:1 on paper white and simply
+       disappears at 0.5pt. A first pass at #C9B99E reached only 1.92:1 — still
+       too faint for table rules, which on paper DO carry structure rather than
+       decoration. #998A75 clears 3:1 and is the same value the screen theme
+       already uses for --color-border-strong, so the print context collapses
+       two roles into one rather than inventing a third. */
+    --color-border:         #998A75;   /* 3.36:1 on paper white */
+    --color-border-strong:  #7C6B5C;
+    --color-accent:         #A34524;
+    --color-accent-subtle:  #F6E4DA;
+    --color-on-accent:      #FFFFFF;
+
+    /* elevation does not exist on paper */
+    --nilai-0: none; --nilai-1: none; --nilai-2: none; --nilai-3: none;
+    --elevation-raised: none; --elevation-panel: none; --elevation-overlay: none;
+  }
+
+  @page{
+    size: A4;
+    margin: 18mm 16mm 20mm;   /* 9P 8P 10P — the page margin is the new page-margin token */
+  }
+  @page :first{ margin-top: 24mm; }
+
+  html, body{
+    background: #FFFFFF !important;
+    color: #17120E !important;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+
+  /* ---- chrome that has no meaning on paper ---- */
+  .topbar, .sidebar, .skip, .site-foot, .density-switch,
+  .chip, .menu-btn, .frame-bar, .demo-stage .btn,
+  [data-density-switch]{ display: none !important; }
+
+  .layout{ display: block; max-width: none; padding: 0; }
+  .main{ padding: 0; }
+  .frame{ border: var(--kambi-1) solid var(--color-border); box-shadow: none; }
+
+  /* ---- structure ---- */
+  h1, h2, h3, h4{ break-after: avoid-page; page-break-after: avoid; }
+  h1{ font-size: var(--ezhuthu-h1); }
+  h2{ font-size: var(--ezhuthu-h2); }
+  h3{ font-size: var(--ezhuthu-h3); }
+  p, li{ orphans: 3; widows: 3; }
+  .doc-section{ break-inside: auto; padding-top: var(--idai-6); margin-top: var(--idai-6); }
+  .panel, .callout, .demo, .kpi, .card{ break-inside: avoid; page-break-inside: avoid; }
+  table{ break-inside: auto; }
+  thead{ display: table-header-group; }   /* repeat headers across pages */
+  tr{ break-inside: avoid; }
+
+  /* ---- links: the URL has to be visible, there is nothing to click ---- */
+  a[href^="http"]::after{
+    content: " (" attr(href) ")";
+    font-size: var(--ezhuthu-caption);
+    color: var(--color-text-secondary);
+    word-break: break-all;
+  }
+  a[href^="#"]::after, a[href$=".html"]::after{ content: ""; }
+  a{ color: var(--color-text); text-decoration: underline; }
+
+  /* ---- the pattern layer, on paper ---- */
+  /* Ink is a cost and a coverage problem, not a legibility one. The screen
+     ceiling of 10% is replaced by two rules: nothing behind body text at all,
+     and no more than 25% coverage in a decorative band. */
+  .kolam-line{ stroke: var(--color-accent) !important; }
+  .kolam-dot{ fill: var(--color-text-secondary) !important; }
+  .canvas{ border: var(--kambi-1) solid var(--color-border); background: none; }
+  .card-media, .mk-art, .app-detail .preview{ background: none !important; }
+
+  /* ---- controls become inert artefacts, not affordances ---- */
+  .btn{
+    border: var(--kambi-2) solid var(--color-text) !important;
+    background: none !important;
+    color: var(--color-text) !important;
+    min-height: 0;
+    padding: 1mm 3mm;
+  }
+  .badge{ border: var(--kambi-1) solid var(--color-border-strong); background: none; }
+  .switch .track, .progress{ border: var(--kambi-1) solid var(--color-border-strong); }
+}

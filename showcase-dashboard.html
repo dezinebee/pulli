@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard showcase — Pulli</title>
+<meta name="description" content="A storage operations console at compact density, running the neelam fork. Dense tables, KPI cards and charts built only from semantic tokens.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/showcase.css">
+<style>
+/* ============================================================
+   FORK · neelam — indigo. Palette and role assignment only.
+   Primitives untouched. r = P/2 untouched.
+   ============================================================ */
+#dashSurface{
+  --neelam-100: #E7ECF7;
+  --neelam-500: #33509B;
+  --neelam-600: #2F4A8C;
+  --neelam-350: #9DB6E8;
+  --neelam-900: #1B2333;
+
+  --color-accent:        var(--neelam-500);
+  --color-accent-hover:  var(--neelam-600);
+  --color-accent-subtle: var(--neelam-100);
+  --color-on-accent:     var(--maa-50);
+  --color-kolam-line:    var(--neelam-500);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) #dashSurface{
+    --color-accent:        var(--neelam-350);
+    --color-accent-hover:  #B4C8EE;
+    --color-accent-subtle: var(--neelam-900);
+    --color-on-accent:     var(--mann-900);
+    --color-kolam-line:    var(--neelam-350);
+  }
+}
+:root[data-theme="dark"] #dashSurface{
+  --color-accent:        var(--neelam-350);
+  --color-accent-hover:  #B4C8EE;
+  --color-accent-subtle: var(--neelam-900);
+  --color-on-accent:     var(--mann-900);
+  --color-kolam-line:    var(--neelam-350);
+}
+/* the fix described on the showcase index: compact visuals, 44px targets */
+#dashSurface .dash-rail a{ min-height:var(--alavu-md); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html">03 · Lattice</a></li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html" aria-current="page">— Dashboard</a>
+          <ul class="nav-sub">
+            <li><a href="#surface">The surface</a></li>
+            <li><a href="#fork">The fork</a></li>
+            <li><a href="#stress">What it stresses</a></li>
+          </ul>
+        </li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">11.01 — Showcase · Dashboard</div>
+      <h1>Operations console.</h1>
+      <p class="lede">A storage capacity dashboard at compact density. This is the surface where the pattern layer disappears entirely and the system has to survive on spacing discipline alone — which is the honest test of a token model.</p>
+    </div>
+
+    <section class="doc-section" id="surface">
+      <h2>The surface</h2>
+
+      <div class="surface-meta">
+        <div><dt>Density</dt><dd>compact · P = 6</dd></div>
+        <div><dt>Fork</dt><dd>neelam · indigo</dd></div>
+        <div><dt>Pattern coverage</dt><dd>0% — none</dd></div>
+        <div><dt>New tokens needed</dt><dd>none</dd></div>
+      </div>
+
+      <div class="density-switch">
+        <span>Density</span>
+        <div class="seg" data-density-switch="#dashSurface">
+          <button type="button" data-d="compact" aria-pressed="true">Compact</button>
+          <button type="button" data-d="default" aria-pressed="false">Default</button>
+          <button type="button" data-d="comfortable" aria-pressed="false">Comfortable</button>
+        </div>
+      </div>
+
+      <div class="frame">
+        <div class="frame-bar">
+          <div class="frame-dots"><i></i><i></i><i></i></div>
+          <div class="frame-url">storage.internal / fleet / capacity</div>
+        </div>
+        <div class="frame-body">
+          <div class="dash" id="dashSurface" data-density="compact">
+
+            <aside class="dash-rail">
+              <div class="grp">Fleet</div>
+              <a href="#surface" aria-current="true">Capacity <span class="n">4</span></a>
+              <a href="#surface">Performance</a>
+              <a href="#surface">Replication <span class="n">2</span></a>
+              <div class="grp">Configure</div>
+              <a href="#surface">Pools</a>
+              <a href="#surface">Volumes</a>
+              <a href="#surface">Policies</a>
+              <div class="grp">Audit</div>
+              <a href="#surface">Events</a>
+              <a href="#surface">Reports</a>
+            </aside>
+
+            <div class="dash-main">
+              <div class="dash-head">
+                <div>
+                  <div class="crumb">Fleet / Capacity</div>
+                  <h3>Capacity overview</h3>
+                </div>
+                <div style="display:flex;gap:var(--space-inline);flex-wrap:wrap">
+                  <button class="btn btn-secondary btn-sm">Last 30 days</button>
+                  <button class="btn btn-primary btn-sm">Reclaim space</button>
+                </div>
+              </div>
+
+              <div class="kpi-row">
+                <div class="kpi">
+                  <span class="lbl">Provisioned</span>
+                  <span class="val">4.82<small> PB</small></span>
+                  <span class="delta up">▲ 3.1% vs last month</span>
+                  <svg viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+                    <polyline points="0,19 12,18 24,17 36,15 48,14 60,12 72,11 84,8 100,6" fill="none" stroke="var(--color-accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="kpi">
+                  <span class="lbl">Used</span>
+                  <span class="val">3.41<small> PB · 71%</small></span>
+                  <span class="delta up">▲ 5.4% vs last month</span>
+                  <svg viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+                    <polyline points="0,20 12,19 24,17 36,16 48,13 60,12 72,9 84,7 100,4" fill="none" stroke="var(--color-warning)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="kpi">
+                  <span class="lbl">Pools at risk</span>
+                  <span class="val">3<small> of 42</small></span>
+                  <span class="delta down">▲ 2 since Tuesday</span>
+                  <svg viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+                    <polyline points="0,21 12,21 24,20 36,21 48,19 60,18 72,14 84,11 100,7" fill="none" stroke="var(--color-danger)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="kpi">
+                  <span class="lbl">Reclaimable</span>
+                  <span class="val">318<small> TB</small></span>
+                  <span class="delta up">▲ 41 TB identified</span>
+                  <svg viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+                    <polyline points="0,16 12,15 24,17 36,14 48,15 60,12 72,13 84,10 100,9" fill="none" stroke="var(--color-success)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="dash-split">
+                <div class="chartbox">
+                  <h3>Provisioned vs. used · 12 months</h3>
+                  <svg viewBox="0 0 420 170" role="img" aria-label="Line chart. Provisioned capacity rose from 3.9 to 4.82 petabytes over twelve months; used capacity rose from 2.4 to 3.41 petabytes, closing the gap.">
+                    <g stroke="var(--color-border)" stroke-width="1">
+                      <line x1="30" y1="140" x2="410" y2="140"/>
+                      <line x1="30" y1="105" x2="410" y2="105"/>
+                      <line x1="30" y1="70"  x2="410" y2="70"/>
+                      <line x1="30" y1="35"  x2="410" y2="35"/>
+                    </g>
+                    <g font-size="9" fill="var(--color-text-tertiary)" font-family="var(--face-mono)">
+                      <text x="0" y="143">2 PB</text><text x="0" y="108">3 PB</text><text x="0" y="73">4 PB</text><text x="0" y="38">5 PB</text>
+                    </g>
+                    <path d="M30 62 L64 60 L98 57 L132 55 L166 52 L200 50 L234 47 L268 44 L302 41 L336 38 L370 35 L410 31 L410 140 L30 140 Z"
+                          fill="var(--color-accent)" fill-opacity="0.08"/>
+                    <polyline points="30,62 64,60 98,57 132,55 166,52 200,50 234,47 268,44 302,41 336,38 370,35 410,31"
+                              fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                    <polyline points="30,124 64,121 98,118 132,113 166,110 200,105 234,101 268,95 302,90 336,84 370,79 410,71"
+                              fill="none" stroke="var(--color-warning)" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"/>
+                    <g font-size="9" fill="var(--color-text-tertiary)" font-family="var(--face-mono)">
+                      <text x="26" y="158">Sep</text><text x="128" y="158">Dec</text><text x="230" y="158">Mar</text><text x="332" y="158">Jun</text>
+                    </g>
+                  </svg>
+                  <div class="legend">
+                    <span><i style="background:var(--color-accent)"></i> Provisioned</span>
+                    <span><i style="background:var(--color-warning)"></i> Used</span>
+                  </div>
+                </div>
+
+                <div class="chartbox">
+                  <h3>Top pools by utilisation</h3>
+                  <svg viewBox="0 0 220 170" role="img" aria-label="Bar chart of pool utilisation. POOL-07 at 94 percent, POOL-12 at 91, POOL-03 at 88, POOL-19 at 74, POOL-22 at 61, POOL-31 at 48.">
+                    <g font-size="9" font-family="var(--face-mono)" fill="var(--color-text-tertiary)">
+                      <text x="0" y="17">POOL-07</text><text x="0" y="43">POOL-12</text><text x="0" y="69">POOL-03</text>
+                      <text x="0" y="95">POOL-19</text><text x="0" y="121">POOL-22</text><text x="0" y="147">POOL-31</text>
+                    </g>
+                    <g>
+                      <rect x="52" y="8"   width="158" height="12" rx="6" fill="var(--color-surface-sunken)"/>
+                      <rect x="52" y="34"  width="158" height="12" rx="6" fill="var(--color-surface-sunken)"/>
+                      <rect x="52" y="60"  width="158" height="12" rx="6" fill="var(--color-surface-sunken)"/>
+                      <rect x="52" y="86"  width="158" height="12" rx="6" fill="var(--color-surface-sunken)"/>
+                      <rect x="52" y="112" width="158" height="12" rx="6" fill="var(--color-surface-sunken)"/>
+                      <rect x="52" y="138" width="158" height="12" rx="6" fill="var(--color-surface-sunken)"/>
+                      <rect x="52" y="8"   width="148" height="12" rx="6" fill="var(--color-danger)"/>
+                      <rect x="52" y="34"  width="144" height="12" rx="6" fill="var(--color-danger)"/>
+                      <rect x="52" y="60"  width="139" height="12" rx="6" fill="var(--color-warning)"/>
+                      <rect x="52" y="86"  width="117" height="12" rx="6" fill="var(--color-accent)"/>
+                      <rect x="52" y="112" width="96"  height="12" rx="6" fill="var(--color-accent)"/>
+                      <rect x="52" y="138" width="76"  height="12" rx="6" fill="var(--color-accent)"/>
+                    </g>
+                  </svg>
+                  <div class="legend">
+                    <span><i style="background:var(--color-danger)"></i> Critical ≥ 90%</span>
+                    <span><i style="background:var(--color-warning)"></i> Watch ≥ 85%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chartbox">
+                <h3>Pools requiring attention</h3>
+                <div class="table-scroll">
+                  <table class="data-table">
+                    <thead>
+                      <tr><th scope="col">Pool</th><th scope="col">Tier</th><th scope="col">Capacity</th><th scope="col">Used</th><th scope="col">Days to full</th><th scope="col">Status</th><th scope="col"><span class="mono">Action</span></th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="mono">POOL-07</td><td>Flash</td><td class="mono">412 TB</td><td class="mono">94%</td><td class="mono">11</td>
+                        <td><span class="badge bad">Critical</span></td>
+                        <td><button class="btn btn-ghost btn-sm">Expand</button></td>
+                      </tr>
+                      <tr>
+                        <td class="mono">POOL-12</td><td>Flash</td><td class="mono">280 TB</td><td class="mono">91%</td><td class="mono">19</td>
+                        <td><span class="badge bad">Critical</span></td>
+                        <td><button class="btn btn-ghost btn-sm">Expand</button></td>
+                      </tr>
+                      <tr>
+                        <td class="mono">POOL-03</td><td>Hybrid</td><td class="mono">640 TB</td><td class="mono">88%</td><td class="mono">34</td>
+                        <td><span class="badge warn">Watch</span></td>
+                        <td><button class="btn btn-ghost btn-sm">Review</button></td>
+                      </tr>
+                      <tr>
+                        <td class="mono">POOL-19</td><td>Archive</td><td class="mono">1.2 PB</td><td class="mono">74%</td><td class="mono">120</td>
+                        <td><span class="badge ok">Healthy</span></td>
+                        <td><button class="btn btn-ghost btn-sm">Review</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="alert warn">
+                <div>
+                  <h4>Two pools crossed the critical threshold since Tuesday</h4>
+                  <p>POOL-07 reaches capacity in an estimated 11 days at the current growth rate. 318 TB is reclaimable across the fleet.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="fork">
+      <h2>The fork</h2>
+      <p class="sub">Nineteen lines. Palette values and semantic reassignment only — no primitive is touched, and <code>r = P/2</code> is untouched, so the geometry is identical to every other surface.</p>
+
+      <pre>#dashSurface{
+  --neelam-100: #E7ECF7;  --neelam-500: #33509B;
+  --neelam-600: #2F4A8C;  --neelam-350: #9DB6E8;
+  --neelam-900: #1B2333;
+
+  <span class="k">--color-accent:</span>        var(--neelam-500);
+  <span class="k">--color-accent-hover:</span>  var(--neelam-600);
+  <span class="k">--color-accent-subtle:</span> var(--neelam-100);
+  <span class="k">--color-on-accent:</span>     var(--maa-50);
+  <span class="k">--color-kolam-line:</span>    var(--neelam-500);
+}
+:root[data-theme="dark"] #dashSurface{
+  <span class="k">--color-accent:</span>        var(--neelam-350);
+  <span class="k">--color-accent-subtle:</span> var(--neelam-900);
+  <span class="k">--color-on-accent:</span>     var(--mann-900);
+}</pre>
+
+      <div class="callout"><b>Note what is absent.</b> No spacing, no radius, no type, no motion, no component override. Everything structural came from the system, which is the only reason a fork can be this short.</div>
+    </section>
+
+    <section class="doc-section" id="stress">
+      <h2>What it stresses</h2>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Held up</h3>
+          <ul class="bullets">
+            <li><b>Compact density.</b> Every gap tightens by 25% and the hierarchy still reads, because proximity ratios are preserved — everything scales by the same factor.</li>
+            <li><b>Type staying fixed.</b> This is the payoff for not coupling type to pitch. The table is denser; it is not smaller to read.</li>
+            <li><b>Charts on semantic colour.</b> Series use <code>--color-accent</code>, <code>--color-warning</code>, <code>--color-danger</code>, so they fork and theme with everything else and never need a chart palette of their own.</li>
+            <li><b>Three elevation levels.</b> A console with cards, a rail and a table needed no more depth than surface stepping plus one hairline shadow.</li>
+          </ul>
+        </div>
+        <div class="panel" style="border-top:var(--kambi-3) solid var(--color-warning)">
+          <h3>Broke, and the fix</h3>
+          <ul class="bullets">
+            <li><b>Rail targets.</b> Navigation items sized on <code>--alavu-sm</code> resolve to 24px at P = 6. Visually correct for a dense console, and an accessibility failure on touch. Fixed by setting <code>min-height: var(--alavu-md)</code> on the rail items — compact appearance, 44px target.</li>
+            <li><b>Table row actions.</b> Same problem, same shape of fix. <code>btn-sm</code> is a visual size, never a target guarantee. This is the distinction the <a href="accessibility.html#targets">target size</a> section insists on, and it is easy to get wrong precisely because the design looks right.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout"><b>No pattern, on purpose.</b> An operations console is scanned under pressure. The 10% density ceiling would technically allow a faint ground here, and it would still be the wrong call — the expressive layer has to earn its place per surface, not per system.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

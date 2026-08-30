@@ -1,0 +1,720 @@
+/* ============================================================================
+   PULLI · COMPONENT LIBRARY — batch 2
+   Load after tokens.css and system.css.
+
+   Semantic tokens only. Where a component is genuinely "options along a
+   line" it inherits the dot-rail primitive rather than inventing an
+   indicator: pagination, the nav rail, the timeline and the meter all use
+   pulli and loops for the same reason tabs do.
+   ========================================================================== */
+
+/* ==========================================================================
+   ACTIONS
+   ========================================================================== */
+
+/* button group — buttons sharing a boundary, so the joint is one hairline */
+.btn-group{ display:inline-flex; }
+.btn-group .btn{ border-radius:0; margin-inline-start:calc(var(--border-hairline) * -1); }
+.btn-group .btn:first-child{ border-start-start-radius:var(--radius-control); border-end-start-radius:var(--radius-control); margin-inline-start:0; }
+.btn-group .btn:last-child{ border-start-end-radius:var(--radius-control); border-end-end-radius:var(--radius-control); }
+.btn-group .btn:focus-visible{ z-index:2; }
+.btn-group .btn[aria-pressed="true"]{ background:var(--color-accent-subtle); color:var(--color-accent); border-color:var(--color-accent); z-index:1; }
+
+/* split button — primary action plus its menu trigger */
+.split{ display:inline-flex; position:relative; }
+.split > .btn:first-child{ border-start-end-radius:0; border-end-end-radius:0; }
+.split > .btn:last-child{
+  border-start-start-radius:0; border-end-start-radius:0;
+  padding-inline:var(--space-inset-sm); margin-inline-start:var(--border-hairline);
+}
+.split > .btn-primary:last-child{ box-shadow:inset var(--border-hairline) 0 0 var(--color-on-accent); }
+
+/* icon button — square, floored at the target size */
+.btn-icon{
+  padding:0; width:var(--alavu-md); min-width:var(--alavu-md);
+  display:inline-grid; place-items:center;
+}
+.btn-icon.btn-sm{ width:var(--alavu-sm); min-width:var(--alavu-sm); }
+/* square icon buttons are the worst case, and they carry no mark of their own */
+.btn-icon.btn-sm:not(.has-mark){ position:relative; }
+.btn-icon.btn-sm:not(.has-mark)::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:var(--alavu-md); height:var(--alavu-md);
+  transform:translate(-50%, -50%); pointer-events:auto; z-index:0;
+}
+/* components whose pseudo-elements ARE the kolam mark opt out of the expander;
+   each already resolves to --alavu-md (44px) on its own, so nothing is lost. */
+.number [data-step], .rail > button, .tabs button, .stepper li,
+.pagination a, .navrail a, .tag .tag-x{ /* mark-bearing — no expander */ }
+
+/* link */
+.link{ color:var(--color-accent); text-decoration:underline; text-underline-offset:.18em; }
+.link:hover{ color:var(--color-accent-hover); }
+.link-quiet{ color:var(--color-text); text-decoration-color:var(--color-border-strong); }
+.link-quiet:hover{ color:var(--color-accent); text-decoration-color:currentColor; }
+.link-external::after{ content:" ↗"; font-size:.85em; }
+
+/* toolbar — one tab stop, arrow keys inside */
+.toolbar{
+  display:flex; align-items:center; gap:var(--space-inline); flex-wrap:wrap;
+  padding:var(--space-inset-sm);
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel);
+  background:var(--color-surface);
+}
+.toolbar .divider-v{ align-self:stretch; }
+
+/* ==========================================================================
+   FORMS
+   ========================================================================== */
+
+/* form layout */
+.form{ display:flex; flex-direction:column; gap:var(--space-inset-md); }
+.form-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(calc(var(--p)*26),1fr)); gap:var(--space-inset-md); }
+.form fieldset{ border:0; padding:0; margin:0; min-width:0; }
+.form legend{
+  padding:0; margin-bottom:var(--space-stack);
+  font-size:var(--ezhuthu-caption); font-weight:600;
+  text-transform:uppercase; letter-spacing:.12em; color:var(--color-text-tertiary);
+}
+.form-actions{ display:flex; gap:var(--space-inline); justify-content:flex-end; flex-wrap:wrap; }
+
+/* number input — the steppers are targets, so they are floored */
+.number{ display:inline-flex; align-items:stretch; }
+.number input{
+  width:calc(var(--p) * 14); text-align:end;
+  font-variant-numeric:tabular-nums; font-family:var(--face-mono);
+  border-radius:0; margin-inline:calc(var(--border-hairline) * -1);
+}
+.number .btn{ border-radius:0; width:var(--alavu-md); min-width:var(--alavu-md); padding:0; }
+.number .btn:first-child{ border-start-start-radius:var(--radius-control); border-end-start-radius:var(--radius-control); }
+.number .btn:last-child{ border-start-end-radius:var(--radius-control); border-end-end-radius:var(--radius-control); }
+
+/* search field */
+.search{ position:relative; display:flex; align-items:center; }
+.search input{ padding-inline-start:calc(var(--p) * 4.5); padding-inline-end:var(--alavu-md); }
+.search .search-icon{
+  position:absolute; inset-inline-start:var(--space-inset-sm);
+  width:calc(var(--p) * 1.75); height:calc(var(--p) * 1.75);
+  border:var(--border-edge) solid var(--color-text-tertiary);
+  border-radius:var(--radius-pill); pointer-events:none;
+}
+.search .search-icon::after{
+  content:""; position:absolute; inset-inline-end:calc(var(--p) * -0.625); bottom:calc(var(--p) * -0.375);
+  width:calc(var(--p) * .875); height:var(--border-edge);
+  background:var(--color-text-tertiary); transform:rotate(45deg);
+}
+.search .search-clear{ position:absolute; inset-inline-end:0; }
+
+/* slider — a kambi the handle travels, with the value as an output */
+.slider{ display:flex; align-items:center; gap:var(--space-inset-sm); }
+.slider input[type="range"]{
+  flex:1; accent-color:var(--color-accent); min-height:var(--alavu-md);
+}
+.slider output{
+  font-family:var(--face-mono); font-size:var(--ezhuthu-small);
+  color:var(--color-accent); min-width:calc(var(--p) * 6); text-align:end;
+  font-variant-numeric:tabular-nums;
+}
+
+/* file upload */
+.dropzone{
+  border:var(--border-edge) dashed var(--color-border-strong);
+  border-radius:var(--radius-panel);
+  padding:var(--space-inset-xl) var(--space-inset-lg);
+  text-align:center; background:var(--color-surface);
+  transition:border-color var(--motion-state), background var(--motion-state);
+}
+.dropzone.is-over{ border-color:var(--color-accent); background:var(--color-accent-subtle); border-style:solid; }
+.dropzone input[type="file"]{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.dropzone p{ font-size:var(--ezhuthu-small); color:var(--color-text-secondary); margin-bottom:var(--space-stack); }
+.filelist{ list-style:none; padding:0; margin:var(--space-inset-md) 0 0; display:flex; flex-direction:column; gap:var(--space-stack-tight); }
+.filelist li{
+  display:flex; align-items:center; gap:var(--space-inline);
+  padding:var(--space-inset-sm); border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-control); font-size:var(--ezhuthu-small);
+}
+.filelist .name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.filelist .size{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); }
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+
+/* breadcrumb */
+.breadcrumb{ font-size:var(--ezhuthu-small); }
+.breadcrumb ol{ list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-inline); }
+.breadcrumb li{ display:flex; align-items:center; gap:var(--space-inline); color:var(--color-text-tertiary); }
+.breadcrumb li + li::before{ content:"/"; color:var(--color-border-strong); }
+.breadcrumb a{ color:var(--color-text-secondary); text-decoration:none; }
+.breadcrumb a:hover{ color:var(--color-accent); text-decoration:underline; }
+.breadcrumb [aria-current="page"]{ color:var(--color-text); font-weight:600; }
+
+/* pagination — pages are pulli on a kambi; the current one is wrapped */
+.pagination{ display:flex; align-items:center; gap:var(--space-inline); }
+.pagination ol{
+  list-style:none; padding:0; margin:0; display:flex; align-items:center;
+  background-image:linear-gradient(var(--color-border-strong), var(--color-border-strong));
+  background-size:calc(100% - var(--alavu-md)) var(--border-hairline);
+  background-position:center; background-repeat:no-repeat;
+}
+.pagination li{ position:relative; }
+.pagination a, .pagination span{
+  position:relative; display:grid; place-items:center;
+  width:var(--alavu-md); height:var(--alavu-md);
+  font-size:var(--ezhuthu-small); font-family:var(--face-mono);
+  color:var(--color-text-secondary); text-decoration:none;
+}
+.pagination a::before{
+  content:""; position:absolute; inset:50% auto auto 50%;
+  width:calc(var(--p) * 3.5); height:calc(var(--p) * 3.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%,-50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+.pagination a:hover{ color:var(--color-text); }
+.pagination [aria-current="page"]{ color:var(--color-accent); font-weight:600; }
+.pagination [aria-current="page"]::before{ transform:translate(-50%,-50%) scale(1); }
+.pagination .gap{ color:var(--color-text-tertiary); }
+
+/* nav rail — the dot rail, vertical */
+.navrail{ display:flex; flex-direction:column; gap:0; border-inline-start:var(--border-hairline) solid var(--color-border); }
+.navrail a{
+  position:relative; display:flex; align-items:center; gap:var(--space-inset-md);
+  padding:var(--space-inset-sm) var(--space-inset-md);
+  min-height:var(--alavu-md);
+  text-decoration:none; color:var(--color-text-secondary); font-size:var(--ezhuthu-small);
+  transition:color var(--motion-state);
+}
+.navrail a::before{
+  content:""; position:absolute; inset-inline-start:0; top:50%; z-index:0;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%,-50%) scale(0);
+  transition:transform var(--motion-reveal);
+}
+.navrail a::after{
+  content:""; position:absolute; inset-inline-start:0; top:50%; z-index:1;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translate(-50%,-50%);
+  transition:background var(--motion-state);
+}
+.navrail a:hover{ color:var(--color-text); }
+.navrail a[aria-current]{ color:var(--color-accent); font-weight:600; }
+.navrail a[aria-current]::before{ transform:translate(-50%,-50%) scale(1); }
+.navrail a[aria-current]::after{ background:var(--color-accent); }
+
+/* menu / dropdown */
+.menu-wrap{ position:relative; display:inline-block; }
+.menu{
+  position:absolute; z-index:40; min-width:calc(var(--p) * 26);
+  inset-block-start:calc(100% + var(--p)); inset-inline-start:0;
+  background:var(--color-surface);
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel);
+  box-shadow:var(--elevation-overlay);
+  padding:var(--space-inset-xs) 0;
+}
+.menu[hidden]{ display:none; }
+.menu.align-end{ inset-inline-start:auto; inset-inline-end:0; }
+.menu [role="menuitem"], .menu [role="menuitemradio"], .menu [role="menuitemcheckbox"]{
+  display:flex; align-items:center; gap:var(--space-inline);
+  width:100%; min-height:var(--alavu-md);
+  padding:0 var(--space-inset-md);
+  background:none; border:0; text-align:start; cursor:pointer;
+  font-family:var(--face-ui); font-size:var(--ezhuthu-small); color:var(--color-text);
+}
+.menu [role^="menuitem"]:hover, .menu [role^="menuitem"]:focus{ background:var(--color-surface-sunken); outline:none; }
+.menu [role^="menuitem"][aria-disabled="true"]{ color:var(--color-text-tertiary); pointer-events:none; }
+.menu-sep{ height:var(--border-hairline); background:var(--color-border); margin:var(--space-inset-xs) 0; }
+
+/* ==========================================================================
+   DATA DISPLAY
+   ========================================================================== */
+
+/* description list */
+.dl{ display:grid; grid-template-columns:auto 1fr; gap:var(--space-stack-tight) var(--space-inset-lg); font-size:var(--ezhuthu-small); }
+.dl dt{ color:var(--color-text-tertiary); }
+.dl dd{ margin:0; color:var(--color-text); }
+.dl.stacked{ grid-template-columns:1fr; gap:0; }
+.dl.stacked dt{ margin-top:var(--space-stack); }
+
+/* avatar */
+.avatar{
+  display:inline-grid; place-items:center; flex:none;
+  width:var(--alavu-md); height:var(--alavu-md);
+  border-radius:var(--radius-pill);
+  background:var(--color-accent-subtle); color:var(--color-accent);
+  font-size:var(--ezhuthu-small); font-weight:600; overflow:hidden;
+  border:var(--border-hairline) solid var(--color-border);
+}
+.avatar img{ width:100%; height:100%; object-fit:cover; }
+.avatar-sm{ width:var(--alavu-sm); height:var(--alavu-sm); font-size:var(--ezhuthu-caption); }
+.avatar-lg{ width:var(--alavu-lg); height:var(--alavu-lg); font-size:var(--ezhuthu-body); }
+.avatar-group{ display:flex; }
+.avatar-group .avatar + .avatar{ margin-inline-start:calc(var(--p) * -1.25); }
+
+/* tag / chip */
+.tag{
+  display:inline-flex; align-items:center; gap:calc(var(--p) * .75);
+  padding:calc(var(--p) * .5) var(--space-inset-sm);
+  border:var(--border-hairline) solid var(--color-border-strong);
+  border-radius:var(--radius-pill);
+  font-size:var(--ezhuthu-caption); color:var(--color-text);
+  background:var(--color-surface);
+}
+.tag.on{ border-color:var(--color-accent); color:var(--color-accent); background:var(--color-accent-subtle); }
+.tag .tag-x{
+  display:grid; place-items:center; border:0; background:none; cursor:pointer;
+  width:calc(var(--p) * 2); height:calc(var(--p) * 2);
+  border-radius:var(--radius-pill); color:inherit; font-size:var(--ezhuthu-caption);
+}
+.tag .tag-x:hover{ background:var(--color-border); }
+
+/* status dot — colour is reinforcement; the label carries the state */
+.status{ display:inline-flex; align-items:center; gap:calc(var(--p) * .75); font-size:var(--ezhuthu-small); }
+.status::before{
+  content:""; width:calc(var(--p) * .75); height:calc(var(--p) * .75);
+  border-radius:var(--radius-pill); background:var(--color-text-tertiary); flex:none;
+}
+.status.ok::before{ background:var(--color-success); }
+.status.warn::before{ background:var(--color-warning); }
+.status.bad::before{ background:var(--color-danger); }
+.status.info::before{ background:var(--color-info); }
+/* a measurement that is off-scale gets a ring, so it reads without colour */
+.status.alert::before{ box-shadow:0 0 0 var(--kambi-2) var(--color-danger); }
+
+/* meter — a measurement, not a task. Distinct from progress on purpose. */
+.meter{ display:flex; flex-direction:column; gap:calc(var(--p) * .5); --value:0; }
+.meter-track{
+  position:relative; height:calc(var(--p) * 1.5);
+  background:var(--color-surface-sunken); border-radius:var(--radius-pill); overflow:hidden;
+}
+.meter-track::before{
+  content:""; position:absolute; inset-block:0; inset-inline-start:0;
+  width:calc(var(--value) * 1%); background:var(--color-accent);
+  border-radius:var(--radius-pill);
+}
+.meter.warn .meter-track::before{ background:var(--color-warning); }
+.meter.bad .meter-track::before{ background:var(--color-danger); }
+.meter-label{ display:flex; justify-content:space-between; font-size:var(--ezhuthu-caption); color:var(--color-text-secondary); }
+.meter-label b{ font-family:var(--face-mono); color:var(--color-text); font-variant-numeric:tabular-nums; }
+
+/* code block */
+.code{ position:relative; }
+.code pre{ margin:0; padding-inline-end:calc(var(--p) * 12); }
+.code .code-copy{ position:absolute; top:var(--space-inset-sm); inset-inline-end:var(--space-inset-sm); }
+
+/* timeline — the dot rail, vertical, with time as the axis */
+.timeline{ list-style:none; padding:0; margin:0; position:relative; }
+.timeline::before{
+  content:""; position:absolute; inset-block:calc(var(--p) * 1.5) 0;
+  inset-inline-start:calc(var(--p) * 1.5); width:var(--border-hairline);
+  background:var(--color-border-strong);
+}
+.timeline li{ position:relative; padding-inline-start:calc(var(--p) * 5); padding-bottom:var(--space-inset-lg); }
+.timeline li:last-child{ padding-bottom:0; }
+.timeline li::before{
+  content:""; position:absolute; inset-inline-start:calc(var(--p) * 1.5); top:calc(var(--p) * .75);
+  width:calc(var(--p) * .625); height:calc(var(--p) * .625);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translateX(-50%);
+}
+.timeline li[data-now]::before{ background:var(--color-accent); }
+.timeline li[data-now]::after{
+  content:""; position:absolute; inset-inline-start:calc(var(--p) * 1.5); top:calc(var(--p) * .75);
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%,-38%);
+}
+.timeline .when{ font-family:var(--face-mono); font-size:var(--ezhuthu-caption); color:var(--color-text-tertiary); }
+.timeline .what{ font-size:var(--ezhuthu-small); color:var(--color-text); }
+
+/* stat / KPI */
+.stat{ display:flex; flex-direction:column; gap:calc(var(--p) * .5); }
+.stat .stat-label{ font-size:var(--ezhuthu-caption); text-transform:uppercase; letter-spacing:.1em; color:var(--color-text-tertiary); font-weight:600; }
+.stat .stat-value{ font-family:var(--face-display); font-size:var(--ezhuthu-h2); line-height:1; font-variant-numeric:tabular-nums; }
+.stat .stat-value small{ font-family:var(--face-ui); font-size:var(--ezhuthu-small); color:var(--color-text-tertiary); }
+.stat .stat-delta{ font-size:var(--ezhuthu-caption); font-weight:600; }
+.stat .stat-delta.up{ color:var(--color-success); }
+.stat .stat-delta.down{ color:var(--color-danger); }
+
+/* ==========================================================================
+   FEEDBACK
+   ========================================================================== */
+
+/* banner — page level, wider than an alert, dismissible */
+.banner{
+  display:flex; align-items:center; gap:var(--space-inset-md);
+  padding:var(--space-inset-md) var(--space-inset-lg);
+  background:var(--color-accent-subtle);
+  border-block-end:var(--border-hairline) solid var(--color-border);
+  font-size:var(--ezhuthu-small);
+}
+.banner .banner-body{ flex:1; }
+.banner.warn{ background:color-mix(in srgb, var(--color-warning) 12%, transparent); }
+.banner.bad{ background:color-mix(in srgb, var(--color-danger) 12%, transparent); }
+
+/* spinner — plain and non-kolam, because enterprise needs one that is not
+   an expressive asset. The draw-on loader stays for brand surfaces. */
+.spinner{
+  width:calc(var(--p) * 3); height:calc(var(--p) * 3); flex:none;
+  border:var(--kambi-2) solid var(--color-border-strong);
+  border-top-color:var(--color-accent);
+  border-radius:var(--radius-pill);
+  animation:pg-spin var(--nagarthal-4) linear infinite;
+}
+.spinner-sm{ width:calc(var(--p) * 2); height:calc(var(--p) * 2); }
+@keyframes pg-spin{ to{ transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce){
+  .spinner{ animation:none; border-top-color:var(--color-border-strong); }
+}
+
+/* skeleton — no shimmer. A looping animation to indicate loading is exactly
+   what the motion rules forbid, and a static block says the same thing. */
+.skeleton{
+  background:var(--color-surface-sunken);
+  border-radius:var(--radius-control);
+  height:var(--ezhuthu-body);
+}
+.skeleton-text{ height:calc(var(--p) * 1.5); margin-block:calc(var(--p) * .5); }
+.skeleton-text:nth-child(3n){ width:70%; }
+.skeleton-text:nth-child(3n+2){ width:88%; }
+.skeleton-block{ height:calc(var(--p) * 12); }
+.skeleton-circle{ width:var(--alavu-md); height:var(--alavu-md); border-radius:var(--radius-pill); }
+
+/* ==========================================================================
+   OVERLAYS
+   ========================================================================== */
+
+.scrim{
+  position:fixed; inset:0; z-index:50;
+  background:color-mix(in srgb, var(--color-scrim) 55%, transparent);
+}
+.scrim[hidden]{ display:none; }
+
+/* drawer */
+.drawer{
+  position:fixed; z-index:60; inset-block:0; inset-inline-end:0;
+  width:min(calc(var(--p) * 56), 100vw);
+  background:var(--color-surface);
+  border-inline-start:var(--border-hairline) solid var(--color-border);
+  box-shadow:var(--elevation-overlay);
+  display:flex; flex-direction:column;
+  transform:translateX(100%);
+  transition:transform var(--motion-reveal);
+}
+.drawer.is-open{ transform:translateX(0); }
+.drawer[hidden]{ display:none; }
+.drawer.start{ inset-inline:0 auto; border-inline:0 var(--border-hairline) solid var(--color-border); transform:translateX(-100%); }
+.drawer.start.is-open{ transform:translateX(0); }
+.drawer-head{ display:flex; align-items:center; gap:var(--space-inline); padding:var(--space-inset-lg); border-block-end:var(--border-hairline) solid var(--color-border); }
+.drawer-head h4{ font-family:var(--face-display); font-size:var(--ezhuthu-lead); flex:1; }
+.drawer-body{ flex:1; overflow:auto; padding:var(--space-inset-lg); }
+.drawer-foot{ padding:var(--space-inset-lg); border-block-start:var(--border-hairline) solid var(--color-border); display:flex; gap:var(--space-inline); justify-content:flex-end; }
+
+/* dialog — modal and confirm share one shell */
+.dialog{
+  position:fixed; z-index:60; inset-block-start:50%; inset-inline-start:50%;
+  transform:translate(-50%,-50%);
+  width:min(calc(var(--p) * 60), calc(100vw - var(--space-inset-lg) * 2));
+  max-height:calc(100vh - var(--space-inset-xl) * 2);
+  background:var(--color-surface);
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel);
+  box-shadow:var(--elevation-overlay);
+  display:flex; flex-direction:column;
+}
+.dialog[hidden]{ display:none; }
+.dialog-head{ padding:var(--space-inset-lg) var(--space-inset-lg) var(--space-inset-sm); }
+.dialog-head h4{ font-family:var(--face-display); font-size:var(--ezhuthu-lead); }
+.dialog-body{ padding:0 var(--space-inset-lg); overflow:auto; font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+.dialog-foot{ padding:var(--space-inset-lg); display:flex; gap:var(--space-inline); justify-content:flex-end; flex-wrap:wrap; }
+
+/* tooltip */
+.tip{
+  position:absolute; z-index:70; pointer-events:none;
+  max-width:calc(var(--p) * 34);
+  padding:calc(var(--p) * .75) var(--space-inset-sm);
+  background:var(--color-text); color:var(--color-bg);
+  border-radius:var(--radius-control);
+  font-size:var(--ezhuthu-caption); line-height:1.4;
+  box-shadow:var(--elevation-panel);
+}
+.tip[hidden]{ display:none; }
+
+/* popover */
+.popover{
+  position:absolute; z-index:65; min-width:calc(var(--p) * 30);
+  max-width:calc(var(--p) * 48);
+  background:var(--color-surface);
+  border:var(--border-hairline) solid var(--color-border);
+  border-radius:var(--radius-panel);
+  box-shadow:var(--elevation-overlay);
+  padding:var(--space-inset-md);
+  font-size:var(--ezhuthu-small);
+}
+.popover[hidden]{ display:none; }
+.popover h5{ font-family:var(--face-ui); font-size:var(--ezhuthu-small); font-weight:600; margin-bottom:var(--space-stack-tight); }
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
+.divider{ border:0; border-block-start:var(--border-hairline) solid var(--color-border); margin-block:var(--space-inset-lg); }
+.divider-v{ width:var(--border-hairline); background:var(--color-border); align-self:stretch; margin-inline:var(--space-inset-xs); }
+/* a labelled divider carries a pulli on the rule, because the label is a
+   point the line passes through */
+.divider-label{
+  display:flex; align-items:center; gap:var(--space-inset-md);
+  color:var(--color-text-tertiary); font-size:var(--ezhuthu-caption);
+  text-transform:uppercase; letter-spacing:.12em; font-weight:600;
+  margin-block:var(--space-inset-lg);
+}
+.divider-label::before, .divider-label::after{
+  content:""; flex:1; height:var(--border-hairline); background:var(--color-border);
+}
+
+/* accordion / disclosure */
+.accordion{ border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); overflow:hidden; }
+.accordion > .acc-item + .acc-item{ border-block-start:var(--border-hairline) solid var(--color-border); }
+.acc-trigger{
+  display:flex; align-items:center; gap:var(--space-inset-md);
+  width:100%; min-height:var(--alavu-md);
+  padding:var(--space-inset-sm) var(--space-inset-md);
+  background:none; border:0; cursor:pointer; text-align:start;
+  font-family:var(--face-ui); font-size:var(--ezhuthu-small); font-weight:600; color:var(--color-text);
+}
+.acc-trigger:hover{ background:var(--color-surface-sunken); }
+.acc-trigger .acc-mark{
+  flex:none; width:calc(var(--p) * 1.5); height:calc(var(--p) * 1.5); position:relative;
+}
+/* the mark is the crossing tile losing an arm as it opens — closed is a
+   crossing, open is the line passing straight through */
+.acc-trigger .acc-mark::before,
+.acc-trigger .acc-mark::after{
+  content:""; position:absolute; inset:50% 0 auto 0;
+  height:var(--kambi-2); background:var(--color-accent);
+  transform:translateY(-50%);
+  transition:transform var(--motion-reveal), opacity var(--motion-state);
+}
+.acc-trigger .acc-mark::after{ transform:translateY(-50%) rotate(90deg); }
+.acc-trigger[aria-expanded="true"] .acc-mark::after{ transform:translateY(-50%) rotate(0deg); opacity:0; }
+.acc-panel{ padding:0 var(--space-inset-md) var(--space-inset-md); font-size:var(--ezhuthu-small); color:var(--color-text-secondary); }
+.acc-panel[hidden]{ display:none; }
+
+/* ==========================================================================
+   THE LINE, APPLIED — second pass
+   --------------------------------------------------------------------------
+   The first pass of this batch shipped 5 of 32 components carrying the
+   primitive and 27 that were conventional components wearing tokens. An audit
+   caught it — the same failure as the original token layer, one level down.
+
+   These eight are the ones where the line genuinely belongs. Each is either
+   options along a path, or a thing that opens and closes. The other nineteen
+   are left conventional on purpose and are listed as such in the library.
+   ========================================================================== */
+
+/* --- SLIDER — the toggle, generalised to a continuous scale ---------------
+   A handle travelling a kambi past pulli. It is exactly the switch with more
+   than two stops, so it gets the same hollow loop wrapping a dot. */
+.slider input[type="range"]{
+  appearance:none; -webkit-appearance:none;
+  background:transparent; width:100%;
+  min-height:var(--alavu-md); cursor:pointer;
+}
+.slider input[type="range"]:focus{ outline:none; }
+.slider input[type="range"]:focus-visible{ outline:var(--border-edge) solid var(--color-focus); outline-offset:var(--border-edge); border-radius:var(--radius-control); }
+
+.slider input[type="range"]::-webkit-slider-runnable-track{
+  height:calc(var(--p) * 3);
+  background-image:
+    linear-gradient(var(--color-border-strong), var(--color-border-strong)),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%);
+  background-size:100% var(--kambi-1), calc(var(--p) * .5) calc(var(--p) * .5);
+  background-position:center, calc(var(--p) * .25) center;
+  background-repeat:no-repeat, space;
+}
+.slider input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:calc(var(--p) * 3); height:calc(var(--p) * 3); box-sizing:border-box;
+  border:var(--kambi-2) solid var(--color-accent);
+  border-radius:var(--radius-pill);
+  background-color:var(--color-bg);
+  background-image:radial-gradient(circle closest-side, var(--color-accent) 16%, transparent 18%);
+}
+.slider input[type="range"]::-moz-range-track{
+  height:calc(var(--p) * 3);
+  background-image:
+    linear-gradient(var(--color-border-strong), var(--color-border-strong)),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%);
+  background-size:100% var(--kambi-1), calc(var(--p) * .5) calc(var(--p) * .5);
+  background-position:center, calc(var(--p) * .25) center;
+  background-repeat:no-repeat, space;
+}
+.slider input[type="range"]::-moz-range-thumb{
+  width:calc(var(--p) * 3); height:calc(var(--p) * 3); box-sizing:border-box;
+  border:var(--kambi-2) solid var(--color-accent);
+  border-radius:var(--radius-pill);
+  background-color:var(--color-bg);
+  background-image:radial-gradient(circle closest-side, var(--color-accent) 16%, transparent 18%);
+}
+
+/* --- BREADCRUMB — a path, so the separators are the dots the line passed --
+   The last crumb is where the line turned, so its dot is wrapped. */
+.breadcrumb li + li::before{
+  content:""; width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+}
+.breadcrumb li + li:last-child{ position:relative; }
+.breadcrumb li + li:last-child::before{ background:var(--color-accent); }
+.breadcrumb li + li:last-child::after{
+  content:""; position:absolute; inset-inline-start:calc(var(--p) * .25); top:50%;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%, -50%); pointer-events:none;
+}
+
+/* --- METER — a kambi with pulli, and no head loop -------------------------
+   Progress carries a loop at the head because the line is travelling.
+   A meter is a static reading, so it has none. That is now the difference
+   between the two components rather than a colour. */
+.meter-track{
+  height:calc(var(--p) * 3); background:none; border-radius:0; overflow:visible;
+  background-image:
+    linear-gradient(var(--color-border-strong), var(--color-border-strong)),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%);
+  background-size:100% var(--kambi-1), calc(var(--p) * .5) calc(var(--p) * .5);
+  background-position:center, calc(var(--p) * .25) center;
+  background-repeat:no-repeat, space;
+}
+.meter-track::before{
+  height:var(--kambi-2); inset-block:auto; top:50%; transform:translateY(-50%);
+}
+
+/* --- NUMBER STEPPERS — minus is the line passing, plus is the crossing ----
+   Tile C, at 44px. The two marks are the two things a line does at a dot. */
+.number [data-step]{ position:relative; font-size:0; }
+.number [data-step]::before,
+.number [data-step]::after{
+  content:""; position:absolute; inset:50% auto auto 50%;
+  width:calc(var(--p) * 1.5); height:var(--kambi-2);
+  background:currentColor; transform:translate(-50%, -50%);
+}
+.number [data-step]::after{ transform:translate(-50%, -50%) rotate(90deg); }
+.number [data-step^="-"]::after{ display:none; }
+
+/* --- DROPZONE — dashed is a line that has not closed ----------------------
+   The same language as the radio: open loop while empty, closed once it
+   holds something. */
+.dropzone[data-count]:not([data-count="0"]){
+  border-style:solid; border-color:var(--color-accent); background:var(--color-accent-subtle);
+}
+
+/* --- MENU — a vertical list is options along a line ----------------------- */
+.menu [role="menuitemradio"], .menu [role="menuitemcheckbox"]{
+  position:relative; padding-inline-start:calc(var(--p) * 6);
+}
+.menu [role="menuitemradio"]::before, .menu [role="menuitemcheckbox"]::before{
+  content:""; position:absolute; inset-inline-start:var(--space-inset-md); top:50%;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-border-strong);
+  transform:translateY(-50%); font-weight:400;
+}
+.menu [role="menuitemradio"]::after, .menu [role="menuitemcheckbox"]::after{
+  content:""; position:absolute; inset-inline-start:var(--space-inset-md); top:50%;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%, -50%) scale(0); margin-inline-start:calc(var(--p) * .25);
+  transition:transform var(--motion-reveal);
+}
+.menu [role^="menuitem"][aria-checked="true"]::before{ content:""; background:var(--color-accent); }
+.menu [role^="menuitem"][aria-checked="true"]::after{ transform:translate(-50%, -50%) scale(1); }
+
+/* --- DIVIDER LABEL — the label is a point the line passes through --------- */
+.divider-label::before, .divider-label::after{
+  height:calc(var(--p) * .5); background:none;
+  background-image:
+    linear-gradient(var(--color-border), var(--color-border)),
+    radial-gradient(circle closest-side, var(--color-border-strong) 96%, transparent 100%);
+  background-size:100% var(--border-hairline), calc(var(--p) * .5) calc(var(--p) * .5);
+  background-repeat:no-repeat, no-repeat;
+}
+.divider-label::before{ background-position:center, right center; }
+.divider-label::after{ background-position:center, left center; }
+
+/* --- TAG — a selected filter is a wrapped dot ----------------------------- */
+.tag.on{ position:relative; padding-inline-start:calc(var(--p) * 5); }
+.tag.on::before{
+  content:""; position:absolute; inset-inline-start:calc(var(--p) * 2.25); top:50%;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-accent);
+  transform:translate(-50%, -50%);
+}
+.tag.on::after{
+  content:""; position:absolute; inset-inline-start:calc(var(--p) * 2.25); top:50%;
+  width:calc(var(--p) * 2.5); height:calc(var(--p) * 2.5);
+  border:var(--kambi-2) solid var(--color-accent); border-radius:var(--radius-pill);
+  transform:translate(-50%, -50%);
+}
+
+/* ==========================================================================
+   FORCED COLORS
+   ========================================================================== */
+@media (forced-colors: active){
+  .menu, .popover, .dialog, .drawer, .tip{ border:1px solid CanvasText; }
+  .tip{ background:Canvas; color:CanvasText; }
+  .avatar, .tag, .dropzone, .toolbar, .accordion{ border:1px solid CanvasText; }
+  .status::before, .timeline li::before, .navrail a::after, .pagination a::before,
+  .breadcrumb li + li::before, .menu [role^="menuitem"]::before, .tag.on::before,
+  .number [data-step]::before, .number [data-step]::after{ forced-color-adjust:none; background:CanvasText; }
+  .breadcrumb li + li:last-child::after, .menu [aria-checked="true"]::after,
+  .tag.on::after{ border-color:Highlight; }
+  .slider input[type="range"]::-webkit-slider-thumb{ border-color:Highlight; background-color:Canvas; }
+  .slider input[type="range"]::-moz-range-thumb{ border-color:Highlight; background-color:Canvas; }
+  .dropzone[data-count]:not([data-count="0"]){ border-color:Highlight; }
+  .navrail a[aria-current]::before, .pagination [aria-current="page"]::before, .timeline li[data-now]::after{ border-color:Highlight; }
+  .meter-track::before, .spinner{ forced-color-adjust:none; background:Highlight; }
+  .spinner{ border-color:CanvasText; border-top-color:Highlight; background:none; }
+  .skeleton{ border:1px solid GrayText; }
+  .acc-trigger .acc-mark::before, .acc-trigger .acc-mark::after{ background:CanvasText; }
+}
+
+/* the expressive loop indicators fall back under the conservative profile */
+[data-profile="regulated"] .pagination a::before,
+[data-profile="regulated"] .navrail a::before,
+[data-profile="regulated"] .timeline li[data-now]::after,
+[data-profile="regulated"] .breadcrumb li + li:last-child::after,
+[data-profile="regulated"] .menu [role^="menuitem"]::after,
+[data-profile="regulated"] .tag.on::after{ display:none; }
+[data-profile="regulated"] .breadcrumb li + li::before{ background:none; }
+[data-profile="regulated"] .breadcrumb li + li::before{ content:"/"; width:auto; height:auto; color:var(--color-border-strong); }
+[data-profile="regulated"] .menu [aria-checked="true"]::before{ content:"\2713"; background:none; width:auto; height:auto; color:var(--color-accent); }
+[data-profile="regulated"] .tag.on{ padding-inline-start:var(--space-inset-sm); }
+[data-profile="regulated"] .tag.on::before{ display:none; }
+[data-profile="regulated"] .pagination [aria-current="page"]{ text-decoration:underline; text-underline-offset:.3em; }
+[data-profile="regulated"] .navrail a[aria-current]{ box-shadow:inset var(--kambi-3) 0 0 var(--color-accent); }
+
+/* --- derivation audit table (library.html) -------------------------------- */
+.data-table td .status{ font-size:var(--ezhuthu-caption); white-space:nowrap; }
+.data-table tr.row-new td:first-child{ position:relative; }
+.data-table tr.row-new td:first-child::before{
+  content:""; position:absolute; inset-inline-start:calc(var(--p) * .5); top:50%;
+  width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-accent);
+  transform:translateY(-50%);
+}
+.row-key{
+  display:inline-block; width:calc(var(--p) * .5); height:calc(var(--p) * .5);
+  border-radius:var(--radius-pill); background:var(--color-accent);
+  vertical-align:middle; margin-inline-end:calc(var(--p) * .5);
+}
+.data-table td.grp{
+  font-size:var(--ezhuthu-caption); text-transform:uppercase; letter-spacing:.12em;
+  color:var(--color-text-tertiary); font-weight:600;
+  background:var(--color-surface-sunken); padding-block:var(--space-inset-sm);
+}
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+.table-wrap{ overflow-x:auto; border:var(--border-hairline) solid var(--color-border); border-radius:var(--radius-panel); }
+.table-wrap .data-table{ margin:0; border:0; min-width:calc(var(--p) * 68); }

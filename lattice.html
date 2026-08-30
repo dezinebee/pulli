@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lattice — Pulli</title>
+<meta name="description" content="The derivation: spacing, sizing, layout grid, breakpoints, density tiers, elevation, and the four places derivation deliberately breaks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 1 0-9 4.5 4.5 0 1 0 0-9Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="13" cy="8.5" r="1.1" fill="currentColor"/><circle cx="13" cy="17.5" r="1.1" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Pulli</span><span class="brand-ver">v0.1</span>
+    </a>
+    <div class="topbar-tools">
+      <div class="pitchbox">
+        <label for="pitchInput">P</label>
+        <input type="range" id="pitchInput" min="6" max="12" step="1" value="8" aria-label="System pitch in pixels">
+        <output id="pitchOut">8px</output>
+      </div>
+      <button class="chip" id="themeBtn" type="button">Dark</button>
+      <button class="chip menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Sections">
+    <div class="nav-group">
+      <div class="nav-title">System</div>
+      <ul class="nav-list">
+        <li><a href="index.html">00 · Overview</a></li>
+        <li><a href="origins.html">01 · Origins</a></li>
+        <li><a href="principles.html">02 · Principles</a></li>
+        <li><a href="lattice.html" aria-current="page">03 · Lattice</a>
+          <ul class="nav-sub">
+            <li><a href="#meeting">The meeting condition</a></li>
+            <li><a href="#spacing">Spacing</a></li>
+            <li><a href="#sizing">Sizing</a></li>
+            <li><a href="#grid">Layout grid</a></li>
+            <li><a href="#density">Density tiers</a></li>
+            <li><a href="#elevation">Elevation</a></li>
+            <li><a href="#breaks">Where derivation breaks</a></li>
+          </ul>
+        </li>
+        <li><a href="line.html">04 · The Line</a></li>
+        <li><a href="tokens.html">05 · Tokens</a></li>
+        <li><a href="generator.html">06 · Generator</a></li>
+        <li><a href="components.html">07 · Components</a></li>
+        <li><a href="motion.html">08 · Motion</a></li>
+        <li><a href="accessibility.html">09 · Accessibility</a></li>
+        <li><a href="governance.html">10 · Governance</a></li>
+        <li><a href="showcase.html">11 · Showcase</a></li>
+        <li><a href="showcase-dashboard.html">— Dashboard</a></li>
+        <li><a href="showcase-mobile.html">— Mobile app</a></li>
+        <li><a href="showcase-website.html">— Website</a></li>
+        <li><a href="showcase-webapp.html">— Web application</a></li>
+        <li><a href="showcase-email-print.html">— Email &amp; print</a></li>
+        <li><a href="readiness.html">12 · Readiness</a></li>
+        <li><a href="enterprise.html">13 · Enterprise subset</a></li>
+        <li><a href="grid.html">14 · Data grid</a></li>
+        <li><a href="library.html">15 · Library</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+
+    <div class="page-head">
+      <div class="eyebrow">03 — Lattice</div>
+      <h1>Two numbers, one geometry.</h1>
+      <p class="lede">The lattice is not a grid overlay you align to. It is the generating function for every dimension in the system. This page is the derivation, followed by an honest account of the four places it deliberately does not apply.</p>
+    </div>
+
+    <!-- ============ MEETING CONDITION ============ -->
+    <section class="doc-section" id="meeting">
+      <h2>The meeting condition</h2>
+      <p class="sub">Why the loop radius is exactly half the pitch, and why that is not a stylistic choice.</p>
+
+      <div class="grid-2" style="align-items:center">
+        <div class="prose">
+          <p>Dots sit on a square lattice at pitch <code>P</code>. The kolam line must curve <em>around</em> each dot without touching it, at some radius <code>r</code>. Consider two adjacent dots and the loops that pass between them.</p>
+          <p>If <code>r &lt; P/2</code>, the two loops fail to reach each other and the line has a gap — it breaks, which the form forbids. If <code>r &gt; P/2</code>, the loops overlap and the line crosses itself where it should not. Only at <code>r = P/2</code> do the two arcs meet exactly once, at the midpoint of the lattice edge between the dots — and there their tangents are both perpendicular to that edge, so they join smoothly.</p>
+          <p>That is the whole geometry. Because the arcs meet at edge midpoints with matching tangents, <b>any</b> tile can sit next to <b>any</b> other tile and the line stays continuous. The pattern engine is only possible because of it, and so is the token model: fixing <code>r</code> in terms of <code>P</code> fixes the radius scale to the spacing scale forever.</p>
+        </div>
+        <div>
+          <div class="canvas" data-kolam='{"dots":5,"seed":404,"crossing":0,"stroke":3.5}'></div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-1);text-align:center">A 5×5 kolam with no crossings — every curve is a quarter arc of radius P/2 centred on a dot.</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>Consequence.</b> A corner radius of <code>--valai-2</code> is not "8px because that looked right". It is one loop radius — the same curve the generator draws around a dot. Increase the pitch and the corner grows in lockstep with the padding, because they are the same number scaled.</div>
+    </section>
+
+    <!-- ============ SPACING ============ -->
+    <section class="doc-section" id="spacing">
+      <h2>Spacing</h2>
+      <p class="sub">Orthogonal lattice steps only. A half-step would land the line on a dot, which a kolam line may never do — so the scale has no half-steps either.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Token</th><th>Derivation</th><th>Value</th><th style="width:36%">Scale</th></tr></thead>
+          <tbody id="spaceRows"></tbody>
+        </table>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Three spacing roles</h3>
+        <p>Primitives are magnitudes; roles say what a magnitude is <em>for</em>. Product code uses roles, never primitives — that is what lets the primitive change without a rewrite.</p>
+        <div class="grid-3">
+          <div class="panel">
+            <h3>inset · inside a box</h3>
+            <ul class="speclist">
+              <li><span>inset-xs</span><b>1 P</b></li>
+              <li><span>inset-sm</span><b>2 P</b></li>
+              <li><span>inset-md</span><b>3 P</b></li>
+              <li><span>inset-lg</span><b>4 P</b></li>
+              <li><span>inset-xl</span><b>6 P</b></li>
+            </ul>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Card padding, panel padding, button padding.</p>
+          </div>
+          <div class="panel">
+            <h3>stack · between rows</h3>
+            <ul class="speclist">
+              <li><span>stack-tight</span><b>1 P</b></li>
+              <li><span>stack</span><b>2 P</b></li>
+              <li><span>stack-loose</span><b>4 P</b></li>
+              <li><span>section</span><b>12 P</b></li>
+            </ul>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Vertical rhythm. Label to input is tight; section to section is 12 P.</p>
+          </div>
+          <div class="panel">
+            <h3>inline · between siblings</h3>
+            <ul class="speclist">
+              <li><span>inline</span><b>2 P</b></li>
+              <li><span>gutter</span><b>3 P</b></li>
+              <li><span>page-margin</span><b>4 P</b></li>
+            </ul>
+            <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Button groups, grid gutters, page edges.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout"><b>Rule of proximity.</b> The gap between related things must be smaller than the gap to the next group, by at least one full step. If label-to-input is <code>1 P</code>, then field-to-field is at least <code>3 P</code>. Adjacent steps are not enough separation to read as a grouping.</div>
+    </section>
+
+    <!-- ============ SIZING ============ -->
+    <section class="doc-section" id="sizing">
+      <h2>Sizing</h2>
+      <p class="sub">Radii, stroke weights, and control heights.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">valai · radius</h3>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Token</th><th>Derivation</th><th>Value</th><th>Corner</th></tr></thead>
+              <tbody id="radRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size:var(--ezhuthu-h3);margin-bottom:var(--idai-2)">kambi · stroke</h3>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Token</th><th>Use</th><th>Value</th><th>Weight</th></tr></thead>
+              <tbody id="strokeRows"></tbody>
+            </table>
+          </div>
+          <p style="font-size:var(--ezhuthu-caption);color:var(--color-text-tertiary);margin-top:var(--idai-2)">Three weights is the maximum a drawn system can justify. Rice flour falls at one thickness; the variation here is hairline, edge, and the drawn line itself.</p>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>alavu · control heights</h3>
+        <p>Derived from the lattice, then floored at 44px. The floor is the system's one legitimate override and is documented as such — see <a href="#breaks">where derivation breaks</a>.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Token</th><th>Derivation</th><th>At P=8</th><th>At P=6</th><th>Used by</th></tr></thead>
+            <tbody>
+              <tr><td class="name">--alavu-xs</td><td class="derive">3 P</td><td>24px</td><td>18px</td><td>Badges, tags — non-interactive only</td></tr>
+              <tr><td class="name">--alavu-sm</td><td class="derive">4 P</td><td>32px</td><td>24px</td><td>Dense toolbars, table row actions</td></tr>
+              <tr><td class="name">--alavu-md</td><td class="derive">max(5.5 P, 44px)</td><td>44px</td><td>44px <span class="mono" style="color:var(--color-warning)">floored</span></td><td>Default control height</td></tr>
+              <tr><td class="name">--alavu-lg</td><td class="derive">max(7 P, 48px)</td><td>56px</td><td>48px <span class="mono" style="color:var(--color-warning)">floored</span></td><td>Primary CTA, mobile-first forms</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn"><b>xs and sm are not touch targets.</b> They may carry a hit area larger than their visual box, but a <code>--alavu-sm</code> control on a touch surface must be padded out to 44px of interactive area or it fails WCAG 2.5.8. The visual size and the target size are different measurements and the system does not conflate them.</div>
+      </div>
+    </section>
+
+    <!-- ============ GRID ============ -->
+    <section class="doc-section" id="grid">
+      <h2>Layout grid</h2>
+      <p class="sub">Twelve columns, lattice gutters, mirrored margins — the default symmetry from principle 03 expressed as page structure.</p>
+
+      <div class="grid-2">
+        <div>
+          <ul class="speclist">
+            <li><span>Columns</span><b>12</b></li>
+            <li><span>Gutter</span><b>3 P</b></li>
+            <li><span>Page margin (≥ lg)</span><b>4 P</b></li>
+            <li><span>Page margin (&lt; md)</span><b>2 P</b></li>
+            <li><span>Max content width</span><b>176 P</b></li>
+            <li><span>Prose measure</span><b>72 ch</b></li>
+            <li><span>Sidebar width</span><b>30 P</b></li>
+          </ul>
+        </div>
+        <div class="prose">
+          <p><b>Why twelve.</b> Twelve divides by 2, 3, 4 and 6, which covers every column split a content page needs without introducing a second grid for exceptions. Nothing kolam-derived about it — and the system says so rather than inventing a justification.</p>
+          <p><b>Why 72ch.</b> Measure is governed by reading, not by the lattice. Line length is a typographic constraint and belongs to the type layer.</p>
+        </div>
+      </div>
+
+      <div class="doc-sub">
+        <h3>Breakpoints</h3>
+        <p>Breakpoints are viewport facts, not lattice facts — they do not scale with pitch. They were <em>chosen</em> as lattice multiples at P=8 so the numbers stay familiar, and then fixed.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Name</th><th>Width</th><th>As lattice (P=8)</th><th>Layout change</th></tr></thead>
+            <tbody>
+              <tr><td class="name">sm</td><td>320px</td><td class="derive">40 P</td><td>Single column, 2 P margins, stacked controls</td></tr>
+              <tr><td class="name">md</td><td>480px</td><td class="derive">60 P</td><td>Two-column forms, inline button groups</td></tr>
+              <tr><td class="name">lg</td><td>768px</td><td class="derive">96 P</td><td>Sidebar appears, 4 P margins, 12-col grid active</td></tr>
+              <tr><td class="name">xl</td><td>1024px</td><td class="derive">128 P</td><td>Persistent navigation, three-column content</td></tr>
+              <tr><td class="name">2xl</td><td>1280px</td><td class="derive">160 P</td><td>Max width engages, margins become auto</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DENSITY ============ -->
+    <section class="doc-section" id="density">
+      <h2>Density tiers</h2>
+      <p class="sub">Kolams are drawn on 3, 5, 7, 9 dot grids. The same recursion gives the density tiers — one attribute, whole interface re-derived.</p>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>compact · P = 6</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Dense tables, admin consoles, monitoring dashboards. Controls hit the 44px floor, so the visual rhythm tightens while target sizes hold.</p>
+        </div>
+        <div class="panel">
+          <h3>default · P = 8</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">The reference tier. Every published token value on this site is quoted at P = 8 unless stated otherwise.</p>
+        </div>
+        <div class="panel">
+          <h3>comfortable · P = 10</h3>
+          <p style="font-size:var(--ezhuthu-small);color:var(--color-text-secondary)">Touch-first surfaces, onboarding, marketing pages, accessibility-forward configurations.</p>
+        </div>
+      </div>
+
+      <pre><span class="c">&lt;!-- one attribute; nothing else in the app changes --&gt;</span>
+&lt;html <span class="k">data-density="compact"</span>&gt;
+
+<span class="c">/* tokens.css */</span>
+:root[data-density="compact"]     { --p: 6px; }
+:root[data-density="default"]     { --p: 8px; }
+:root[data-density="comfortable"] { --p: 10px; }</pre>
+
+      <div class="callout"><b>Type does not change with density.</b> Only space and geometry follow the pitch. A compact table is tighter, not smaller to read — which is the failure mode of most density switches.</div>
+    </section>
+
+    <!-- ============ ELEVATION ============ -->
+    <section class="doc-section" id="elevation">
+      <h2>Elevation</h2>
+      <p class="sub">A kolam is flour lying flat on a floor. It casts no shadow. Depth here is expressed by lifting the ground, not by casting light.</p>
+
+      <div class="grid-2">
+        <div class="prose">
+          <p>Most systems have five or six elevation levels and use them to signal importance, which quietly turns shadow into a second, unowned hierarchy. Pulli has three, and only the third is a shadow of any consequence.</p>
+          <p><b>Surface stepping does the work.</b> Depth is primarily communicated by moving between <code>--color-surface-sunken</code>, <code>--color-bg</code> and <code>--color-surface</code>. Shadow is reserved for things that genuinely float above the page and must be dismissible.</p>
+        </div>
+        <div>
+          <ul class="speclist">
+            <li><span>--elevation-raised</span><b>hairline shadow</b></li>
+            <li><span>--elevation-panel</span><b>cards, popovers</b></li>
+            <li><span>--elevation-overlay</span><b>modal, toast only</b></li>
+          </ul>
+          <div class="demo" style="margin-top:var(--idai-3)">
+            <div class="demo-stage" style="gap:var(--idai-3)">
+              <div class="panel" style="box-shadow:var(--elevation-raised);flex:1;text-align:center;font-size:var(--ezhuthu-caption)">raised</div>
+              <div class="panel" style="box-shadow:var(--elevation-panel);flex:1;text-align:center;font-size:var(--ezhuthu-caption)">panel</div>
+              <div class="panel" style="box-shadow:var(--elevation-overlay);flex:1;text-align:center;font-size:var(--ezhuthu-caption)">overlay</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BREAKS ============ -->
+    <section class="doc-section" id="breaks">
+      <h2>Where derivation breaks</h2>
+      <p class="sub">Four places the lattice does not govern. A system that hides its exceptions teaches people to make undocumented ones.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Exception</th><th>Governed by</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Target size</b></td><td class="name">WCAG 2.5.8</td>
+              <td>Interactive controls take an absolute 44px floor via <code>max()</code>. At P = 6 the derived height would be 33px. The floor wins, always, and is written into the token rather than patched per component.</td>
+            </tr>
+            <tr>
+              <td><b>Hairlines</b></td><td class="name">device pixels</td>
+              <td><code>--kambi-1</code> is a literal 1px, not <code>r/4</code>. Sub-pixel borders render inconsistently across devices and browsers. A hairline is a rendering primitive, not a lattice measurement.</td>
+            </tr>
+            <tr>
+              <td><b>Type scale</b></td><td class="name">the diagonal, √2</td>
+              <td>Type does not scale with pitch. The lattice governs space and geometry; the lattice <em>diagonal</em> governs proportion. Coupling type to density makes compact modes unreadable rather than dense.</td>
+            </tr>
+            <tr>
+              <td><b>Breakpoints &amp; measure</b></td><td class="name">viewport and reading</td>
+              <td>Breakpoints are properties of devices, and line length is a property of reading. Both are fixed. Deriving them from the pitch would be numerology, not design.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>How to add an exception.</b> An exception must be argued in a pull request, land in <code>tokens.css</code> with an inline comment naming the standard or constraint that forced it, and be listed in this table. An exception that lives in component code instead is a bug, however reasonable it looked at the time.</div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <p><b style="color:var(--color-text)">Pulli</b> — an open design system derived from the kolam.</p>
+    <p class="mono">seed P=<span data-echo="p">8</span>px · r=<span data-echo="r">4</span>px · MIT</p>
+  </div>
+</footer>
+
+<script src="assets/kolam.js"></script>
+<script>
+/* Live token tables — re-render whenever the pitch changes. */
+window.PulliTables = function (P) {
+  var r = P / 2, html, i;
+  var SPACE = [["--idai-1","P",1],["--idai-2","2P",2],["--idai-3","3P",3],["--idai-4","4P",4],["--idai-5","5P",5],["--idai-6","6P",6],["--idai-8","8P",8],["--idai-12","12P",12],["--idai-16","16P",16]];
+  var RAD   = [["--valai-1","r/2",0.5],["--valai-2","r",1],["--valai-3","2r",2],["--valai-4","4r",4],["--valai-5","6r",6]];
+  var STROKE= [["--kambi-1","dividers, table rules",1],["--kambi-2","focus rings, selected",2],["--kambi-3","accent bars, the drawn line",0]];
+
+  var el = document.getElementById("spaceRows");
+  if (el) {
+    html = "";
+    for (i = 0; i < SPACE.length; i++) {
+      var s = SPACE[i], px = s[2] * P;
+      html += '<tr><td class="name">' + s[0] + '</td><td class="derive">' + s[1] + '</td><td>' + px + 'px</td>' +
+              '<td><span class="bar" style="width:' + Math.min(px, 160) + 'px"></span></td></tr>';
+    }
+    el.innerHTML = html;
+  }
+
+  el = document.getElementById("radRows");
+  if (el) {
+    html = "";
+    for (i = 0; i < RAD.length; i++) {
+      var d = RAD[i], rp = d[2] * r;
+      html += '<tr><td class="name">' + d[0] + '</td><td class="derive">' + d[1] + '</td><td>' + rp + 'px</td>' +
+              '<td><span class="radbox" style="border-top-left-radius:' + rp + 'px"></span></td></tr>';
+    }
+    el.innerHTML = html;
+  }
+
+  el = document.getElementById("strokeRows");
+  if (el) {
+    html = "";
+    for (i = 0; i < STROKE.length; i++) {
+      var k = STROKE[i], w = (i === 2) ? r : k[2];
+      html += '<tr><td class="name">' + k[0] + '</td><td class="derive">' + k[1] + '</td><td>' + w + 'px</td>' +
+              '<td><span style="display:block;height:' + w + 'px;background:var(--color-text);width:100%"></span></td></tr>';
+    }
+    el.innerHTML = html;
+  }
+};
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>
