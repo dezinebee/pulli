@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .loop{stroke:#17120E}.pulli{fill:#17120E}
+    @media (prefers-color-scheme:dark){.loop{stroke:#FDFBF7}.pulli{fill:#FDFBF7}}
+  </style>
+  <circle class="loop" cx="16" cy="16" r="10" fill="none" stroke-width="3" stroke-linecap="round"/>
+  <circle class="pulli" cx="16" cy="16" r="4"/>
+</svg>
